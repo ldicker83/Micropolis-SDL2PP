@@ -26,7 +26,7 @@ namespace
 
     int DualColumnOffset = 0;
 
-    auto stringLength = [](std::string a, std::string b)
+    constexpr auto stringLength = [](std::string a, std::string b)
         {
             return a.length() < b.length();
         };
