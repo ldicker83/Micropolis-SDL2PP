@@ -13,10 +13,14 @@
 #include "WindowBase.h"
 
 #include "Font.h"
+#include "StringRender.h"
 #include "Texture.h"
 
 #include <memory>
 #include <SDL2/SDL.h>
+
+
+#include "Evaluation.h"
 
 
 class EvaluationWindow : public WindowBase
@@ -27,15 +31,31 @@ public:
     const EvaluationWindow operator=(const EvaluationWindow&) = delete;
     
     EvaluationWindow(SDL_Renderer* renderer);
+
+    void setEvaluation(const Evaluation& evaluation);
     
     void draw() override;
     void update() override;
-    
-    void onMouseDown(const Point<int>& position) override;
-    void onMouseUp() override;
+
+private:
+    void drawYesNoPanel();
+    void drawOpinionPanel();
+    void drawStatsPanel();
+    void drawScorePanel();
     
 private:
     Font* mFont{ nullptr };
+    Font* mFontBold{ nullptr };
+    Font* mFontSemiBold{ nullptr };
+
+    const int mLineSpacing{ 0 };
+    const int mTitleSpacing{ 0 };
+
     Texture mTexture;
+    Texture mTextTexture;
+
     SDL_Renderer* mRenderer{ nullptr };
+
+    Evaluation mEvaluation;
+    StringRender mStringRenderer;
 };

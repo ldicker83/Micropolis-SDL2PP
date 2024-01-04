@@ -11,16 +11,57 @@
 #pragma once
 
 #include <array>
+#include <string>
 
 class Budget;
 class CityProperties;
 
+
+struct Evaluation
+{
+    std::string changed{};
+    std::string score{};
+
+    std::array<std::string, 4> problemString;
+    std::array<std::string, 4> problemVote;
+
+    std::string pop{};
+    std::string delta{};
+    std::string assessed_dollars{};
+
+    std::string cityclass{};
+    std::string citylevel{};
+
+    std::string goodyes{};
+    std::string goodno{};
+
+    std::string title{};
+
+    bool needsAttention{ true };
+};
+
+
+enum class CityClass
+{
+	Village,
+	Town,
+	City,
+	Capital,
+	Metropolis,
+	Megalopolis
+};
+
+
 constexpr auto PROBNUM = 10;
+
+const Evaluation& currentEvaluation();
+
+void currentEvaluationSeen();
 
 int cityAssessedValue();
 
-int cityClass();
-void cityClass(const int value);
+CityClass cityClass();
+void cityClass(const CityClass value);
 
 void CityEvaluation(const Budget& budget);
 

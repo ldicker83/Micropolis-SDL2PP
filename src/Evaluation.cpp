@@ -19,6 +19,8 @@
 #include "w_tk.h"
 #include "w_util.h"
 
+#include <map>
+
 
 /* City Evaluation */
 namespace
@@ -28,6 +30,8 @@ namespace
 
     bool EvalChanged{ false };
 
+    Evaluation CurrentEvaluation;
+
     std::array<int, PROBNUM> ProblemTable;
     std::array<int, PROBNUM> ProblemTaken;
     std::array<int, PROBNUM> ProblemVotes; /* these are the votes for each  */
@@ -35,30 +39,26 @@ namespace
     
     int CityPop{}, deltaCityPop{};
     int CityAssessedValue; /* assessed city value */
-    int CityClass; /*  0..5  */
+    CityClass CityClassValue;
     int CityScore{}, DeltaCityScore{}, AverageCityScore{};
     int TrafficAverage{};
 
-    const std::string cityClassStr[6] =
+    constexpr int CityClassPopulation[] =
     {
-      "VILLAGE",
-      "TOWN",
-      "CITY",
-      "CAPITAL",
-      "METROPOLIS",
-      "MEGALOPOLIS"
+        0, 2000, 10000, 50000, 100000, 500000
     };
 
-
-    const std::string cityLevelStr[3] =
+    const std::string CityClassString[] =
     {
-      "Easy",
-      "Medium",
-      "Hard"
+        "VILLAGE", "TOWN", "CITY", "METROPOLIS", "MEGALOPOLIS"
     };
 
+    const std::string CityLevelString[] =
+    {
+      "Easy", "Medium", "Hard"
+    };
 
-    const std::string probStr[10] =
+    const std::string ProblemStrings[10] =
     {
       "CRIME",
       "POLLUTION",
@@ -70,27 +70,60 @@ namespace
     };
 
 
-    struct EvaulationStrings
+    int PopulationThreshold(CityClass cityClass)
     {
-        const std::string changed{};
-        const std::string score{};
-        
-        const std::array<std::string, 4> problemString;
-        const std::array<std::string, 4> problemVote;
+        return CityClassPopulation[static_cast<int>(cityClass)];
+    }
 
-        const std::string pop{};
-        const std::string delta{};
-        const std::string assessed_dollars{};
 
-        const std::string cityclass{};
-        const std::string citylevel{};
+    /**
+     * \todo Yuck, there has to be a better way to do this.
+     */
+    CityClass DetermineCityClass()
+    {
+        auto cityClass = CityClass::Village;
 
-        const std::string goodyes{};
-        const std::string goodno{};
+        if (CityPop > PopulationThreshold(CityClass::Town))
+        {
+            cityClass = CityClass::Town;
+        }
 
-        const std::string title{};
-    };
+        if (CityPop > PopulationThreshold(CityClass::City))
+        {
+            cityClass = CityClass::City;
+        }
+
+        if (CityPop > PopulationThreshold(CityClass::Capital))
+        {
+            cityClass = CityClass::Capital;
+        }
+
+        if (CityPop > PopulationThreshold(CityClass::Metropolis))
+        {
+            cityClass = CityClass::Metropolis;
+        }
+
+        if (CityPop > PopulationThreshold(CityClass::Megalopolis))
+        {
+            cityClass = CityClass::Megalopolis;
+        }
+
+        return cityClass;
+    }
+
 };
+
+
+const Evaluation& currentEvaluation()
+{
+    return CurrentEvaluation;
+}
+
+
+void currentEvaluationSeen()
+{
+    CurrentEvaluation.needsAttention = false;
+}
 
 
 const std::array<int, 4>& problemOrder()
@@ -135,15 +168,15 @@ int deltaCityScore()
 }
 
 
-int cityClass()
+CityClass cityClass()
 {
-    return CityClass;
+    return static_cast<CityClass>(CityClassValue);
 }
 
 
-void cityClass(const int value)
+void cityClass(const CityClass value)
 {
-    CityClass = value;
+    CityClassValue = value;
 }
 
 
@@ -184,7 +217,7 @@ void EvalInit()
     CityPop = 0;
     deltaCityPop = 0;
     CityAssessedValue = 0;
-    CityClass = 0;
+    CityClassValue = CityClass::Village;
     CityScore = 500;
     DeltaCityScore = 0;
     EvalValid = 1;
@@ -226,29 +259,15 @@ void DoPopNum()
 {
     int oldCityPop{ CityPop };
     CityPop = (ResPop + (ComPop * 8) + (IndPop * 8)) * 20;
-
-    if (oldCityPop == -1) // fixme: magic number (sentinel, use named value)
+    
+    if (oldCityPop == 0) // fixme: magic number (sentinel, use named value)
     {
         oldCityPop = CityPop;
     }
-
+    
     deltaCityPop = CityPop - oldCityPop;
-
-    /**
-     * 0 == village
-     * 2000 == town
-     * 10000 == city
-     * 50000 == capital
-     * 100000 == metropolis
-     * 500000 == megalopolis
-     */
-
-    CityClass = 0;
-    if (CityPop > 2000) { CityClass++; }
-    if (CityPop > 10000) { CityClass++; }
-    if (CityPop > 50000) { CityClass++; }
-    if (CityPop > 100000) { CityClass++; }
-    if (CityPop > 500000) { CityClass++; }
+    
+    CityClassValue = DetermineCityClass();
 }
 
 
@@ -489,26 +508,28 @@ void CityEvaluation(const Budget& budget)
 }
 
 
-void SetEvaluation(const EvaulationStrings& strings)
+void SetEvaluation(const Evaluation& eval)
 {
+    CurrentEvaluation = eval;
+
     const std::string evalMessage = "UISetEvaluation {" +
-        strings.changed + "} {" +
-        strings.problemString[0] + "} {" +
-        strings.problemString[1] + "} {" +
-        strings.problemString[2] + "} {" +
-        strings.problemString[3] + "} {" +
-        strings.problemVote[0] + "} {" +
-        strings.problemVote[1] + "} {" +
-        strings.problemVote[2] + "} {" +
-        strings.problemVote[3] + "} {" +
-        strings.pop + "} {" +
-        strings.delta + "} {" +
-        strings.assessed_dollars + "} {" +
-        "City Class: " + strings.cityclass + "} {" +
-        "City Level: " + strings.citylevel + "} {" +
-        "GoodYes: " + strings.goodyes + "} {" +
-        "GoodNo: " + strings.goodno + "} {" +
-        "Title: " + strings.title + "}";
+        eval.changed + "} {" +
+        eval.problemString[0] + "} {" +
+        eval.problemString[1] + "} {" +
+        eval.problemString[2] + "} {" +
+        eval.problemString[3] + "} {" +
+        eval.problemVote[0] + "} {" +
+        eval.problemVote[1] + "} {" +
+        eval.problemVote[2] + "} {" +
+        eval.problemVote[3] + "} {" +
+        eval.pop + "} {" +
+        eval.delta + "} {" +
+        eval.assessed_dollars + "} {" +
+        "City Class: " + eval.cityclass + "} {" +
+        "City Level: " + eval.citylevel + "} {" +
+        "GoodYes: " + eval.goodyes + "} {" +
+        "GoodNo: " + eval.goodno + "} {" +
+        "Title: " + eval.title + "}";
 
     Eval(evalMessage);
 }
@@ -516,16 +537,16 @@ void SetEvaluation(const EvaulationStrings& strings)
 
 void doScoreCard(const CityProperties& properties)
 {
-    const EvaulationStrings strings
+    const Evaluation eval
     {
         std::to_string(deltaCityScore()),
         std::to_string(cityScore()),
         std::array<std::string, 4>
         {
-            problemVotes()[problemOrder()[0]] ? probStr[problemOrder()[0]] : " ",
-            problemVotes()[problemOrder()[1]] ? probStr[problemOrder()[1]] : " ",
-            problemVotes()[problemOrder()[2]] ? probStr[problemOrder()[2]] : " ",
-            problemVotes()[problemOrder()[3]] ? probStr[problemOrder()[3]] : " "
+            problemVotes()[problemOrder()[0]] ? ProblemStrings[problemOrder()[0]] : " ",
+            problemVotes()[problemOrder()[1]] ? ProblemStrings[problemOrder()[1]] : " ",
+            problemVotes()[problemOrder()[2]] ? ProblemStrings[problemOrder()[2]] : " ",
+            problemVotes()[problemOrder()[3]] ? ProblemStrings[problemOrder()[3]] : " "
         },
         std::array<std::string, 4>
         {
@@ -537,14 +558,14 @@ void doScoreCard(const CityProperties& properties)
         std::to_string(cityPopulation()),
         std::to_string(deltaCityPopulation()),
         NumberToDollarDecimal(cityAssessedValue()),
-        cityClassStr[cityClass()],
-        cityLevelStr[properties.GameLevel()],
+        CityClassString[static_cast<int>(cityClass())],
+        CityLevelString[properties.GameLevel()],
         std::to_string(cityYes()) + "%",
         std::to_string(cityNo()) + "%",
         std::to_string(CurrentYear())
     };
 
-    SetEvaluation(strings);
+    SetEvaluation(eval);
 }
 
 

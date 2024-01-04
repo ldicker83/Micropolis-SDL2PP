@@ -348,7 +348,7 @@ void simInit()
     CityTime = 50;
     NoDisasters = false;
     AutoBulldoze = true;
-    AutoBudget = false;
+    AutoBudget = true;
     MessageId(NotificationId::None);
     ClearMes();
     SimSpeed(SimulationSpeed::Normal);
@@ -608,6 +608,14 @@ void ToggleMiniMapVisibility()
 }
 
 
+void showEvaluationWindow()
+{
+    evaluationWindow->setEvaluation(currentEvaluation());
+    currentEvaluationSeen();
+    ShowWindowAndBringToFront(*evaluationWindow.get());
+}
+
+
 void handleKeyEvent(SDL_Event& event)
 {
     switch (event.key.keysym.sym)
@@ -685,7 +693,7 @@ void handleKeyEvent(SDL_Event& event)
         break;
             
     case SDLK_F1:
-        ShowWindowAndBringToFront(*evaluationWindow.get());
+        showEvaluationWindow();
         break;
 
     default:
@@ -1128,6 +1136,12 @@ void GameLoop()
             }
 
             drawTopUi();
+
+            if (currentEvaluation().needsAttention)
+            {
+                evaluationWindow->setEvaluation(currentEvaluation());
+                currentEvaluationSeen();
+            }
 
             GuiWindowStack.draw();
         }
