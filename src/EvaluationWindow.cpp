@@ -272,10 +272,3 @@ void EvaluationWindow::draw()
     SDL_RenderCopy(mRenderer, mTexture.texture, &BgRect, &rect);
     SDL_RenderCopy(mRenderer, mTextTexture.texture, &BgRect, &rect);
 }
-
-
-void EvaluationWindow::update()
-{
-    
-}
-

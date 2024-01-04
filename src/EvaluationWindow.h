@@ -35,7 +35,7 @@ public:
     void setEvaluation(const Evaluation& evaluation);
     
     void draw() override;
-    void update() override;
+    void update() override {}
 
 private:
     void drawYesNoPanel();
