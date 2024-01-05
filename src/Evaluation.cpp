@@ -19,6 +19,7 @@
 #include "w_tk.h"
 #include "w_util.h"
 
+#include <algorithm>
 #include <map>
 
 
@@ -31,11 +32,15 @@ namespace
 
     Evaluation CurrentEvaluation;
 
-    std::array<int, PROBNUM> ProblemTable;
-    std::array<int, PROBNUM> ProblemTaken;
-    std::array<int, PROBNUM> ProblemVotes; /* these are the votes for each  */
-    std::array<int, 4> ProblemOrder{}; /* sorted index to above  */
-    
+    struct Problem
+    {
+        std::string name{};
+        int value{};
+        int votes{};
+    };
+
+    std::array<Problem, PROBNUM> Problems;
+
     int CityPop{}, deltaCityPop{};
     int CityAssessedValue; /* assessed city value */
     CityClass CityClassValue;
@@ -125,18 +130,6 @@ void currentEvaluationSeen()
 }
 
 
-const std::array<int, 4>& problemOrder()
-{
-    return ProblemOrder;
-}
-
-
-const std::array<int, PROBNUM>& problemVotes()
-{
-    return ProblemVotes;
-}
-
-
 int trafficAverage()
 {
     return TrafficAverage;
@@ -220,8 +213,7 @@ void EvalInit()
     CityScore = 500;
     DeltaCityScore = 0;
     
-    ProblemVotes.fill(0);
-    ProblemTaken.fill(0);
+    Problems.fill({});
 }
 
 
@@ -271,14 +263,12 @@ void DoPopNum()
 
 void VoteProblems()
 {
-    ProblemVotes.fill(0);
-
     int problemIndex{}, voteCount{}, count{};
     while ((voteCount < 100) && (count < 600))
     {
-        if (RandomRange(0, 300) < ProblemTable[problemIndex])
+        if (RandomRange(0, 300) < Problems[problemIndex].value)
         {
-            ++ProblemVotes[problemIndex];
+            ++Problems[problemIndex].votes;
             ++voteCount;
         }
         
@@ -361,7 +351,7 @@ void GetScore(const Budget& budget)
     x = 0;
     for (z = 0; z < 7; z++)
     {
-        x += ProblemTable[z];	/* add 7 probs */
+        x += Problems[z].value;	/* add 7 probs */
     }
 
     x = x / 3;			/* 7 + 2 average */
@@ -445,45 +435,20 @@ void DoVotes()
 
 void DoProblems(const Budget& budget)
 {
-    ProblemTaken.fill(0);
-
-    ProblemTable =
+    Problems =
     {
-        CrimeAverage,  // Crime
-        PolluteAverage, // Pollution
-        static_cast<int>(LVAverage * 0.7f), // Housing
-        budget.TaxRate() * 10, // Taxes
-        AverageTraffic(), // Traffic
-        GetUnemployment(), // Unemployment
-        GetFire() // Fire
+        Problem{ ProblemStrings[0], CrimeAverage },
+        Problem{ ProblemStrings[1], PolluteAverage },
+        Problem{ ProblemStrings[2], static_cast<int>(LVAverage * 0.7f) },
+        Problem{ ProblemStrings[3], budget.TaxRate() * 10 },
+        Problem{ ProblemStrings[4], AverageTraffic() },
+        Problem{ ProblemStrings[5], GetUnemployment() },
+        Problem{ ProblemStrings[6], GetFire() }
     };
 
     VoteProblems();
-    
-    int thisProblem{};
-    for (int problemIndex = 0; problemIndex < 4; ++problemIndex) //fixme: Magic number
-    {
-        int max{};
-        for (int votesIndex = 0; votesIndex < 7; ++votesIndex) //fixme: Magic number
-        {
-            if ((ProblemVotes[votesIndex] > max) && (!ProblemTaken[votesIndex]))
-            {
-                thisProblem = votesIndex;
-                max = ProblemVotes[votesIndex];
-            }
-        }
 
-        if (max)
-        {
-            ProblemTaken[thisProblem] = 1;
-            ProblemOrder[problemIndex] = thisProblem;
-        }
-        else
-        {
-            ProblemOrder[problemIndex] = 7;
-            ProblemTable[7] = 0;
-        }
-    }
+    std::sort(Problems.begin(), Problems.end(), [](const Problem& a, const Problem& b) { return a.votes > b.votes; });
 }
 
 
@@ -508,23 +473,23 @@ void CityEvaluation(const Budget& budget)
 
 void doScoreCard(const CityProperties& properties)
 {
-    CurrentEvaluation = 
+    CurrentEvaluation =
     {
         std::to_string(deltaCityScore()),
         std::to_string(cityScore()),
         std::array<std::string, 4>
         {
-            problemVotes()[problemOrder()[0]] ? ProblemStrings[problemOrder()[0]] : " ",
-            problemVotes()[problemOrder()[1]] ? ProblemStrings[problemOrder()[1]] : " ",
-            problemVotes()[problemOrder()[2]] ? ProblemStrings[problemOrder()[2]] : " ",
-            problemVotes()[problemOrder()[3]] ? ProblemStrings[problemOrder()[3]] : " "
+            Problems[0].name,
+            Problems[1].name,
+            Problems[2].name,
+            Problems[3].name
         },
         std::array<std::string, 4>
         {
-            problemVotes()[problemOrder()[0]] ? std::to_string(problemVotes()[problemOrder()[0]]) + "%" : " ",
-            problemVotes()[problemOrder()[1]] ? std::to_string(problemVotes()[problemOrder()[1]]) + "%" : " ",
-            problemVotes()[problemOrder()[2]] ? std::to_string(problemVotes()[problemOrder()[2]]) + "%" : " ",
-            problemVotes()[problemOrder()[3]] ? std::to_string(problemVotes()[problemOrder()[3]]) + "%" : " "
+            std::to_string(Problems[0].votes),
+            std::to_string(Problems[1].votes),
+            std::to_string(Problems[2].votes),
+            std::to_string(Problems[3].votes)
         },
         std::to_string(cityPopulation()),
         std::to_string(deltaCityPopulation()),

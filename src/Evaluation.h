@@ -85,6 +85,3 @@ void ChangeEval();
 void scoreDoer(const CityProperties& properties);
 
 void UpdateEvaluation();
-
-const std::array<int, PROBNUM>& problemVotes();
-const std::array<int, 4>& problemOrder();
