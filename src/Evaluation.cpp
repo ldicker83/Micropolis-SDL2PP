@@ -31,7 +31,7 @@ namespace
 
     Evaluation CurrentEvaluation;
 
-    constexpr auto PROBNUM = 10;
+    constexpr auto ProblemArraySize = 10;
 
     struct Problem
     {
@@ -40,7 +40,7 @@ namespace
         int votes{};
     };
 
-    std::array<Problem, PROBNUM> Problems;
+    std::array<Problem, ProblemArraySize> Problems;
 
     int CityPop{}, deltaCityPop{};
     int CityAssessedValue; /* assessed city value */
@@ -275,7 +275,7 @@ void VoteProblems()
         
         ++problemIndex;
 
-        if (problemIndex >= PROBNUM)
+        if (problemIndex >= ProblemArraySize)
         {
             problemIndex = 0;
         }
