@@ -350,9 +350,9 @@ void GetScore(const Budget& budget)
 
     OldCityScore = CityScore;
     x = 0;
-    for (z = 0; z < 7; z++)
+    for (z = 0; z < ProblemArraySize; z++)
     {
-        x += Problems[z].value;	/* add 7 probs */
+        x += Problems[z].value;
     }
 
     x = x / 3;			/* 7 + 2 average */
