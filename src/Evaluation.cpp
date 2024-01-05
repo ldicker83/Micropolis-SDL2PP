@@ -508,36 +508,9 @@ void CityEvaluation(const Budget& budget)
 }
 
 
-void SetEvaluation(const Evaluation& eval)
-{
-    CurrentEvaluation = eval;
-
-    const std::string evalMessage = "UISetEvaluation {" +
-        eval.changed + "} {" +
-        eval.problemString[0] + "} {" +
-        eval.problemString[1] + "} {" +
-        eval.problemString[2] + "} {" +
-        eval.problemString[3] + "} {" +
-        eval.problemVote[0] + "} {" +
-        eval.problemVote[1] + "} {" +
-        eval.problemVote[2] + "} {" +
-        eval.problemVote[3] + "} {" +
-        eval.pop + "} {" +
-        eval.delta + "} {" +
-        eval.assessed_dollars + "} {" +
-        "City Class: " + eval.cityclass + "} {" +
-        "City Level: " + eval.citylevel + "} {" +
-        "GoodYes: " + eval.goodyes + "} {" +
-        "GoodNo: " + eval.goodno + "} {" +
-        "Title: " + eval.title + "}";
-
-    Eval(evalMessage);
-}
-
-
 void doScoreCard(const CityProperties& properties)
 {
-    const Evaluation eval
+    CurrentEvaluation = 
     {
         std::to_string(deltaCityScore()),
         std::to_string(cityScore()),
@@ -564,8 +537,6 @@ void doScoreCard(const CityProperties& properties)
         std::to_string(cityNo()) + "%",
         std::to_string(CurrentYear())
     };
-
-    SetEvaluation(eval);
 }
 
 
