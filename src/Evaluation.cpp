@@ -445,16 +445,18 @@ void DoVotes()
 
 void DoProblems(const Budget& budget)
 {
-    ProblemTable.fill(0);
     ProblemTaken.fill(0);
 
-    ProblemTable[0] = CrimeAverage; /* Crime */
-    ProblemTable[1] = PolluteAverage; /* Pollution */
-    ProblemTable[2] = static_cast<int>(LVAverage * 0.7f); /* Housing */
-    ProblemTable[3] = budget.TaxRate() * 10; /* Taxes */
-    ProblemTable[4] = AverageTraffic(); /* Traffic */
-    ProblemTable[5] = GetUnemployment(); /* Unemployment */
-    ProblemTable[6] = GetFire(); /* Fire */
+    ProblemTable =
+    {
+        CrimeAverage,  // Crime
+        PolluteAverage, // Pollution
+        static_cast<int>(LVAverage * 0.7f), // Housing
+        budget.TaxRate() * 10, // Taxes
+        AverageTraffic(), // Traffic
+        GetUnemployment(), // Unemployment
+        GetFire() // Fire
+    };
 
     VoteProblems();
     
@@ -470,6 +472,7 @@ void DoProblems(const Budget& budget)
                 max = ProblemVotes[votesIndex];
             }
         }
+
         if (max)
         {
             ProblemTaken[thisProblem] = 1;
