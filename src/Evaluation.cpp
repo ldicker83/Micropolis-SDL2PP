@@ -20,7 +20,6 @@
 #include "w_util.h"
 
 #include <algorithm>
-#include <map>
 
 
 /* City Evaluation */
