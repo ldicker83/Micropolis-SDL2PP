@@ -25,7 +25,6 @@
 /* City Evaluation */
 namespace
 {
-    int EvalValid{};
     int CityYes{}, CityNo{};
 
     bool EvalChanged{ false };
@@ -220,7 +219,6 @@ void EvalInit()
     CityClassValue = CityClass::Village;
     CityScore = 500;
     DeltaCityScore = 0;
-    EvalValid = 1;
     
     ProblemVotes.fill(0);
     ProblemTaken.fill(0);
@@ -488,7 +486,6 @@ void DoProblems(const Budget& budget)
 
 void CityEvaluation(const Budget& budget)
 {
-    EvalValid = 0;
     if (TotalPop)
     {
         GetAssessedValue();
@@ -503,8 +500,6 @@ void CityEvaluation(const Budget& budget)
         EvalInit();
         ChangeEval();
     }
-
-    EvalValid = 1;
 }
 
 
