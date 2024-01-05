@@ -43,7 +43,7 @@ namespace
     std::array<Problem, ProblemArraySize> Problems;
 
     int CityPop{}, deltaCityPop{};
-    int CityAssessedValue; /* assessed city value */
+    int CityAssessedValue;
     CityClass CityClassValue;
     int CityScore{}, DeltaCityScore{}, AverageCityScore{};
     int TrafficAverage{};
