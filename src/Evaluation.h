@@ -52,8 +52,6 @@ enum class CityClass
 };
 
 
-constexpr auto PROBNUM = 10;
-
 const Evaluation& currentEvaluation();
 
 void currentEvaluationSeen();

@@ -31,6 +31,8 @@ namespace
 
     Evaluation CurrentEvaluation;
 
+    constexpr auto PROBNUM = 10;
+
     struct Problem
     {
         std::string name{};
