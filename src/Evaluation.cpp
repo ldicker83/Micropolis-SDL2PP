@@ -55,7 +55,7 @@ namespace
 
     const std::string CityClassString[] =
     {
-        "Village", "Town", "City", "Metropolis", "Megalopolis"
+         "Village", "Town", "City", "Capital", "Metropolis", "Megalopolis"
     };
 
     const std::string CityLevelString[] =
