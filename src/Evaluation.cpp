@@ -63,7 +63,7 @@ namespace
       "Easy", "Medium", "Hard"
     };
 
-    const std::string ProblemStrings[10] =
+    const std::string ProblemTitles[10] =
     {
       "CRIME",
       "POLLUTION",
@@ -332,13 +332,7 @@ int GetUnemployment()
 
 int GetFire()
 {
-    int z{ FirePop * 5 };
-    if (z > 255)
-    {
-        return 255;
-    }
-
-    return z;
+    return std::clamp(FirePop * 5, 0, 255);
 }
 
 
@@ -438,13 +432,13 @@ void DoProblems(const Budget& budget)
 {
     Problems =
     {
-        Problem{ ProblemStrings[0], CrimeAverage },
-        Problem{ ProblemStrings[1], PolluteAverage },
-        Problem{ ProblemStrings[2], static_cast<int>(LVAverage * 0.7f) },
-        Problem{ ProblemStrings[3], budget.TaxRate() * 10 },
-        Problem{ ProblemStrings[4], AverageTraffic() },
-        Problem{ ProblemStrings[5], GetUnemployment() },
-        Problem{ ProblemStrings[6], GetFire() }
+        Problem{ ProblemTitles[0], CrimeAverage },
+        Problem{ ProblemTitles[1], PolluteAverage },
+        Problem{ ProblemTitles[2], static_cast<int>(LVAverage * 0.7f) },
+        Problem{ ProblemTitles[3], budget.TaxRate() * 10 },
+        Problem{ ProblemTitles[4], AverageTraffic() },
+        Problem{ ProblemTitles[5], GetUnemployment() },
+        Problem{ ProblemTitles[6], GetFire() }
     };
 
     VoteProblems();
@@ -487,10 +481,10 @@ void doScoreCard(const CityProperties& properties)
         },
         std::array<std::string, 4>
         {
-            std::to_string(Problems[0].votes),
-            std::to_string(Problems[1].votes),
-            std::to_string(Problems[2].votes),
-            std::to_string(Problems[3].votes)
+            std::to_string(Problems[0].votes) + "%",
+            std::to_string(Problems[1].votes) + "%",
+            std::to_string(Problems[2].votes) + "%",
+            std::to_string(Problems[3].votes) + "%"
         },
         std::to_string(cityPopulation()),
         std::to_string(deltaCityPopulation()),
