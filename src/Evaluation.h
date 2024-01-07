@@ -81,5 +81,3 @@ int trafficAverage();
 
 void ChangeEval();
 void scoreDoer(const CityProperties& properties);
-
-void UpdateEvaluation();

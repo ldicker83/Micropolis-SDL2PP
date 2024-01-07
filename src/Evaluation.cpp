@@ -224,12 +224,6 @@ void ChangeEval()
 }
 
 
-void UpdateEvaluation()
-{
-    ChangeEval();
-}
-
-
 void GetAssessedValue()
 {
     int assesedValue = RoadTotal * 5;
