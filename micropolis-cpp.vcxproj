@@ -24,6 +24,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Map.cpp" />
     <ClCompile Include="src\MiniMapWindow.cpp" />
+    <ClCompile Include="src\QueryWindow.cpp" />
     <ClCompile Include="src\Scan.cpp" />
     <ClCompile Include="src\Sprite.cpp" />
     <ClCompile Include="src\StringRender.cpp" />
@@ -68,6 +69,7 @@
     <ClInclude Include="src\MiniMapWindow.h" />
     <ClInclude Include="src\Point.h" />
     <ClInclude Include="src\PointInRectangleRange.h" />
+    <ClInclude Include="src\QueryWindow.h" />
     <ClInclude Include="src\Scan.h" />
     <ClInclude Include="src\Sprite.h" />
     <ClInclude Include="src\StringRender.h" />
