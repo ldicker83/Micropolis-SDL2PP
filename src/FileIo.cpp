@@ -24,6 +24,8 @@
 #include <sstream>
 #include <stdexcept>
 
+#include "nfd.hpp"
+
 
 namespace
 {
@@ -52,28 +54,18 @@ namespace
 };
 
 
-FileIo::FileIo(SDL_Window& window):
-	mWindow(window)
+FileIo::FileIo(SDL_Window&)
 {
-	SDL_GetWindowWMInfo(&mWindow, &mWmInfo);
-
-    #if defined(WIN32)
-    wchar_t* path{ nullptr };
-    if (SHGetKnownFolderPath(FOLDERID_Documents, KF_FLAG_CREATE, NULL, &path) != S_OK)
+    if(NFD::Init() != NFD_OKAY)
     {
-        throw std::runtime_error("Unable to get user documents path.");
+        throw std::runtime_error("Unable to initialise file picker library.");
     }
+}
 
-    std::wstringstream ss;
-    ss << path << L"\\Micropolis";
-    mSavePathW = ss.str();
-    mSavePath = StringFromWString(mSavePathW);
 
-    if (!PathFileExists(mSavePathW.c_str()))
-    {
-        CreateDirectory(mSavePathW.c_str(), nullptr);
-    }
-    #endif
+FileIo::~FileIo()
+{
+    NFD::Quit();
 }
 
 
@@ -117,80 +109,35 @@ bool FileIo::pickOpenFile()
 
 void FileIo::extractFileName()
 {
-    std::size_t location = mFileNameW.find_last_of(L"/\\");
-    mFileNameW = mFileNameW.substr(location + 1);
-    
-    #if defined(WIN32)
-    mFileName = StringFromWString(mFileNameW);
-    #endif
+    std::size_t location = mFileName.find_last_of("/\\");
+    mFileName = mFileName.substr(location + 1);
 }
 
 
 /**
- * There are a few assumptions here regarding the Win32 API's handling of the file
- * pick interface -- creating items, setting parameters and options, etc. are all
- * assumed to not fail. If they fail this will undoubtedly result in other issues.
- *
- * The checks are not present for the sake of brevity. If it's determined that the
- * hresult checks are necessary they can be added as needed.
- * 
  * \return Returns true if a file name has been picked. False otherwise.
  */
 bool FileIo::showFileDialog(FileOperation operation)
 {
-    #if defined(WIN32)
-    CLSID fileOperation
+    NFD::UniquePath outPath;
+    nfdfilteritem_t filterItem[1] = {{"Micropolis City", "cty"}};
+       
+    if(operation == FileOperation::Open)
     {
-        operation == FileOperation::Open ? CLSID_FileOpenDialog : CLSID_FileSaveDialog
-    };
-    
-    IFileDialog* fileDialog{ nullptr };
-    if (!SUCCEEDED(CoCreateInstance(fileOperation, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&fileDialog))))
-    {
-        throw std::runtime_error("Unable to create file IO dialog");
-    }
-
-    IShellItem* defaultFolder{ nullptr };
-    SHCreateItemFromParsingName(mSavePathW.c_str(), nullptr, IID_PPV_ARGS(&defaultFolder));
-    fileDialog->SetDefaultFolder(defaultFolder);
-    defaultFolder->Release();
-
-    DWORD dwFlags{};
-    fileDialog->GetOptions(&dwFlags);
-
-    fileDialog->SetOptions(dwFlags | FOS_FORCEFILESYSTEM);
-    fileDialog->SetFileTypes(ARRAYSIZE(FileTypeFilter), FileTypeFilter);
-    fileDialog->SetFileTypeIndex(1);
-    fileDialog->SetDefaultExtension(L"cty");
-
-    if (operation == FileOperation::Save && !mFileNameW.empty())
-    {
-        fileDialog->SetFileName(mFileNameW.c_str());
-    }
-
-    if (!SUCCEEDED(fileDialog->Show(mWmInfo.info.win.window)))
-    {
-        fileDialog->Release();
-        return false;
-    }
-
-    IShellItem* item{ nullptr };
-    if (SUCCEEDED(fileDialog->GetResult(&item)))
-    {
-        PWSTR filePath{ nullptr };
-
-        if (!SUCCEEDED(item->GetDisplayName(SIGDN_FILESYSPATH, &filePath)))
+        if(NFD::OpenDialog(outPath, filterItem, 1) != NFD_OKAY)
         {
-            throw std::runtime_error("Unable to get file name");
+            return false;
         }
-        mFileNameW = filePath;
-        CoTaskMemFree(filePath);
-
-        item->Release();
     }
-
-    fileDialog->Release();
-    #endif
+    else
+    {
+        if(NFD::SaveDialog(outPath, filterItem, 1) != NFD_OKAY)
+        {
+            return false;
+        }
+    }
+    
+    mFileName = outPath.get();
 
     return true;
 }
