@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5718EAB92B551047008A62B8 /* include in Resources */ = {isa = PBXBuildFile; fileRef = 5718EAB72B551047008A62B8 /* include */; };
+		5718EABA2B551047008A62B8 /* nfd_cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = 5718EAB82B551047008A62B8 /* nfd_cocoa.m */; };
 		57B5F54D2B2BECC300683BF7 /* WindowStack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57B5F54B2B2BECC300683BF7 /* WindowStack.cpp */; };
 		57B5F54F2B2BEDBD00683BF7 /* WindowBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57B5F54E2B2BEDBD00683BF7 /* WindowBase.cpp */; };
 		57C37B2C2958E47C0055BC50 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57C37B2B2958E47C0055BC50 /* Assets.xcassets */; };
@@ -76,6 +78,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5718EAB72B551047008A62B8 /* include */ = {isa = PBXFileReference; lastKnownFileType = folder; name = include; path = "../../nativefiledialog-extended/src/include"; sourceTree = "<group>"; };
+		5718EAB82B551047008A62B8 /* nfd_cocoa.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = nfd_cocoa.m; path = "../../nativefiledialog-extended/src/nfd_cocoa.m"; sourceTree = "<group>"; };
 		57B5F54B2B2BECC300683BF7 /* WindowStack.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WindowStack.cpp; path = ../../src/WindowStack.cpp; sourceTree = "<group>"; };
 		57B5F54C2B2BECC300683BF7 /* WindowStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WindowStack.h; path = ../../src/WindowStack.h; sourceTree = "<group>"; };
 		57B5F54E2B2BEDBD00683BF7 /* WindowBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WindowBase.cpp; path = ../../src/WindowBase.cpp; sourceTree = "<group>"; };
@@ -187,6 +191,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5718EAB62B551022008A62B8 /* NativeFileDialog */ = {
+			isa = PBXGroup;
+			children = (
+				5718EAB72B551047008A62B8 /* include */,
+				5718EAB82B551047008A62B8 /* nfd_cocoa.m */,
+			);
+			name = NativeFileDialog;
+			sourceTree = "<group>";
+		};
 		57C37B1C2958E47B0055BC50 = {
 			isa = PBXGroup;
 			children = (
@@ -208,6 +221,7 @@
 		57C37B272958E47B0055BC50 /* Micropolis-SDL2PP */ = {
 			isa = PBXGroup;
 			children = (
+				5718EAB62B551022008A62B8 /* NativeFileDialog */,
 				57C37B6E2958E4FF0055BC50 /* Budget.cpp */,
 				57C37BA32958E52C0055BC50 /* BudgetWindow.cpp */,
 				57C37BA42958E52C0055BC50 /* Connection.cpp */,
@@ -384,6 +398,7 @@
 				57C37BC32958EAA30055BC50 /* scenarios in Resources */,
 				57C37BC22958EAA30055BC50 /* icons in Resources */,
 				57C37BC62958EAA30055BC50 /* res in Resources */,
+				5718EAB92B551047008A62B8 /* include in Resources */,
 				57C37B2C2958E47C0055BC50 /* Assets.xcassets in Resources */,
 				57C37B2F2958E47C0055BC50 /* MainMenu.xib in Resources */,
 			);
@@ -426,6 +441,7 @@
 				57C37B8D2958E4FF0055BC50 /* Graphics.cpp in Sources */,
 				57B5F54D2B2BECC300683BF7 /* WindowStack.cpp in Sources */,
 				57C37B972958E4FF0055BC50 /* ToolPalette.cpp in Sources */,
+				5718EABA2B551047008A62B8 /* nfd_cocoa.m in Sources */,
 				57C37BAD2958E52C0055BC50 /* FileIo.cpp in Sources */,
 				57C37B9C2958E4FF0055BC50 /* Traffic.cpp in Sources */,
 				57C37BAF2958E52C0055BC50 /* MiniMapWindow.cpp in Sources */,
@@ -499,7 +515,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 13.1;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -551,7 +567,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 13.1;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -563,10 +579,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_ARC = NO;
 				CODE_SIGN_ENTITLEMENTS = "Micropolis-SDL2PP/Micropolis_SDL2PP.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -574,6 +592,7 @@
 					"$(PROJECT_DIR)",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = "../nativefiledialog-extended/src/include";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.simulation-games";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainNibFile = MainMenu;
@@ -582,7 +601,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "lairworks.Micropolis-SDL2PP";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -595,10 +614,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_ARC = NO;
 				CODE_SIGN_ENTITLEMENTS = "Micropolis-SDL2PP/Micropolis_SDL2PP.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -606,6 +627,7 @@
 					"$(PROJECT_DIR)",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = "../nativefiledialog-extended/src/include";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.simulation-games";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainNibFile = MainMenu;
@@ -614,7 +636,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "lairworks.Micropolis-SDL2PP";
 				PRODUCT_NAME = "$(TARGET_NAME)";

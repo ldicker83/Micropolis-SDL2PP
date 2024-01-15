@@ -23,12 +23,14 @@ public:
 	const FileIo& operator=(const FileIo&) = delete;
 
 	FileIo(SDL_Window& window);
-	~FileIo() = default;
+	~FileIo();
 
 	const std::string& savePath() const { return mSavePath; }
 	const std::string& fileName() const { return mFileName; }
-	const std::string fullPath() const { return mSavePath + "\\" + mFileName; }
+	const std::string fullPath() const { return mSavePath + mSeparator + mFileName; }
 
+    void clearSaveFilename();
+    
 	bool pickSaveFile();
 	bool pickOpenFile();
 
@@ -40,12 +42,7 @@ private:
 	bool showFileDialog(FileOperation);
 	void extractFileName();
 
-	SDL_Window& mWindow;
-	SDL_SysWMinfo mWmInfo{};
-
 	std::string mSavePath;
-	std::wstring mSavePathW;
-
 	std::string mFileName;
-	std::wstring mFileNameW;
+    std::string mSeparator;
 };

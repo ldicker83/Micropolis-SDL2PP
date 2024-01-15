@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\NativeFileDialog">
+      <UniqueIdentifier>{eca2bde5-5dec-4718-95d9-88d8ae12261d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\NativeFileDialog">
+      <UniqueIdentifier>{f8c7d5c6-5ac2-4aa8-8f92-25afbeb57cac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\g_ani.cpp">
@@ -119,6 +125,9 @@
     </ClCompile>
     <ClCompile Include="src\WindowBase.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nativefiledialog-extended\src\nfd_win.cpp">
+      <Filter>Source Files\NativeFileDialog</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -259,6 +268,12 @@
     </ClInclude>
     <ClInclude Include="src\WindowStack.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nativefiledialog-extended\src\include\nfd.h">
+      <Filter>Header Files\NativeFileDialog</Filter>
+    </ClInclude>
+    <ClInclude Include="nativefiledialog-extended\src\include\nfd.hpp">
+      <Filter>Header Files\NativeFileDialog</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="nativefiledialog-extended\src\nfd_win.cpp" />
     <ClCompile Include="src\Budget.cpp" />
     <ClCompile Include="src\BudgetWindow.cpp" />
     <ClCompile Include="src\Connection.cpp" />
@@ -48,6 +49,8 @@
     <ClCompile Include="src\Zone.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="nativefiledialog-extended\src\include\nfd.h" />
+    <ClInclude Include="nativefiledialog-extended\src\include\nfd.hpp" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\BindFunction.h" />
     <ClInclude Include="src\Budget.h" />
@@ -151,7 +154,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);nativefiledialog-extended\src\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -191,6 +194,7 @@ IF NOT "$(VcpkgInstalledDir)" == "" (
       <StringPooling>true</StringPooling>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
+      <AdditionalIncludeDirectories>;nativefiledialog-extended\src\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

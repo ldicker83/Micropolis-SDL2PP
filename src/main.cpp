@@ -680,6 +680,7 @@ void handleKeyEvent(SDL_Event& event)
         break;
 
     case SDLK_F7:
+        fileIo->clearSaveFilename();
         resetGame();
         DrawBigMap();
         break;
