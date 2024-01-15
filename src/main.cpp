@@ -1197,7 +1197,7 @@ int main(int argc, char* argv[])
 
         SDL_Quit();
     }
-    catch(std::exception e)
+    catch(const std::exception& e)
     {
         std::string message(std::string(e.what()) + "\n\nMicropolis-SDL2PP will now close.");
         
