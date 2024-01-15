@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		5718EAB92B551047008A62B8 /* include in Resources */ = {isa = PBXBuildFile; fileRef = 5718EAB72B551047008A62B8 /* include */; };
 		5718EABA2B551047008A62B8 /* nfd_cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = 5718EAB82B551047008A62B8 /* nfd_cocoa.m */; };
+		5718EABC2B552B74008A62B8 /* QueryWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5718EABB2B552B74008A62B8 /* QueryWindow.cpp */; };
 		57B5F54D2B2BECC300683BF7 /* WindowStack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57B5F54B2B2BECC300683BF7 /* WindowStack.cpp */; };
 		57B5F54F2B2BEDBD00683BF7 /* WindowBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57B5F54E2B2BEDBD00683BF7 /* WindowBase.cpp */; };
 		57C37B2C2958E47C0055BC50 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57C37B2B2958E47C0055BC50 /* Assets.xcassets */; };
@@ -80,6 +81,8 @@
 /* Begin PBXFileReference section */
 		5718EAB72B551047008A62B8 /* include */ = {isa = PBXFileReference; lastKnownFileType = folder; name = include; path = "../../nativefiledialog-extended/src/include"; sourceTree = "<group>"; };
 		5718EAB82B551047008A62B8 /* nfd_cocoa.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = nfd_cocoa.m; path = "../../nativefiledialog-extended/src/nfd_cocoa.m"; sourceTree = "<group>"; };
+		5718EABB2B552B74008A62B8 /* QueryWindow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = QueryWindow.cpp; path = ../../src/QueryWindow.cpp; sourceTree = "<group>"; };
+		5718EABD2B552B7D008A62B8 /* QueryWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = QueryWindow.h; path = ../../src/QueryWindow.h; sourceTree = "<group>"; };
 		57B5F54B2B2BECC300683BF7 /* WindowStack.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WindowStack.cpp; path = ../../src/WindowStack.cpp; sourceTree = "<group>"; };
 		57B5F54C2B2BECC300683BF7 /* WindowStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WindowStack.h; path = ../../src/WindowStack.h; sourceTree = "<group>"; };
 		57B5F54E2B2BEDBD00683BF7 /* WindowBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WindowBase.cpp; path = ../../src/WindowBase.cpp; sourceTree = "<group>"; };
@@ -236,6 +239,7 @@
 				57C37B622958E4FE0055BC50 /* Map.cpp */,
 				57C37BA82958E52C0055BC50 /* MiniMapWindow.cpp */,
 				57C37B6B2958E4FF0055BC50 /* Power.cpp */,
+				5718EABB2B552B74008A62B8 /* QueryWindow.cpp */,
 				57C37BA22958E52C0055BC50 /* Rectangle.cpp */,
 				57C37B772958E4FF0055BC50 /* s_alloc.cpp */,
 				57C37B782958E4FF0055BC50 /* s_disast.cpp */,
@@ -281,6 +285,7 @@
 				57C37B7F2958E4FF0055BC50 /* Point.h */,
 				57C37B632958E4FE0055BC50 /* PointInRectangleRange.h */,
 				57C37B682958E4FF0055BC50 /* Power.h */,
+				5718EABD2B552B7D008A62B8 /* QueryWindow.h */,
 				57C37B5E2958E4FE0055BC50 /* Rectangle.h */,
 				57C37B432958E4FE0055BC50 /* s_alloc.h */,
 				57C37B452958E4FE0055BC50 /* s_disast.h */,
@@ -439,6 +444,7 @@
 				57C37B892958E4FF0055BC50 /* s_msg.cpp in Sources */,
 				57C37B942958E4FF0055BC50 /* s_sim.cpp in Sources */,
 				57C37B8D2958E4FF0055BC50 /* Graphics.cpp in Sources */,
+				5718EABC2B552B74008A62B8 /* QueryWindow.cpp in Sources */,
 				57B5F54D2B2BECC300683BF7 /* WindowStack.cpp in Sources */,
 				57C37B972958E4FF0055BC50 /* ToolPalette.cpp in Sources */,
 				5718EABA2B551047008A62B8 /* nfd_cocoa.m in Sources */,
