@@ -27,7 +27,7 @@ public:
 
 	const std::string& savePath() const { return mSavePath; }
 	const std::string& fileName() const { return mFileName; }
-	const std::string fullPath() const { return mSavePath + "\\" + mFileName; }
+	const std::string fullPath() const { return mSavePath + mSeparator + mFileName; }
 
 	bool pickSaveFile();
 	bool pickOpenFile();
@@ -42,4 +42,5 @@ private:
 
 	std::string mSavePath;
 	std::string mFileName;
+    std::string mSeparator;
 };
