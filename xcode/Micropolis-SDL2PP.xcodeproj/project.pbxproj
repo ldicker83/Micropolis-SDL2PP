@@ -56,6 +56,7 @@
 		57C37BC52958EAA30055BC50 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 57C37BBF2958EAA30055BC50 /* images */; };
 		57C37BC62958EAA30055BC50 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 57C37BC02958EAA30055BC50 /* res */; };
 		57C37BC72958EAA30055BC50 /* micropolis.ico in Resources */ = {isa = PBXBuildFile; fileRef = 57C37BC12958EAA30055BC50 /* micropolis.ico */; };
+		57CB7D3A2B54E62D008B74E2 /* QueryWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57CB7D392B54E62D008B74E2 /* QueryWindow.cpp */; };
 		57E8E893295E9CCE0062D57B /* EvaluationWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57E8E892295E9CCE0062D57B /* EvaluationWindow.cpp */; };
 /* End PBXBuildFile section */
 
@@ -169,6 +170,8 @@
 		57C37BBF2958EAA30055BC50 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = images; path = ../images; sourceTree = "<group>"; };
 		57C37BC02958EAA30055BC50 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; name = res; path = ../res; sourceTree = "<group>"; };
 		57C37BC12958EAA30055BC50 /* micropolis.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; name = micropolis.ico; path = ../micropolis.ico; sourceTree = "<group>"; };
+		57CB7D392B54E62D008B74E2 /* QueryWindow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = QueryWindow.cpp; path = ../../src/QueryWindow.cpp; sourceTree = "<group>"; };
+		57CB7D3B2B54E64A008B74E2 /* QueryWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = QueryWindow.h; path = ../../src/QueryWindow.h; sourceTree = "<group>"; };
 		57E8E891295E9A4C0062D57B /* EvaluationWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = EvaluationWindow.h; path = ../../src/EvaluationWindow.h; sourceTree = "<group>"; };
 		57E8E892295E9CCE0062D57B /* EvaluationWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = EvaluationWindow.cpp; path = ../../src/EvaluationWindow.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -222,6 +225,7 @@
 				57C37B622958E4FE0055BC50 /* Map.cpp */,
 				57C37BA82958E52C0055BC50 /* MiniMapWindow.cpp */,
 				57C37B6B2958E4FF0055BC50 /* Power.cpp */,
+				57CB7D392B54E62D008B74E2 /* QueryWindow.cpp */,
 				57C37BA22958E52C0055BC50 /* Rectangle.cpp */,
 				57C37B772958E4FF0055BC50 /* s_alloc.cpp */,
 				57C37B782958E4FF0055BC50 /* s_disast.cpp */,
@@ -267,6 +271,7 @@
 				57C37B7F2958E4FF0055BC50 /* Point.h */,
 				57C37B632958E4FE0055BC50 /* PointInRectangleRange.h */,
 				57C37B682958E4FF0055BC50 /* Power.h */,
+				57CB7D3B2B54E64A008B74E2 /* QueryWindow.h */,
 				57C37B5E2958E4FE0055BC50 /* Rectangle.h */,
 				57C37B432958E4FE0055BC50 /* s_alloc.h */,
 				57C37B452958E4FE0055BC50 /* s_disast.h */,
@@ -348,7 +353,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastUpgradeCheck = 1420;
+				LastUpgradeCheck = 1510;
 				TargetAttributes = {
 					57C37B242958E47B0055BC50 = {
 						CreatedOnToolsVersion = 14.2;
@@ -429,6 +434,7 @@
 				57C37BAD2958E52C0055BC50 /* FileIo.cpp in Sources */,
 				57C37B9C2958E4FF0055BC50 /* Traffic.cpp in Sources */,
 				57C37BAF2958E52C0055BC50 /* MiniMapWindow.cpp in Sources */,
+				57CB7D3A2B54E62D008B74E2 /* QueryWindow.cpp in Sources */,
 				57C37B8B2958E4FF0055BC50 /* Evaluation.cpp in Sources */,
 				57C37B902958E4FF0055BC50 /* s_fileio.cpp in Sources */,
 				57C37B992958E4FF0055BC50 /* Power.cpp in Sources */,
@@ -482,6 +488,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -540,6 +547,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -567,6 +575,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -599,6 +608,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
