@@ -33,6 +33,12 @@ FileIo::~FileIo()
 }
 
 
+void FileIo::clearSaveFilename()
+{
+    mFileName.clear();
+}
+
+
 bool FileIo::filePicked() const
 {
     return !mFileName.empty();

@@ -29,6 +29,8 @@ public:
 	const std::string& fileName() const { return mFileName; }
 	const std::string fullPath() const { return mSavePath + mSeparator + mFileName; }
 
+    void clearSaveFilename();
+    
 	bool pickSaveFile();
 	bool pickOpenFile();
 
