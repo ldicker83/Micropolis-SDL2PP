@@ -27,3 +27,4 @@ struct Texture final
 
 Texture loadTexture(SDL_Renderer* renderer, const std::string& filename);
 Texture newTexture(SDL_Renderer* renderer, const Vector<int>& dimensions);
+void flushTexture(SDL_Renderer* renderer, Texture& texture);
