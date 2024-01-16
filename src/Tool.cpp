@@ -596,7 +596,7 @@ struct ZoneStatsStrings
 };
 
 
-void DoShowZoneStatus(const ZoneStatsStrings zoneStats, int x, int y)
+void DoShowZoneStatus(const ZoneStatsStrings zoneStats)
 {
     const std::string msg{
         "UIShowZoneStatus {" +
@@ -605,9 +605,7 @@ void DoShowZoneStatus(const ZoneStatsStrings zoneStats, int x, int y)
         zoneStats.landValue + "} {" +
         zoneStats.pollution + "} {" +
         zoneStats.crime + "} {" +
-        zoneStats.populationGrowth + "} {" +
-        std::to_string(x) + "} {" +
-        std::to_string(y) + "}"
+        zoneStats.populationGrowth + "}"
     };
 
     Eval(msg);
@@ -649,7 +647,7 @@ void doZoneStatus(int x, int y)
         statusStr[_x] = ZoneStatsString(static_cast<ZoneStatsId>(std::clamp(id, 1, 19)));
     }
 
-    DoShowZoneStatus({ localStr, statusStr[0], statusStr[1], statusStr[2], statusStr[3], statusStr[4] }, x, y);
+    DoShowZoneStatus({ localStr, statusStr[0], statusStr[1], statusStr[2], statusStr[3], statusStr[4] });
 }
 
 
