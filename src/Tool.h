@@ -51,7 +51,7 @@ struct ToolProperties
 };
 
 
-struct ZoneStatsStrings
+struct ZoneStats
 {
     const std::string title;
     const std::string density;

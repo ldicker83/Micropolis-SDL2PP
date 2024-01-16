@@ -585,7 +585,7 @@ int getDensityStr(int catNo, int mapH, int mapV)
 }
 
 
-void DoShowZoneStatus(const ZoneStatsStrings zoneStats)
+void DoShowZoneStatus(const ZoneStats zoneStats)
 {
     const std::string msg{
         "UIShowZoneStatus {" +
