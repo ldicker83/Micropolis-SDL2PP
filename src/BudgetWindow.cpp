@@ -160,10 +160,6 @@ BudgetWindow::BudgetWindow(SDL_Renderer* renderer, const StringRender& stringRen
 }
 
 
-BudgetWindow::~BudgetWindow()
-{}
-
-
 void BudgetWindow::reset()
 {
 	mAccepted = false;

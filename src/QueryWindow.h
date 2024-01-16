@@ -41,9 +41,9 @@ private:
     void onMouseDown(const Point<int>&) override;
 
 private:
-    Font* mFont{ nullptr };
-    Font* mFontBold{ nullptr };
-    Font* mFontBoldItalic{ nullptr };
+    std::unique_ptr<Font> mFont;
+    std::unique_ptr<Font> mFontBold;
+    std::unique_ptr<Font> mFontBoldItalic;
 
     Texture mTexture;
     Texture mTextTexture;
