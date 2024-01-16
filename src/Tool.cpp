@@ -587,12 +587,12 @@ int getDensityStr(int catNo, int mapH, int mapV)
 
 struct ZoneStatsStrings
 {
-    const std::string str;
-    const std::string s0;
-    const std::string s1;
-    const std::string s2;
-    const std::string s3;
-    const std::string s4;
+    const std::string title;
+    const std::string density;
+    const std::string landValue;
+    const std::string pollution;
+    const std::string crime;
+    const std::string populationGrowth;
 };
 
 
@@ -600,12 +600,12 @@ void DoShowZoneStatus(const ZoneStatsStrings zoneStats, int x, int y)
 {
     const std::string msg{
         "UIShowZoneStatus {" +
-        zoneStats.str + "} {" +
-        zoneStats.s0 + "} {" +
-        zoneStats.s1 + "} {" +
-        zoneStats.s2 + "} {" +
-        zoneStats.s3 + "} {" +
-        zoneStats.s4 + "} {" +
+        zoneStats.title + "} {" +
+        zoneStats.density + "} {" +
+        zoneStats.landValue + "} {" +
+        zoneStats.pollution + "} {" +
+        zoneStats.crime + "} {" +
+        zoneStats.populationGrowth + "} {" +
         std::to_string(x) + "} {" +
         std::to_string(y) + "}"
     };
