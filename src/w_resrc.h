@@ -130,8 +130,8 @@ struct ZoneStats
     std::string title;
     std::string density;
     std::string landValue;
-    std::string pollution;
     std::string crime;
+    std::string pollution;
     std::string populationGrowth;
 };
 
