@@ -44,9 +44,9 @@ private:
     void drawScorePanel();
     
 private:
-    Font* mFont{ nullptr };
-    Font* mFontBold{ nullptr };
-    Font* mFontSemiBold{ nullptr };
+    std::unique_ptr<Font> mFont;
+    std::unique_ptr<Font> mFontBold;
+    std::unique_ptr<Font> mFontSemiBold;
 
     const int mLineSpacing{ 0 };
     const int mTitleSpacing{ 0 };
