@@ -38,8 +38,12 @@ public:
     void update() override {}
 
 private:
+    void onMouseDown(const Point<int>&) override;
+
+private:
     Font* mFont{ nullptr };
     Font* mFontBold{ nullptr };
+    Font* mFontBoldItalic{ nullptr };
 
     Texture mTexture;
     Texture mTextTexture;
