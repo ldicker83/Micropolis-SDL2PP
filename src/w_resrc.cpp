@@ -78,7 +78,7 @@ std::map<ZoneStatsId, std::string> ZoneStatsTable =
     { ZoneStatsId::LandValueSlum, "Slum" },
     { ZoneStatsId::LandValueLowerClass, "Lower Class" },
     { ZoneStatsId::LandValueMiddleClass, "Middle Class" },
-    { ZoneStatsId::LandValueHighClass, "High x" },
+    { ZoneStatsId::LandValueHighClass, "Upper Class" },
     { ZoneStatsId::CrimeSafe, "Safe" },
     { ZoneStatsId::CrimeLight, "Light" },
     { ZoneStatsId::CrimeModerate, "Moderate" },
