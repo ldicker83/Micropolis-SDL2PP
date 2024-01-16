@@ -773,8 +773,8 @@ void handleMouseEvent(SDL_Event& event)
 
             if (pendingTool() == Tool::Query)
             {
-                // inject query tool result here
                 GuiWindowStack.bringToFront(queryWindow.get());
+                queryWindow->setQueryResult(queryResult());
                 queryWindow->show();
             }
         }
