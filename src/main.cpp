@@ -770,6 +770,13 @@ void handleMouseEvent(SDL_Event& event)
             {
                 ToolDown(TilePointedAt, budget);
             }
+
+            if (pendingTool() == Tool::Query)
+            {
+                // inject query tool result here
+                GuiWindowStack.bringToFront(queryWindow.get());
+                queryWindow->show();
+            }
         }
         break;
 
