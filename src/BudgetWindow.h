@@ -48,7 +48,6 @@ public:
 	const BudgetWindow& operator=(const BudgetWindow&) = delete;
 
 	BudgetWindow(SDL_Renderer* renderer, const StringRender& stringRenderer, Budget& budget);
-	~BudgetWindow() override;
 
 	void reset();
 
@@ -71,7 +70,7 @@ private:
 	SDL_Renderer* mRenderer{ nullptr };
 	const StringRender& mStringRenderer;
 
-	std::unique_ptr<Font> mFont{ nullptr };
+	std::unique_ptr<Font> mFont;
 
 	Texture mTexture{};
 
