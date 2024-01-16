@@ -51,17 +51,6 @@ struct ToolProperties
 };
 
 
-struct ZoneStats
-{
-    const std::string title;
-    const std::string density;
-    const std::string landValue;
-    const std::string pollution;
-    const std::string crime;
-    const std::string populationGrowth;
-};
-
-
 enum class ToolResult
 {
     Success,
