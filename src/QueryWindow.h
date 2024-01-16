@@ -20,6 +20,9 @@
 #include <SDL2/SDL.h>
 
 
+struct ZoneStats;
+
+
 class QueryWindow : public WindowBase
 {
 public:
@@ -28,6 +31,8 @@ public:
     const QueryWindow operator=(const QueryWindow&) = delete;
 
     QueryWindow(SDL_Renderer* renderer);
+
+    void setQueryResult(const ZoneStats& stats);
 
     void draw() override;
     void update() override {}

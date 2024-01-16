@@ -11,6 +11,8 @@
 
 #include "QueryWindow.h"
 
+#include "w_resrc.h"
+
 
 namespace
 {
@@ -34,6 +36,11 @@ QueryWindow::QueryWindow(SDL_Renderer* renderer) :
     SDL_SetTextureBlendMode(mTextTexture.texture, SDL_BLENDMODE_BLEND);
 
     closeButtonActive(true);
+}
+
+
+void QueryWindow::setQueryResult(const ZoneStats& stats)
+{
 }
 
 
