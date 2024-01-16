@@ -71,12 +71,6 @@ void WindowBase::size(const Vector<int>& size)
 }
 
 
-constexpr Vector<int> WindowBase::size() const
-{
-    return mArea.size();
-}
-
-
 const Rectangle<int>& WindowBase::area() const
 {
     return mArea;
