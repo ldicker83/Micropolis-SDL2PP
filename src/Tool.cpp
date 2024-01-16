@@ -635,19 +635,14 @@ void doZoneStatus(int x, int y)
         tileNum = COALBASE;
     }
 
-    std::string localStr = queryString(tileNum);
     std::array<std::string, 5> statusStr;
-
-    for (int _x = 0; _x < 5; ++_x)
+    for (int i = 0; i < 5; ++i)
     {
-        int id = getDensityStr(_x, x, y);
-        id++;
-        
-        // \fixme ugly cast
-        statusStr[_x] = ZoneStatsString(static_cast<ZoneStatsId>(std::clamp(id, 1, 19)));
+        const int id = getDensityStr(i, x, y) + 1;
+        statusStr[i] = ZoneStatsString(static_cast<ZoneStatsId>(std::clamp(id, 1, 19)));
     }
 
-    DoShowZoneStatus({ localStr, statusStr[0], statusStr[1], statusStr[2], statusStr[3], statusStr[4] });
+    DoShowZoneStatus({ queryString(tileNum), statusStr[0], statusStr[1], statusStr[2], statusStr[3], statusStr[4] });
 }
 
 
