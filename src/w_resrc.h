@@ -127,12 +127,12 @@ enum class QueryStatsId
 
 struct ZoneStats
 {
-    const std::string title;
-    const std::string density;
-    const std::string landValue;
-    const std::string pollution;
-    const std::string crime;
-    const std::string populationGrowth;
+    std::string title;
+    std::string density;
+    std::string landValue;
+    std::string pollution;
+    std::string crime;
+    std::string populationGrowth;
 };
 
 
