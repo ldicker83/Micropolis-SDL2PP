@@ -32,6 +32,8 @@ QueryWindow::QueryWindow(SDL_Renderer* renderer) :
     SDL_SetTextureColorMod(mFontBold->texture(), 0, 0, 0);
 
     SDL_SetTextureBlendMode(mTextTexture.texture, SDL_BLENDMODE_BLEND);
+
+    closeButtonActive(true);
 }
 
 
