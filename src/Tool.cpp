@@ -619,7 +619,7 @@ void doZoneStatus(int x, int y)
     std::array<std::string, 5> statusStr;
     for (int i = 0; i < 5; ++i)
     {
-        const int id = getDensityStr(i, x, y) + 1;
+        const int id = getDensityStr(i, x, y);
         statusStr[i] = ZoneStatsString(static_cast<ZoneStatsId>(std::clamp(id, 1, 19)));
     }
 
