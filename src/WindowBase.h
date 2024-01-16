@@ -38,7 +38,10 @@ public:
 
     void size(const Vector<int>& size);
 
-    constexpr Vector<int> size() const;
+    constexpr Vector<int> size() const
+    {
+        return mArea.size();
+    }
 
     const Rectangle<int>& area() const;
 

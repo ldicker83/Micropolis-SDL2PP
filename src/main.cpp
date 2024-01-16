@@ -17,6 +17,7 @@
 #include "EvaluationWindow.h"
 #include "GraphWindow.h"
 #include "MiniMapWindow.h"
+#include "QueryWindow.h"
 
 #include "CityProperties.h"
 #include "Colors.h"
@@ -145,6 +146,7 @@ namespace
     std::unique_ptr<EvaluationWindow> evaluationWindow;
     std::unique_ptr<MiniMapWindow> miniMapWindow;
     std::unique_ptr<ToolPalette> toolPalette;
+    std::unique_ptr<QueryWindow> queryWindow;
     std::unique_ptr<StringRender> stringRenderer;
 
     std::unique_ptr<FileIo> fileIo;
@@ -692,6 +694,10 @@ void handleKeyEvent(SDL_Event& event)
     case SDLK_F10:
         ShowWindowAndBringToFront(*budgetWindow.get());
         break;
+
+    case SDLK_F11:
+        ShowWindowAndBringToFront(*queryWindow.get());
+        break;
             
     case SDLK_F1:
         showEvaluationWindow();
@@ -763,6 +769,13 @@ void handleMouseEvent(SDL_Event& event)
             if (!budgetWindow->visible() && !pendingToolProperties().draggable)
             {
                 ToolDown(TilePointedAt, budget);
+            }
+
+            if (pendingTool() == Tool::Query)
+            {
+                GuiWindowStack.bringToFront(queryWindow.get());
+                queryWindow->setQueryResult(queryResult());
+                queryWindow->show();
             }
         }
         break;
@@ -1076,10 +1089,14 @@ void initUI()
     evaluationWindow = std::make_unique<EvaluationWindow>(MainWindowRenderer);
     centerWindow(*evaluationWindow);
 
+    queryWindow = std::make_unique<QueryWindow>(MainWindowRenderer);
+    centerWindow(*queryWindow);
+
     GuiWindowStack.addWindow(budgetWindow.get());
     GuiWindowStack.addWindow(evaluationWindow.get());
     GuiWindowStack.addWindow(graphWindow.get());
     GuiWindowStack.addWindow(toolPalette.get());
+    GuiWindowStack.addWindow(queryWindow.get());
 
     UiRects.push_back(&UiHeaderRect);
 }
@@ -1187,7 +1204,7 @@ int main(int argc, char* argv[])
 
         SDL_Quit();
     }
-    catch(std::exception e)
+    catch(const std::exception& e)
     {
         std::string message(std::string(e.what()) + "\n\nMicropolis-SDL2PP will now close.");
         

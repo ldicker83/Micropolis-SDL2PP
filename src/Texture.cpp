@@ -59,3 +59,16 @@ Texture newTexture(SDL_Renderer* renderer, const Vector<int>& dimensions)
 
     return Texture{ texture, SDL_Rect{ 0, 0, width, height }, { width, height } };
 }
+
+
+/**
+ * Clears a texture and sets alpha to 0.
+ */
+void flushTexture(SDL_Renderer* renderer, Texture& texture)
+{
+    SDL_SetRenderTarget(renderer, texture.texture);
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0);
+    SDL_RenderFillRect(renderer, &texture.area);
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+}

@@ -72,6 +72,7 @@ Font::~Font()
 	if (mFontInfo.texture)
 	{
 		SDL_DestroyTexture(mFontInfo.texture);
+		mFontInfo.texture = nullptr;
 	}
 }
 

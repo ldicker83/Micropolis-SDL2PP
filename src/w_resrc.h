@@ -68,26 +68,26 @@ enum class NotificationId
 
 enum class ZoneStatsId
 {
-    Low,
-    Medium,
-    High,
-    VeryHigh,
-    Slum,
-    LowerClass,
-    MiddleClass,
-    HighClass,
-    Safe,
-    Light,
-    Moderate,
-    Dangerous,
-    None,
-    Moderate2,
-    Heavy,
-    VeryHeavy,
-    Declining,
-    Stable,
-    SlowGrowth,
-    FastGrowth
+    DensityLow,
+    DensityMedium,
+    DensityHigh,
+    DensityVeryHigh,
+    LandValueSlum,
+    LandValueLowerClass,
+    LandValueMiddleClass,
+    LandValueHighClass,
+    CrimeSafe,
+    CrimeLight,
+    CrimeModerate,
+    CrimeDangerous,
+    PollutionNone,
+    PollutionModerate,
+    PollutionHeavy,
+    PollutionVeryHeavy,
+    GrowthDeclining,
+    GrowthStable,
+    GrowthSlow,
+    GrowthFast
 };
 
 
@@ -122,6 +122,17 @@ enum class QueryStatsId
     Ur238,
     Padding1,
     Padding2
+};
+
+
+struct ZoneStats
+{
+    std::string title;
+    std::string density;
+    std::string landValue;
+    std::string crime;
+    std::string pollution;
+    std::string populationGrowth;
 };
 
 

@@ -74,6 +74,8 @@ namespace
 
     Point<int> ToolStart{};
     Point<int> ToolEnd{};
+
+    ZoneStats QueryResult{};
 };
 
 
@@ -98,6 +100,12 @@ const ToolProperties& toolProperties(const Tool tool)
 const ToolProperties& pendingToolProperties()
 {
     return Tools.at(PendingTool);
+}
+
+
+const ZoneStats& queryResult()
+{
+    return QueryResult;
 }
 
 
@@ -585,55 +593,14 @@ int getDensityStr(int catNo, int mapH, int mapV)
 }
 
 
-struct ZoneStatsStrings
-{
-    const std::string str;
-    const std::string s0;
-    const std::string s1;
-    const std::string s2;
-    const std::string s3;
-    const std::string s4;
-};
-
-
-void DoShowZoneStatus(const ZoneStatsStrings zoneStats, int x, int y)
-{
-    const std::string msg{
-        "UIShowZoneStatus {" +
-        zoneStats.str + "} {" +
-        zoneStats.s0 + "} {" +
-        zoneStats.s1 + "} {" +
-        zoneStats.s2 + "} {" +
-        zoneStats.s3 + "} {" +
-        zoneStats.s4 + "} {" +
-        std::to_string(x) + "} {" +
-        std::to_string(y) + "}"
-    };
-
-    Eval(msg);
-}
-
-
 const std::string& queryString(int tileValue)
 {
     for (int i = 1; i < 29; ++i)
     {
         if (tileValue < idArray[i])
         {
-            /*
-            int queryId = i - 1;
-            if (queryId < 1 || queryId > 28)
-            {
-                queryId = 28;
-            }
-            */
-
-            int queryId = std::clamp(i - 1, 0, 28);
-
-            // \fixme ugly cast
+            const int queryId = std::clamp(i - 1, 0, 28);
             return QueryStatsString(static_cast<QueryStatsId>(queryId));
-
-            break;
         }
     }
 
@@ -649,19 +616,14 @@ void doZoneStatus(int x, int y)
         tileNum = COALBASE;
     }
 
-    std::string localStr = queryString(tileNum);
     std::array<std::string, 5> statusStr;
-
-    for (int _x = 0; _x < 5; ++_x)
+    for (int i = 0; i < 5; ++i)
     {
-        int id = getDensityStr(_x, x, y);
-        id++;
-        
-        // \fixme ugly cast
-        statusStr[_x] = ZoneStatsString(static_cast<ZoneStatsId>(std::clamp(id, 1, 19)));
+        const int id = getDensityStr(i, x, y);
+        statusStr[i] = ZoneStatsString(static_cast<ZoneStatsId>(std::clamp(id, 1, 19)));
     }
 
-    DoShowZoneStatus({ localStr, statusStr[0], statusStr[1], statusStr[2], statusStr[3], statusStr[4] }, x, y);
+    QueryResult = { queryString(tileNum), statusStr[0], statusStr[1], statusStr[2], statusStr[3], statusStr[4] };
 }
 
 

@@ -12,6 +12,7 @@
 
 #include "Point.h"
 #include "Vector.h"
+#include "w_resrc.h"
 
 #include <map>
 #include <string>
@@ -69,6 +70,8 @@ bool tally(int tileValue);
 
 const ToolProperties& toolProperties(const Tool);
 const ToolProperties& pendingToolProperties();
+
+const ZoneStats& queryResult();
 
 Tool pendingTool();
 void pendingTool(const Tool);
