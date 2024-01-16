@@ -85,6 +85,4 @@ private:
 
     int mSelectedIndex{ NoSelection };
     Tool mTool{ Tool::None };
-
-    //bool mDragging{ false };
 };
