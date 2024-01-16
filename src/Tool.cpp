@@ -585,17 +585,6 @@ int getDensityStr(int catNo, int mapH, int mapV)
 }
 
 
-struct ZoneStatsStrings
-{
-    const std::string title;
-    const std::string density;
-    const std::string landValue;
-    const std::string pollution;
-    const std::string crime;
-    const std::string populationGrowth;
-};
-
-
 void DoShowZoneStatus(const ZoneStatsStrings zoneStats)
 {
     const std::string msg{
