@@ -74,6 +74,8 @@ namespace
 
     Point<int> ToolStart{};
     Point<int> ToolEnd{};
+
+    ZoneStats QueryResult{};
 };
 
 
@@ -98,6 +100,12 @@ const ToolProperties& toolProperties(const Tool tool)
 const ToolProperties& pendingToolProperties()
 {
     return Tools.at(PendingTool);
+}
+
+
+const ZoneStats& queryResult()
+{
+    return QueryResult;
 }
 
 
@@ -585,22 +593,6 @@ int getDensityStr(int catNo, int mapH, int mapV)
 }
 
 
-void DoShowZoneStatus(const ZoneStats zoneStats)
-{
-    const std::string msg{
-        "UIShowZoneStatus {" +
-        zoneStats.title + "} {" +
-        zoneStats.density + "} {" +
-        zoneStats.landValue + "} {" +
-        zoneStats.pollution + "} {" +
-        zoneStats.crime + "} {" +
-        zoneStats.populationGrowth + "}"
-    };
-
-    Eval(msg);
-}
-
-
 const std::string& queryString(int tileValue)
 {
     for (int i = 1; i < 29; ++i)
@@ -631,7 +623,7 @@ void doZoneStatus(int x, int y)
         statusStr[i] = ZoneStatsString(static_cast<ZoneStatsId>(std::clamp(id, 1, 19)));
     }
 
-    DoShowZoneStatus({ queryString(tileNum), statusStr[0], statusStr[1], statusStr[2], statusStr[3], statusStr[4] });
+    QueryResult = { queryString(tileNum), statusStr[0], statusStr[1], statusStr[2], statusStr[3], statusStr[4] };
 }
 
 
