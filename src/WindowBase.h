@@ -74,6 +74,9 @@ private:
     virtual void onMoved(const Vector<int>&) {};
     virtual void onPositionChanged(const Point<int>&) {};
 
+    virtual void onShow() {};
+    virtual void onHide() {};
+
     Rectangle<int> mArea;
     Rectangle<int> mClientArea;
     Rectangle<int> mTitleBarArea;
