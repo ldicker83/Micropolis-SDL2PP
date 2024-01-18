@@ -34,9 +34,11 @@ public:
 
 private:
     void onMouseDown(const Point<int>&) override;
+    void onShow() override;
 
 private:
     Texture mTexture;
+    Texture mCheckTexture;
 
     SDL_Renderer* mRenderer{ nullptr };
 };
