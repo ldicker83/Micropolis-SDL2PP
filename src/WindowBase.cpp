@@ -21,6 +21,7 @@ bool WindowBase::visible() const
 void WindowBase::toggleVisible()
 {
     mVisible = !mVisible;
+    mVisible ? show() : hide();
 }
 
 
