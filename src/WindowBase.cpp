@@ -27,12 +27,14 @@ void WindowBase::toggleVisible()
 void WindowBase::show()
 {
     mVisible = true;
+    onShow();
 }
 
 
 void WindowBase::hide()
 {
     mVisible = false;
+    onHide();
 }
 
 
