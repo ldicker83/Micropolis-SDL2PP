@@ -17,11 +17,28 @@
 #include "Texture.h"
 
 #include <memory>
+#include <type_traits>
+#include <vector>
+
+
 #include <SDL2/SDL.h>
 
 
 class OptionsWindow : public WindowBase
 {
+public:
+    struct Options
+    {
+        bool autoBudget{ false };
+        bool autoBulldoze{ true };
+        bool autoGoto{ true };
+        bool disastersEnabled{ true };
+        bool playMusic{ true };
+        bool playSound{ true };
+    };
+
+    using Callback = std::add_pointer<void(const Options&)>::type;
+
 public:
     OptionsWindow() = delete;
     OptionsWindow(const OptionsWindow&) = delete;
@@ -29,16 +46,31 @@ public:
 
     OptionsWindow(SDL_Renderer* renderer);
 
+    void optionsChangedConnect(Callback&);
+    void optionsChangedDisconnect(Callback&);
+
+    void setOptions(const Options&);
+
     void draw() override;
     void update() override {}
 
 private:
     void onMouseDown(const Point<int>&) override;
+    void onKeyDown(int32_t key) override;
+
     void onShow() override;
+
+    void drawChecks();
+
+    void optionsChangedTrigger();
 
 private:
     Texture mTexture;
     Texture mCheckTexture;
+
+    std::vector<Callback> mOptionsChanged;
+
+    Options mOptions;
 
     SDL_Renderer* mRenderer{ nullptr };
 };
