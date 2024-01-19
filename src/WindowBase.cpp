@@ -156,3 +156,9 @@ void WindowBase::injectMouseMotion(const Vector<int>& delta)
     if (!mDragging) { return; }
     move(delta);
 }
+
+
+void WindowBase::injectKeyDown(int32_t key)
+{
+    onKeyDown(key);
+}

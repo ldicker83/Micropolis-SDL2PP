@@ -58,6 +58,8 @@ public:
     void injectMouseUp();
     void injectMouseMotion(const Vector<int>& delta);
 
+    void injectKeyDown(int32_t key);
+
     virtual void draw() = 0;
     virtual void update() = 0;
 
@@ -70,6 +72,8 @@ private:
     virtual void onMouseDown(const Point<int>&) {};
     virtual void onMouseUp() {};
     virtual void onMouseMotion(const Vector<int>&) {};
+
+    virtual void onKeyDown(int32_t key) {};
 
     virtual void onMoved(const Vector<int>&) {};
     virtual void onPositionChanged(const Point<int>&) {};
