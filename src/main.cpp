@@ -17,6 +17,7 @@
 #include "EvaluationWindow.h"
 #include "GraphWindow.h"
 #include "MiniMapWindow.h"
+#include "OptionsWindow.h"
 #include "QueryWindow.h"
 
 #include "CityProperties.h"
@@ -146,6 +147,7 @@ namespace
     std::unique_ptr<EvaluationWindow> evaluationWindow;
     std::unique_ptr<MiniMapWindow> miniMapWindow;
     std::unique_ptr<ToolPalette> toolPalette;
+    std::unique_ptr<OptionsWindow> optionsWindow;
     std::unique_ptr<QueryWindow> queryWindow;
     std::unique_ptr<StringRender> stringRenderer;
 
@@ -620,10 +622,17 @@ void showEvaluationWindow()
 
 void handleKeyEvent(SDL_Event& event)
 {
+    if (optionsWindow->visible())
+    {
+        optionsWindow->injectKeyDown(event.key.keysym.sym);
+        return;
+    }
+
     switch (event.key.keysym.sym)
     {
     case SDLK_ESCAPE:
         GuiWindowStack.hide();
+        optionsWindow->show();
         break;
 
     case SDLK_0:
@@ -1089,6 +1098,9 @@ void initUI()
     evaluationWindow = std::make_unique<EvaluationWindow>(MainWindowRenderer);
     centerWindow(*evaluationWindow);
 
+    optionsWindow = std::make_unique<OptionsWindow>(MainWindowRenderer);
+    centerWindow(*optionsWindow);
+
     queryWindow = std::make_unique<QueryWindow>(MainWindowRenderer);
     centerWindow(*queryWindow);
 
@@ -1096,6 +1108,7 @@ void initUI()
     GuiWindowStack.addWindow(evaluationWindow.get());
     GuiWindowStack.addWindow(graphWindow.get());
     GuiWindowStack.addWindow(toolPalette.get());
+    GuiWindowStack.addWindow(optionsWindow.get());
     GuiWindowStack.addWindow(queryWindow.get());
 
     UiRects.push_back(&UiHeaderRect);
@@ -1133,16 +1146,31 @@ void GameLoop()
         SDL_RenderCopy(MainWindowRenderer, MainMapTexture.texture, &FullMapViewRect, nullptr);
         drawSprites();
 
-        if (budget.NeedsAttention() || budgetWindow->visible())
+        /**
+         * \fixme   Not a fan of the special case code here that may get bigger as time
+         *          goes on. Would prerfer to add a method to windows to show as modal
+         *          and only do this if a modal window is visible. Or something to that
+         *          effect. Would be far less prone to issues than this.
+         */
+        if (budget.NeedsAttention() || budgetWindow->visible() || optionsWindow->visible())
         {
             SDL_SetRenderDrawColor(MainWindowRenderer, 0, 0, 0, 175);
             SDL_RenderFillRect(MainWindowRenderer, nullptr);
-            budgetWindow->draw();
-
-            if (budgetWindow->accepted())
+            
+            if (optionsWindow->visible())
             {
-                budgetWindow->reset();
-                budgetWindow->hide();
+                optionsWindow->draw();
+            }
+            else
+            {
+
+                budgetWindow->draw();
+
+                if (budgetWindow->accepted())
+                {
+                    budgetWindow->reset();
+                    budgetWindow->hide();
+                }
             }
         }
         else
