@@ -1,6 +1,7 @@
 #include "OptionsWindow.h"
 
 
+#include <algorithm>
 #include <array>
 #include <map>
 
@@ -8,16 +9,7 @@
 namespace
 {
 	constexpr SDL_Rect BgRect{ 0, 0, 256, 256 };
-	constexpr SDL_Rect CheckedBox{ 231, 13, 14, 12 };
-
-	/*
-	constexpr SDL_Rect BrnReturn{ 61, 31, 142, 20 };
-	constexpr SDL_Rect BtnNew{ 61, 63, 142, 20 };
-	constexpr SDL_Rect BtnOpen{ 61, 87, 142, 20 };
-	constexpr SDL_Rect BtnSave{ 61, 111, 142, 20 };
-	constexpr SDL_Rect BtnQuit{ 61, 145, 142, 20 };
-	constexpr SDL_Rect BtnAccept{ 61, 224, 142, 20 };
-	*/
+	constexpr SDL_Rect CheckedBox{ 261, 13, 14, 12 };
 
 	enum class Button
 	{
@@ -50,14 +42,14 @@ namespace
 		PlaySound
 	};
 
-	constexpr std::array CheckBoxes =
+	std::array CheckBoxes =
 	{
-		std::make_tuple(CheckBox::AutoBudget, SDL_Rect{ 145, 172, 12, 12 }),
-		std::make_tuple(CheckBox::AutoBulldoze, SDL_Rect{ 13, 172, 12, 12 }),
-		std::make_tuple(CheckBox::AutoGoto, SDL_Rect{ 13, 188, 12, 12 }),
-		std::make_tuple(CheckBox::DisastersEnabled, SDL_Rect{ 13, 204, 12, 12 }),
-		std::make_tuple(CheckBox::PlayMusic, SDL_Rect{ 145, 204, 12, 12 }),
-		std::make_tuple(CheckBox::PlaySound, SDL_Rect{ 145, 188, 12, 12 })
+		std::make_tuple(CheckBox::AutoBudget, SDL_Rect{ 145, 172, 12, 12 }, false),
+		std::make_tuple(CheckBox::AutoBulldoze, SDL_Rect{ 13, 172, 12, 12 }, false),
+		std::make_tuple(CheckBox::AutoGoto, SDL_Rect{ 13, 188, 12, 12 }, false),
+		std::make_tuple(CheckBox::DisastersEnabled, SDL_Rect{ 13, 204, 12, 12 }, false),
+		std::make_tuple(CheckBox::PlayMusic, SDL_Rect{ 145, 204, 12, 12 }, false),
+		std::make_tuple(CheckBox::PlaySound, SDL_Rect{ 145, 188, 12, 12 }, false)
 	};
 };
 
@@ -69,6 +61,39 @@ OptionsWindow::OptionsWindow(SDL_Renderer* renderer):
 {
     size({ BgRect.w, BgRect.h });
     closeButtonActive(false);
+	anchor();
+
+	SDL_SetTextureBlendMode(mCheckTexture.texture, SDL_BLENDMODE_BLEND);
+}
+
+
+void OptionsWindow::optionsChangedConnect(Callback& callback)
+{
+	if (std::find(mOptionsChanged.begin(), mOptionsChanged.end(), callback) != mOptionsChanged.end())
+	{
+		throw std::runtime_error("OptionsWindow::optionsChangedConnect(): Connecting duplicate callback.");
+	}
+
+	mOptionsChanged.push_back(callback);
+}
+
+
+void OptionsWindow::optionsChangedDisconnect(Callback& callback)
+{
+	auto it = std::find(mOptionsChanged.begin(), mOptionsChanged.end(), callback);
+	if (it == mOptionsChanged.end())
+	{
+		throw std::runtime_error("OptionsWindow::optionsChangedConnect(): Disconnecting callback that was never connected.");
+	}
+
+	mOptionsChanged.erase(it);
+}
+
+
+void OptionsWindow::setOptions(const Options& options)
+{
+	mOptions = options;
+	drawChecks();
 }
 
 
@@ -77,14 +102,92 @@ void OptionsWindow::draw()
 	const SDL_Rect rect{ area().x, area().y, area().width, area().height };
 	SDL_RenderCopy(mRenderer, mTexture.texture, &BgRect, &rect);
 	SDL_RenderCopy(mRenderer, mCheckTexture.texture, &BgRect, &rect);
+
+	//drawChecks();
 }
 
 
-void OptionsWindow::onMouseDown(const Point<int>&)
+void OptionsWindow::onMouseDown(const Point<int>& point)
 {
+	for (auto& [checkbox, rect, checked] : CheckBoxes)
+	{
+		const SDL_Point pt{ point.x, point.y };
+		const SDL_Rect adjustedRect{ rect.x + area().x, rect.y + area().y, rect.w, rect.h };
+
+		if (SDL_PointInRect(&pt, &adjustedRect))
+		{
+			checked = !checked;
+			drawChecks();
+			return; // can only change on checkbox at a time, no overlap.
+		}
+	}
+
+	for (auto& [button, rect] : Buttons)
+	{
+		const SDL_Point pt{ point.x, point.y };
+		const SDL_Rect adjustedRect{ rect.x + area().x, rect.y + area().y, rect.w, rect.h };
+
+		if (SDL_PointInRect(&pt, &adjustedRect))
+		{
+			if (button == Button::Accept)
+			{
+				optionsChangedTrigger();
+				hide();
+				return;
+			}
+
+			// handle other buttons here
+		}
+	}
+}
+
+
+void OptionsWindow::onKeyDown(int32_t key)
+{
+	switch (key)
+	{
+	case SDLK_ESCAPE:
+		hide();
+		break;
+
+	case SDLK_RETURN:
+		optionsChangedTrigger();
+		hide();
+		break;
+
+	default:
+		break;
+	}
 }
 
 
 void OptionsWindow::onShow()
 {
+	drawChecks();
+}
+
+
+void OptionsWindow::drawChecks()
+{
+	flushTexture(mRenderer, mCheckTexture);
+
+	for (const auto& [checkbox, rect, checked] : CheckBoxes)
+	{
+		if (checked)
+		{
+			const SDL_Rect adjustedRect{ rect.x, rect.y, CheckedBox.w, CheckedBox.h };
+			SDL_RenderCopy(mRenderer, mTexture.texture, &CheckedBox, &adjustedRect);
+		}
+	}
+
+	SDL_SetRenderTarget(mRenderer, nullptr);
+}
+
+
+void OptionsWindow::optionsChangedTrigger()
+{
+	for (auto& callback : mOptionsChanged)
+	{
+		callback(mOptions);
+	}
 }
