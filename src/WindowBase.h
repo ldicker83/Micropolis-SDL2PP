@@ -73,6 +73,7 @@ private:
     virtual void onMouseUp() {};
     virtual void onMouseMotion(const Vector<int>&) {};
 
+    /** Takes a keycode equivalent to SDL_Keycode */
     virtual void onKeyDown(int32_t key) {};
 
     virtual void onMoved(const Vector<int>&) {};
