@@ -67,7 +67,7 @@ OptionsWindow::OptionsWindow(SDL_Renderer* renderer):
 }
 
 
-void OptionsWindow::optionsChangedConnect(Callback& callback)
+void OptionsWindow::optionsChangedConnect(Callback callback)
 {
 	if (std::find(mOptionsChanged.begin(), mOptionsChanged.end(), callback) != mOptionsChanged.end())
 	{
@@ -78,7 +78,7 @@ void OptionsWindow::optionsChangedConnect(Callback& callback)
 }
 
 
-void OptionsWindow::optionsChangedDisconnect(Callback& callback)
+void OptionsWindow::optionsChangedDisconnect(Callback callback)
 {
 	auto it = std::find(mOptionsChanged.begin(), mOptionsChanged.end(), callback);
 	if (it == mOptionsChanged.end())
