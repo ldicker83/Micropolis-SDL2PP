@@ -46,8 +46,8 @@ public:
 
     OptionsWindow(SDL_Renderer* renderer);
 
-    void optionsChangedConnect(Callback&);
-    void optionsChangedDisconnect(Callback&);
+    void optionsChangedConnect(Callback);
+    void optionsChangedDisconnect(Callback);
 
     void setOptions(const Options&);
 
