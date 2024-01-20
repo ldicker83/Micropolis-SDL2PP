@@ -374,7 +374,7 @@ void simInit()
     StartingYear = 1900;
     AutoGotoMessageLocation(true);
     CityTime = 50;
-    disastersEnabled(false);
+    disastersEnabled(true);
     autoBulldoze(true);
     autoBudget(true);
     MessageId(NotificationId::None);
