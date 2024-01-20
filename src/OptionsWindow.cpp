@@ -93,6 +93,19 @@ void OptionsWindow::optionsChangedDisconnect(Callback callback)
 void OptionsWindow::setOptions(const Options& options)
 {
 	mOptions = options;
+
+	/**
+	 * These options are arranged in alphabetical order
+	 * both in the options struct and in the array for
+	 * options.
+	 */
+	std::get<bool>(CheckBoxes[0]) = options.autoBudget;
+	std::get<bool>(CheckBoxes[1]) = options.autoBulldoze;
+	std::get<bool>(CheckBoxes[2]) = options.autoGoto;
+	std::get<bool>(CheckBoxes[3]) = options.disastersEnabled;
+	std::get<bool>(CheckBoxes[4]) = options.playMusic;
+	std::get<bool>(CheckBoxes[5]) = options.playSound;
+
 	drawChecks();
 }
 
