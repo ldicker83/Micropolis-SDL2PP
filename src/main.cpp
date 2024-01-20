@@ -242,6 +242,30 @@ void autoBudget(const bool b)
 }
 
 
+bool autoBulldoze()
+{
+    return AutoBulldoze;
+}
+
+
+void autoBulldoze(const bool b)
+{
+    AutoBulldoze = b;
+}
+
+
+bool disastersEnabled()
+{
+    return NoDisasters;
+}
+
+
+void disastersEnabled(const bool b)
+{
+    NoDisasters = b;
+}
+
+
 bool autoGoto()
 {
     return AutoGo;
@@ -632,6 +656,8 @@ void handleKeyEvent(SDL_Event& event)
     {
     case SDLK_ESCAPE:
         GuiWindowStack.hide();
+
+        optionsWindow->setOptions({autoBudget(), AutoBulldoze, });
         optionsWindow->show();
         break;
 
@@ -1056,6 +1082,12 @@ void gameInit()
 }
 
 
+void optionsChanged(const OptionsWindow::Options& options)
+{
+    throw std::runtime_error("Hey look it works!");
+}
+
+
 void initUI()
 {
     Point<int> mainWindowPosition{};
@@ -1100,6 +1132,7 @@ void initUI()
 
     optionsWindow = std::make_unique<OptionsWindow>(MainWindowRenderer);
     centerWindow(*optionsWindow);
+    optionsWindow->optionsChangedConnect(optionsChanged);
 
     queryWindow = std::make_unique<QueryWindow>(MainWindowRenderer);
     centerWindow(*queryWindow);
@@ -1117,6 +1150,8 @@ void initUI()
 
 void cleanUp()
 {
+    optionsWindow->optionsChangedDisconnect(optionsChanged);
+
     deinitTimers();
 
     SDL_DestroyTexture(BigTileset.texture);

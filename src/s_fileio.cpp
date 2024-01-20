@@ -122,7 +122,7 @@ bool loadFile(const std::string& filename, CityProperties& properties, Budget& b
     CityTime = std::clamp(MiscHis[8], 0, std::numeric_limits<int>::max());
     budget.CurrentFunds(MiscHis[50]);
     budget.PreviousFunds(MiscHis[51]);
-    AutoBulldoze = MiscHis[52];
+    autoBulldoze(MiscHis[52]);
     autoBudget(MiscHis[53]);
     autoGoto(MiscHis[54]);
 
@@ -155,7 +155,7 @@ bool saveFile(const std::string& filename, const CityProperties&, const Budget& 
     MiscHis[50] = budget.CurrentFunds();
     MiscHis[51] = budget.PreviousFunds();
 
-    MiscHis[52] = AutoBulldoze;
+    MiscHis[52] = autoBulldoze();
     MiscHis[53] = autoBudget(); 
     MiscHis[54] = autoGoto();
     MiscHis[55] = userSoundOn();

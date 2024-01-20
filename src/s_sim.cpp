@@ -480,7 +480,7 @@ void DoSPZone(bool powered, const CityProperties& properties)
         return;
 
     case NUCLEAR:
-        if (!NoDisasters && !RandomRange(0, MltdwnTab[properties.GameLevel()]))
+        if (disastersEnabled() && !RandomRange(0, MltdwnTab[properties.GameLevel()]))
         {
             DoMeltdown(SimulationTarget.x, SimulationTarget.y);
             return;

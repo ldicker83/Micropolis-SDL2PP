@@ -791,7 +791,7 @@ void updateAirplane(SimSprite& sprite)
     }
 
     /* deh added test for !Disasters */
-    if (!NoDisasters)
+    if (disastersEnabled())
     {
         for (auto& other : Sprites)
         {
