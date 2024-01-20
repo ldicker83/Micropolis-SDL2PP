@@ -374,9 +374,9 @@ void simInit()
     StartingYear = 1900;
     AutoGotoMessageLocation(true);
     CityTime = 50;
-    NoDisasters = false;
-    AutoBulldoze = true;
-    AutoBudget = true;
+    disastersEnabled(false);
+    autoBulldoze(true);
+    autoBudget(true);
     MessageId(NotificationId::None);
     ClearMes();
     SimSpeed(SimulationSpeed::Normal);
@@ -657,7 +657,7 @@ void handleKeyEvent(SDL_Event& event)
     case SDLK_ESCAPE:
         GuiWindowStack.hide();
 
-        optionsWindow->setOptions({autoBudget(), AutoBulldoze, });
+        optionsWindow->setOptions({ autoBudget(), autoBulldoze(), autoGoto(), disastersEnabled(), false, false });
         optionsWindow->show();
         break;
 
@@ -733,7 +733,7 @@ void handleKeyEvent(SDL_Event& event)
     case SDLK_F11:
         ShowWindowAndBringToFront(*queryWindow.get());
         break;
-            
+
     case SDLK_F1:
         showEvaluationWindow();
         break;
