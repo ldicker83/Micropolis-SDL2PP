@@ -1084,7 +1084,12 @@ void gameInit()
 
 void optionsChanged(const OptionsWindow::Options& options)
 {
-    throw std::runtime_error("Hey look it works!");
+    autoBudget(options.autoBudget);
+    autoBulldoze(options.autoBulldoze);
+    autoGoto(options.autoGoto);
+    disastersEnabled(options.disastersEnabled);
+
+    /// \todo Add music/sound playback options
 }
 
 
