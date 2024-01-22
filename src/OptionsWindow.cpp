@@ -115,8 +115,6 @@ void OptionsWindow::draw()
 	const SDL_Rect rect{ area().x, area().y, area().width, area().height };
 	SDL_RenderCopy(mRenderer, mTexture.texture, &BgRect, &rect);
 	SDL_RenderCopy(mRenderer, mCheckTexture.texture, &BgRect, &rect);
-
-	//drawChecks();
 }
 
 
@@ -142,14 +140,17 @@ void OptionsWindow::onMouseDown(const Point<int>& point)
 
 		if (SDL_PointInRect(&pt, &adjustedRect))
 		{
-			if (button == Button::Accept)
+			switch (button)
 			{
+			case Button::Accept:
 				optionsChangedTrigger();
 				hide();
-				return;
-			}
+				break;
 
-			// handle other buttons here
+			case Button::Return:
+				hide();
+				break;
+			}
 		}
 	}
 }
