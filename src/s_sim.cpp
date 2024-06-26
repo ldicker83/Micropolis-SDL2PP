@@ -625,9 +625,10 @@ void MapScan(int x1, int x2, const CityProperties& properties)
             CurrentTile = Map[x][y];
             if (CurrentTile != 0)
             {
-                CurrentTileMasked = CurrentTile & LOMASK;	// Mask off status bits
+                //CurrentTileMasked = CurrentTile & LOMASK;	// Mask off status bits
 
-                const int tile = maskedTileValue(x, y);
+                //const int tile = maskedTileValue(x, y);
+                CurrentTileMasked = maskedTileValue(CurrentTile);
 
                 if (CurrentTileMasked >= FLOOD)
                 {
@@ -672,7 +673,7 @@ void MapScan(int x1, int x2, const CityProperties& properties)
                         continue;
                     }
 
-                    if ((tile >= RAILBASE) && (tile < ResidentialBase))
+                    if ((CurrentTileMasked >= RAILBASE) && (CurrentTileMasked < ResidentialBase))
                     {
                         DoRail({ x, y });
                         continue;
