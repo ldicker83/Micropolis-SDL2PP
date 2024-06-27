@@ -696,17 +696,19 @@ void updateCommercial(bool zonePowered)
 }
 
 
-void updateResidential(bool zonePowered)
+void updateResidential(const Point<int>& location, bool zonePowered)
 {
-    int residentialPopulation, value;
+    int residentialPopulation = 0, value = 0;
 
-    if (CurrentTileMasked == ResidentialEmpty)
+    const auto tileValue{maskedTileValue(location)};
+
+    if (tileValue == ResidentialEmpty)
     {
         residentialPopulation = housePopulation();
     }
     else
     {
-        residentialPopulation = residentialZonePopulation(CurrentTileMasked);
+        residentialPopulation = residentialZonePopulation(tileValue);
     }
 
     ResZPop++;
@@ -725,7 +727,7 @@ void updateResidential(bool zonePowered)
         return;
     }
 
-    if ((CurrentTileMasked == ResidentialEmpty) || (RandomRange(0, 8) == 0))
+    if ((tileValue == ResidentialEmpty) || (RandomRange(0, 8) == 0))
     {
         int locationValue = evaluateResidential(trafficResult);
         int zoneScore = RValve + locationValue;
@@ -772,7 +774,7 @@ void updateZone(const Point<int>& location, const CityProperties& properties)
 
     if (CurrentTileMasked < HOSPITAL)
     {
-        updateResidential(zonePowered);
+        updateResidential(location, zonePowered);
         return;
     }
 

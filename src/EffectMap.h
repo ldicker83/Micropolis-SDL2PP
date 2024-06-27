@@ -28,7 +28,7 @@ public:
         mDimensions{ size },
         mSize{ size.x * size.y }
     {
-        fill(0);
+        reset();
     }
 
     EffectMap& operator*(int scalar)
@@ -43,12 +43,12 @@ public:
 
     int value(const Point<int>& point) const
     {
-        return mEffectMap[(mDimensions.x * point.y) + point.x];
+        return mEffectMap[static_cast<size_t>((point.y * mDimensions.x) + point.x)];
     }
 
     int& value(const Point<int>& point)
     {
-        return mEffectMap[(mDimensions.x * point.y) + point.x];
+        return mEffectMap[static_cast<size_t>((point.y * mDimensions.x) + point.x)];
     }
 
     void reset()
