@@ -554,6 +554,7 @@ void windowResized(const Vector<int>& size)
     centerWindow(*budgetWindow);
     centerWindow(*graphWindow);
     centerWindow(*evaluationWindow);
+    centerWindow(*optionsWindow);
 
     UiHeaderRect.w = WindowSize.x - 20;
 }
