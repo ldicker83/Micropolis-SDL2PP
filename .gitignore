@@ -1,7 +1,6 @@
 /.vs
-/x64
 /*.user
-/Debug
+/micropolis-sdl2
 /images/*.bmp
 /res/*.ttf
 /icons/24
