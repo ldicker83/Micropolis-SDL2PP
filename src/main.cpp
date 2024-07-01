@@ -1168,6 +1168,18 @@ void cleanUp()
 }
 
 
+bool modalWindowVisible()
+{
+    /**
+     * \fixme   Not a fan of the special case code here that may get bigger as time
+     *          goes on. Would prerfer to add a method to windows to show as modal
+     *          and only do this if a modal window is visible. Or something to that
+     *          effect. Would be far less prone to issues than this.
+     */
+    return budget.NeedsAttention() || budgetWindow->visible() || optionsWindow->visible();
+}
+
+
 void GameLoop()
 {
     miniMapWindow->draw();
@@ -1186,13 +1198,7 @@ void GameLoop()
         simLoop(SimulationStep);
         drawSprites();
 
-        /**
-         * \fixme   Not a fan of the special case code here that may get bigger as time
-         *          goes on. Would prerfer to add a method to windows to show as modal
-         *          and only do this if a modal window is visible. Or something to that
-         *          effect. Would be far less prone to issues than this.
-         */
-        if (budget.NeedsAttention() || budgetWindow->visible() || optionsWindow->visible())
+        if (modalWindowVisible())
         {
             SDL_SetRenderDrawColor(MainWindowRenderer, 0, 0, 0, 175);
             SDL_RenderFillRect(MainWindowRenderer, nullptr);
