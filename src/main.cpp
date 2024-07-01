@@ -1175,16 +1175,15 @@ void GameLoop()
 
     while (!Exit)
     {
-        pendingTool(toolPalette->tool());
-
-        simLoop(SimulationStep);
-
         pumpEvents();
-
-        currentBudget = NumberToDollarDecimal(budget.CurrentFunds());
 
         SDL_RenderClear(MainWindowRenderer);
         SDL_RenderCopy(MainWindowRenderer, MainMapTexture.texture, &FullMapViewRect, nullptr);
+
+        currentBudget = NumberToDollarDecimal(budget.CurrentFunds());
+
+        pendingTool(toolPalette->tool());
+        simLoop(SimulationStep);
         drawSprites();
 
         /**
