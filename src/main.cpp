@@ -17,6 +17,7 @@
 #include "EvaluationWindow.h"
 #include "GraphWindow.h"
 #include "MiniMapWindow.h"
+#include "OptionsWindow.h"
 #include "QueryWindow.h"
 
 #include "CityProperties.h"
@@ -146,6 +147,7 @@ namespace
     std::unique_ptr<EvaluationWindow> evaluationWindow;
     std::unique_ptr<MiniMapWindow> miniMapWindow;
     std::unique_ptr<ToolPalette> toolPalette;
+    std::unique_ptr<OptionsWindow> optionsWindow;
     std::unique_ptr<QueryWindow> queryWindow;
     std::unique_ptr<StringRender> stringRenderer;
 
@@ -240,6 +242,30 @@ void autoBudget(const bool b)
 }
 
 
+bool autoBulldoze()
+{
+    return AutoBulldoze;
+}
+
+
+void autoBulldoze(const bool b)
+{
+    AutoBulldoze = b;
+}
+
+
+bool disastersEnabled()
+{
+    return NoDisasters;
+}
+
+
+void disastersEnabled(const bool b)
+{
+    NoDisasters = b;
+}
+
+
 bool autoGoto()
 {
     return AutoGo;
@@ -282,9 +308,6 @@ void simUpdate()
 
 void simLoop(bool doSim)
 {
-    // \fixme Find a better way to do this
-    if (budgetWindow->visible()) { return; }
-
     if (doSim)
     {
         SimFrame(cityProperties, budget);
@@ -348,9 +371,9 @@ void simInit()
     StartingYear = 1900;
     AutoGotoMessageLocation(true);
     CityTime = 50;
-    NoDisasters = false;
-    AutoBulldoze = true;
-    AutoBudget = true;
+    disastersEnabled(true);
+    autoBulldoze(true);
+    autoBudget(true);
     MessageId(NotificationId::None);
     ClearMes();
     SimSpeed(SimulationSpeed::Normal);
@@ -528,6 +551,7 @@ void windowResized(const Vector<int>& size)
     centerWindow(*budgetWindow);
     centerWindow(*graphWindow);
     centerWindow(*evaluationWindow);
+    centerWindow(*optionsWindow);
 
     UiHeaderRect.w = WindowSize.x - 20;
 }
@@ -620,10 +644,19 @@ void showEvaluationWindow()
 
 void handleKeyEvent(SDL_Event& event)
 {
+    if (optionsWindow->visible())
+    {
+        optionsWindow->injectKeyDown(event.key.keysym.sym);
+        return;
+    }
+
     switch (event.key.keysym.sym)
     {
     case SDLK_ESCAPE:
         GuiWindowStack.hide();
+
+        optionsWindow->setOptions({ autoBudget(), autoBulldoze(), autoGoto(), disastersEnabled(), false, false });
+        optionsWindow->show();
         break;
 
     case SDLK_0:
@@ -698,7 +731,7 @@ void handleKeyEvent(SDL_Event& event)
     case SDLK_F11:
         ShowWindowAndBringToFront(*queryWindow.get());
         break;
-            
+
     case SDLK_F1:
         showEvaluationWindow();
         break;
@@ -1047,6 +1080,17 @@ void gameInit()
 }
 
 
+void optionsChanged(const OptionsWindow::Options& options)
+{
+    autoBudget(options.autoBudget);
+    autoBulldoze(options.autoBulldoze);
+    autoGoto(options.autoGoto);
+    disastersEnabled(options.disastersEnabled);
+
+    /// \todo Add music/sound playback options
+}
+
+
 void initUI()
 {
     Point<int> mainWindowPosition{};
@@ -1089,6 +1133,10 @@ void initUI()
     evaluationWindow = std::make_unique<EvaluationWindow>(MainWindowRenderer);
     centerWindow(*evaluationWindow);
 
+    optionsWindow = std::make_unique<OptionsWindow>(MainWindowRenderer);
+    centerWindow(*optionsWindow);
+    optionsWindow->optionsChangedConnect(optionsChanged);
+
     queryWindow = std::make_unique<QueryWindow>(MainWindowRenderer);
     centerWindow(*queryWindow);
 
@@ -1096,6 +1144,7 @@ void initUI()
     GuiWindowStack.addWindow(evaluationWindow.get());
     GuiWindowStack.addWindow(graphWindow.get());
     GuiWindowStack.addWindow(toolPalette.get());
+    GuiWindowStack.addWindow(optionsWindow.get());
     GuiWindowStack.addWindow(queryWindow.get());
 
     UiRects.push_back(&UiHeaderRect);
@@ -1104,6 +1153,8 @@ void initUI()
 
 void cleanUp()
 {
+    optionsWindow->optionsChangedDisconnect(optionsChanged);
+
     deinitTimers();
 
     SDL_DestroyTexture(BigTileset.texture);
@@ -1114,6 +1165,18 @@ void cleanUp()
 }
 
 
+bool modalWindowVisible()
+{
+    /**
+     * \fixme   Not a fan of the special case code here that may get bigger as time
+     *          goes on. Would prerfer to add a method to windows to show as modal
+     *          and only do this if a modal window is visible. Or something to that
+     *          effect. Would be far less prone to issues than this.
+     */
+    return budget.NeedsAttention() || budgetWindow->visible() || optionsWindow->visible();
+}
+
+
 void GameLoop()
 {
     miniMapWindow->draw();
@@ -1121,28 +1184,34 @@ void GameLoop()
 
     while (!Exit)
     {
-        pendingTool(toolPalette->tool());
-
-        simLoop(SimulationStep);
-
         pumpEvents();
-
-        currentBudget = NumberToDollarDecimal(budget.CurrentFunds());
 
         SDL_RenderClear(MainWindowRenderer);
         SDL_RenderCopy(MainWindowRenderer, MainMapTexture.texture, &FullMapViewRect, nullptr);
+
+        currentBudget = NumberToDollarDecimal(budget.CurrentFunds());
+
+        pendingTool(toolPalette->tool());
         drawSprites();
 
-        if (budget.NeedsAttention() || budgetWindow->visible())
+        if (modalWindowVisible())
         {
             SDL_SetRenderDrawColor(MainWindowRenderer, 0, 0, 0, 175);
             SDL_RenderFillRect(MainWindowRenderer, nullptr);
-            budgetWindow->draw();
-
-            if (budgetWindow->accepted())
+            
+            if (optionsWindow->visible())
             {
-                budgetWindow->reset();
-                budgetWindow->hide();
+                optionsWindow->draw();
+            }
+            else
+            {
+                budgetWindow->draw();
+
+                if (budgetWindow->accepted())
+                {
+                    budgetWindow->reset();
+                    budgetWindow->hide();
+                }
             }
         }
         else
@@ -1162,6 +1231,8 @@ void GameLoop()
             }
 
             GuiWindowStack.draw();
+
+            simLoop(SimulationStep);
         }
 
         SDL_RenderPresent(MainWindowRenderer);

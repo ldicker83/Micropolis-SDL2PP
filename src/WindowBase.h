@@ -58,6 +58,8 @@ public:
     void injectMouseUp();
     void injectMouseMotion(const Vector<int>& delta);
 
+    void injectKeyDown(int32_t key);
+
     virtual void draw() = 0;
     virtual void update() = 0;
 
@@ -71,8 +73,14 @@ private:
     virtual void onMouseUp() {};
     virtual void onMouseMotion(const Vector<int>&) {};
 
+    /** Takes a keycode equivalent to SDL_Keycode */
+    virtual void onKeyDown(int32_t key) {};
+
     virtual void onMoved(const Vector<int>&) {};
     virtual void onPositionChanged(const Point<int>&) {};
+
+    virtual void onShow() {};
+    virtual void onHide() {};
 
     Rectangle<int> mArea;
     Rectangle<int> mClientArea;

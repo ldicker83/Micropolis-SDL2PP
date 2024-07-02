@@ -59,6 +59,7 @@
 		57C37BC52958EAA30055BC50 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 57C37BBF2958EAA30055BC50 /* images */; };
 		57C37BC62958EAA30055BC50 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 57C37BC02958EAA30055BC50 /* res */; };
 		57C37BC72958EAA30055BC50 /* micropolis.ico in Resources */ = {isa = PBXBuildFile; fileRef = 57C37BC12958EAA30055BC50 /* micropolis.ico */; };
+		57E2ED752B5E219000E7E8B6 /* OptionsWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57E2ED742B5E219000E7E8B6 /* OptionsWindow.cpp */; };
 		57E8E893295E9CCE0062D57B /* EvaluationWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57E8E892295E9CCE0062D57B /* EvaluationWindow.cpp */; };
 /* End PBXBuildFile section */
 
@@ -176,6 +177,8 @@
 		57C37BBF2958EAA30055BC50 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = images; path = ../images; sourceTree = "<group>"; };
 		57C37BC02958EAA30055BC50 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; name = res; path = ../res; sourceTree = "<group>"; };
 		57C37BC12958EAA30055BC50 /* micropolis.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; name = micropolis.ico; path = ../micropolis.ico; sourceTree = "<group>"; };
+		57E2ED742B5E219000E7E8B6 /* OptionsWindow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OptionsWindow.cpp; path = ../../src/OptionsWindow.cpp; sourceTree = "<group>"; };
+		57E2ED762B5E21A900E7E8B6 /* OptionsWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OptionsWindow.h; path = ../../src/OptionsWindow.h; sourceTree = "<group>"; };
 		57E8E891295E9A4C0062D57B /* EvaluationWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = EvaluationWindow.h; path = ../../src/EvaluationWindow.h; sourceTree = "<group>"; };
 		57E8E892295E9CCE0062D57B /* EvaluationWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = EvaluationWindow.cpp; path = ../../src/EvaluationWindow.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -238,6 +241,7 @@
 				57C37BA72958E52C0055BC50 /* main.cpp */,
 				57C37B622958E4FE0055BC50 /* Map.cpp */,
 				57C37BA82958E52C0055BC50 /* MiniMapWindow.cpp */,
+				57E2ED742B5E219000E7E8B6 /* OptionsWindow.cpp */,
 				57C37B6B2958E4FF0055BC50 /* Power.cpp */,
 				5718EABB2B552B74008A62B8 /* QueryWindow.cpp */,
 				57C37BA22958E52C0055BC50 /* Rectangle.cpp */,
@@ -282,6 +286,7 @@
 				57C37B5C2958E4FE0055BC50 /* main.h */,
 				57C37B812958E4FF0055BC50 /* Map.h */,
 				57C37B5D2958E4FE0055BC50 /* MiniMapWindow.h */,
+				57E2ED762B5E21A900E7E8B6 /* OptionsWindow.h */,
 				57C37B7F2958E4FF0055BC50 /* Point.h */,
 				57C37B632958E4FE0055BC50 /* PointInRectangleRange.h */,
 				57C37B682958E4FF0055BC50 /* Power.h */,
@@ -446,6 +451,7 @@
 				57C37B8D2958E4FF0055BC50 /* Graphics.cpp in Sources */,
 				5718EABC2B552B74008A62B8 /* QueryWindow.cpp in Sources */,
 				57B5F54D2B2BECC300683BF7 /* WindowStack.cpp in Sources */,
+				57E2ED752B5E219000E7E8B6 /* OptionsWindow.cpp in Sources */,
 				57C37B972958E4FF0055BC50 /* ToolPalette.cpp in Sources */,
 				5718EABA2B551047008A62B8 /* nfd_cocoa.m in Sources */,
 				57C37BAD2958E52C0055BC50 /* FileIo.cpp in Sources */,

@@ -322,7 +322,7 @@ void DoDisasters(CityProperties& properties)
         ScenarioDisaster();
     }
 
-    if (NoDisasters)
+    if (!disastersEnabled())
     {
         return;
     }

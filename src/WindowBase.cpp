@@ -21,18 +21,21 @@ bool WindowBase::visible() const
 void WindowBase::toggleVisible()
 {
     mVisible = !mVisible;
+    mVisible ? show() : hide();
 }
 
 
 void WindowBase::show()
 {
     mVisible = true;
+    onShow();
 }
 
 
 void WindowBase::hide()
 {
     mVisible = false;
+    onHide();
 }
 
 
@@ -152,4 +155,10 @@ void WindowBase::injectMouseMotion(const Vector<int>& delta)
 {
     if (!mDragging) { return; }
     move(delta);
+}
+
+
+void WindowBase::injectKeyDown(int32_t key)
+{
+    onKeyDown(key);
 }

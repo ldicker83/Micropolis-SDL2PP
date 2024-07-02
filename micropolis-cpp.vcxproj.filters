@@ -132,6 +132,9 @@
     <ClCompile Include="nativefiledialog-extended\src\nfd_win.cpp">
       <Filter>Source Files\NativeFileDialog</Filter>
     </ClCompile>
+    <ClCompile Include="src\OptionsWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\animtab.h">
@@ -274,12 +277,20 @@
     </ClInclude>
     <ClInclude Include="src\QueryWindow.h">
       <Filter>Header Files</Filter>
-    </ClInclude>    <ClInclude Include="nativefiledialog-extended\src\include\nfd.h">
+    </ClInclude>
+    <ClInclude Include="nativefiledialog-extended\src\include\nfd.h">
       <Filter>Header Files\NativeFileDialog</Filter>
     </ClInclude>
     <ClInclude Include="nativefiledialog-extended\src\include\nfd.hpp">
       <Filter>Header Files\NativeFileDialog</Filter>
-    </ClInclude>  </ItemGroup>
+    </ClInclude>
+    <ClInclude Include="src\OptionsWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Button.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="micropolis-sdl2.rc">
       <Filter>Resource Files</Filter>
