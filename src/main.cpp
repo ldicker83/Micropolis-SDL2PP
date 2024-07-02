@@ -308,9 +308,6 @@ void simUpdate()
 
 void simLoop(bool doSim)
 {
-    // \fixme Find a better way to do this
-    if (budgetWindow->visible()) { return; }
-
     if (doSim)
     {
         SimFrame(cityProperties, budget);
@@ -1195,7 +1192,6 @@ void GameLoop()
         currentBudget = NumberToDollarDecimal(budget.CurrentFunds());
 
         pendingTool(toolPalette->tool());
-        simLoop(SimulationStep);
         drawSprites();
 
         if (modalWindowVisible())
@@ -1209,7 +1205,6 @@ void GameLoop()
             }
             else
             {
-
                 budgetWindow->draw();
 
                 if (budgetWindow->accepted())
@@ -1236,6 +1231,8 @@ void GameLoop()
             }
 
             GuiWindowStack.draw();
+
+            simLoop(SimulationStep);
         }
 
         SDL_RenderPresent(MainWindowRenderer);
