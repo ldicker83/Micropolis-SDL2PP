@@ -186,10 +186,10 @@ void OptionsWindow::checkCheckboxesForClick(const Point<int>& point)
 {
 	for (auto& [checkbox, rect, checked] : CheckBoxes)
 	{
-		const SDL_Point pt{ point.x, point.y };
-		const SDL_Rect adjustedRect{ rect.x + area().x, rect.y + area().y, rect.w, rect.h };
+		const auto clickPoint = pointToSdlPoint(point);
+		const auto adjustedButtonRect = adjustedRect(rect, area().startPoint());
 
-		if (SDL_PointInRect(&pt, &adjustedRect))
+		if (SDL_PointInRect(&clickPoint, &adjustedButtonRect))
 		{
 			checked = !checked;
 		}
