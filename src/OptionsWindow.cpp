@@ -51,6 +51,17 @@ namespace
 		std::make_tuple(CheckBox::PlayMusic, SDL_Rect{ 145, 204, 12, 12 }, false),
 		std::make_tuple(CheckBox::PlaySound, SDL_Rect{ 145, 188, 12, 12 }, false)
 	};
+
+	
+	void setOptionsFromCheckboxValues(OptionsWindow::Options& options)
+	{
+		options.autoBudget = std::get<bool>(CheckBoxes[0]);
+		options.autoBulldoze = std::get<bool>(CheckBoxes[1]);
+		options.autoGoto = std::get<bool>(CheckBoxes[2]);
+		options.disastersEnabled = std::get<bool>(CheckBoxes[3]);
+		options.playMusic = std::get<bool>(CheckBoxes[4]);
+		options.playSound = std::get<bool>(CheckBoxes[5]);
+	}
 };
 
 
@@ -129,6 +140,7 @@ void OptionsWindow::onMouseDown(const Point<int>& point)
 		{
 			checked = !checked;
 			drawChecks();
+			setOptionsFromCheckboxValues(mOptions);
 			return; // can only change on checkbox at a time, no overlap.
 		}
 	}
