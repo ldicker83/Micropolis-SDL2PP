@@ -11,25 +11,14 @@ namespace
 	constexpr SDL_Rect BgRect{ 0, 0, 256, 256 };
 	constexpr SDL_Rect CheckedBox{ 261, 13, 14, 12 };
 
-	enum class Button
-	{
-		Return,
-		New,
-		Open,
-		Save,
-		Quit,
-		Accept
-	};
-
-
 	constexpr std::array Buttons =
 	{
-		std::make_tuple(Button::Return, SDL_Rect{ 61, 31, 142, 20 }),
-		std::make_tuple(Button::New, SDL_Rect{ 61, 63, 142, 20 }),
-		std::make_tuple(Button::Open, SDL_Rect{ 61, 87, 142, 20 }),
-		std::make_tuple(Button::Save, SDL_Rect{ 61, 111, 142, 20 }),
-		std::make_tuple(Button::Quit, SDL_Rect{ 61, 145, 142, 20 }),
-		std::make_tuple(Button::Accept, SDL_Rect{ 61, 224, 142, 20 })
+		std::make_tuple(OptionsWindow::Button::Return, SDL_Rect{ 61, 31, 142, 20 }),
+		std::make_tuple(OptionsWindow::Button::New, SDL_Rect{ 61, 63, 142, 20 }),
+		std::make_tuple(OptionsWindow::Button::Open, SDL_Rect{ 61, 87, 142, 20 }),
+		std::make_tuple(OptionsWindow::Button::Save, SDL_Rect{ 61, 111, 142, 20 }),
+		std::make_tuple(OptionsWindow::Button::Quit, SDL_Rect{ 61, 145, 142, 20 }),
+		std::make_tuple(OptionsWindow::Button::Accept, SDL_Rect{ 61, 224, 142, 20 })
 	};
 
 	enum class CheckBox
@@ -195,26 +184,32 @@ void OptionsWindow::checkButtonsForClick(const Point<int>& point)
 		const SDL_Point pt{ point.x, point.y };
 		const SDL_Rect adjustedButtonRect{ buttonRect.x + area().x, buttonRect.y + area().y, buttonRect.w, buttonRect.h };
 
-		if (SDL_PointInRect(&pt, &adjustedButtonRect))
+		checkButtonForClick(pt, adjustedButtonRect, button);
+	}
+}
+
+
+void OptionsWindow::checkButtonForClick(const SDL_Point& pt, const SDL_Rect& adjustedButtonRect, const Button button)
+{
+	if (SDL_PointInRect(&pt, &adjustedButtonRect))
+	{
+		switch (button)
 		{
-			switch (button)
-			{
-			case Button::Accept:
-				optionsChangedTrigger();
-				hide();
-				break;
+		case Button::Accept:
+			optionsChangedTrigger();
+			hide();
+			break;
 
-			case Button::Return:
-				hide();
-				break;
+		case Button::Return:
+			hide();
+			break;
 
-			case Button::Quit:
-				postQuit();
-				break;
+		case Button::Quit:
+			postQuit();
+			break;
 
-			default:
-				break;
-			}
+		default:
+			break;
 		}
 	}
 }

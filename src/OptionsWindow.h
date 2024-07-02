@@ -27,6 +27,16 @@
 class OptionsWindow : public WindowBase
 {
 public:
+    enum class Button
+    {
+        Return,
+        New,
+        Open,
+        Save,
+        Quit,
+        Accept
+    };
+
     struct Options
     {
         bool autoBudget{ false };
@@ -62,6 +72,8 @@ private:
 
     void checkCheckboxesForClick(const Point<int>& point);
     void checkButtonsForClick(const Point<int>& point);
+
+    void checkButtonForClick(const SDL_Point& pt, const SDL_Rect& adjustedButtonRect, const Button button);
 
     void drawChecks();
 
