@@ -53,6 +53,20 @@ namespace
 	}
 
 
+	template <typename BaseType>
+	SDL_Point pointToSdlPoint(const Point<BaseType>& point)
+	{
+		return { point.x, point.y };
+	}
+
+
+	template <typename BaseType>
+	SDL_Rect adjustedRect(const SDL_Rect& source, const Point<BaseType>& offset)
+	{
+		return { source.x + offset.x, source.y + offset.y, source.w, source.h };
+	}
+
+
 	void postQuit()
 	{
 		SDL_Event event{};
@@ -72,6 +86,25 @@ OptionsWindow::OptionsWindow(SDL_Renderer* renderer):
 	anchor();
 
 	SDL_SetTextureBlendMode(mCheckTexture.texture, SDL_BLENDMODE_BLEND);
+
+	initButtons();
+}
+
+
+void OptionsWindow::initButtons()
+{
+	/*
+	std::make_tuple(OptionsWindow::Button::Return, SDL_Rect{ 61, 31, 142, 20 }),
+	std::make_tuple(OptionsWindow::Button::New, SDL_Rect{ 61, 63, 142, 20 }),
+	std::make_tuple(OptionsWindow::Button::Open, SDL_Rect{ 61, 87, 142, 20 }),
+	std::make_tuple(OptionsWindow::Button::Save, SDL_Rect{ 61, 111, 142, 20 }),
+	std::make_tuple(OptionsWindow::Button::Quit, SDL_Rect{ 61, 145, 142, 20 }),
+	std::make_tuple(OptionsWindow::Button::Accept, SDL_Rect{ 61, 224, 142, 20 })
+	*/
+
+	mButtons.emplace_back(::Button{ std::bind(&OptionsWindow::buttonReturnClicked, this), SDL_Rect{61, 31, 142, 20} });
+	mButtons.emplace_back(::Button{ std::bind(&OptionsWindow::buttonQuitClicked, this), SDL_Rect{61, 145, 142, 20} });
+	mButtons.emplace_back(::Button{ std::bind(&OptionsWindow::buttonAcceptClicked, this), SDL_Rect{61, 224, 142, 20} });
 }
 
 
@@ -179,39 +212,34 @@ void OptionsWindow::checkCheckboxesForClick(const Point<int>& point)
 
 void OptionsWindow::checkButtonsForClick(const Point<int>& point)
 {
-	for (auto& [button, buttonRect] : Buttons)
+	for (auto& button : mButtons)
 	{
-		const SDL_Point pt{ point.x, point.y };
-		const SDL_Rect adjustedButtonRect{ buttonRect.x + area().x, buttonRect.y + area().y, buttonRect.w, buttonRect.h };
-
-		checkButtonForClick(pt, adjustedButtonRect, button);
+		const auto clickPoint = pointToSdlPoint(point);
+		const auto adjustedButtonRect = adjustedRect(button.area(), area().startPoint());
+		if (SDL_PointInRect(&clickPoint, &adjustedButtonRect))
+		{
+			button.click();
+		}
 	}
 }
 
 
-void OptionsWindow::checkButtonForClick(const SDL_Point& pt, const SDL_Rect& adjustedButtonRect, const Button button)
+void OptionsWindow::buttonReturnClicked()
 {
-	if (SDL_PointInRect(&pt, &adjustedButtonRect))
-	{
-		switch (button)
-		{
-		case Button::Accept:
-			optionsChangedTrigger();
-			hide();
-			break;
+	hide();
+}
 
-		case Button::Return:
-			hide();
-			break;
 
-		case Button::Quit:
-			postQuit();
-			break;
+void OptionsWindow::buttonAcceptClicked()
+{
+	optionsChangedTrigger();
+	hide();
+}
 
-		default:
-			break;
-		}
-	}
+
+void OptionsWindow::buttonQuitClicked()
+{
+	postQuit();
 }
 
 

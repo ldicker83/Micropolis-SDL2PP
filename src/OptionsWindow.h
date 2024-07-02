@@ -12,6 +12,8 @@
 
 #include "WindowBase.h"
 
+#include "Button.h"
+
 #include "Font.h"
 #include "StringRender.h"
 #include "Texture.h"
@@ -37,6 +39,7 @@ public:
         Accept
     };
 
+
     struct Options
     {
         bool autoBudget{ false };
@@ -46,6 +49,7 @@ public:
         bool playMusic{ true };
         bool playSound{ true };
     };
+
 
     using Callback = std::add_pointer<void(const Options&)>::type;
 
@@ -65,15 +69,20 @@ public:
     void update() override {}
 
 private:
+    void initButtons();
+
     void onMouseDown(const Point<int>&) override;
     void onKeyDown(int32_t key) override;
 
     void onShow() override;
 
     void checkCheckboxesForClick(const Point<int>& point);
+
     void checkButtonsForClick(const Point<int>& point);
 
-    void checkButtonForClick(const SDL_Point& pt, const SDL_Rect& adjustedButtonRect, const Button button);
+    void buttonReturnClicked();
+    void buttonAcceptClicked();
+    void buttonQuitClicked();
 
     void drawChecks();
 
@@ -84,6 +93,8 @@ private:
     Texture mCheckTexture;
 
     std::vector<Callback> mOptionsChanged;
+
+    std::vector<::Button> mButtons;
 
     Options mOptions;
 
