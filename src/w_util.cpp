@@ -66,21 +66,20 @@ bool CoordinatesValid(const Point<int>& position)
 
 std::string NumberToDollarDecimal(int value)
 {
-    std::string valueString{ "$" + std::to_string(value)};
+    auto outString = std::to_string(value);
 
-    if (value < 1000)
+    int n = static_cast<int>(outString.length() - 3);
+    const int end = (value >= 0) ? 0 : 1;
+
+    while (n > end)
     {
-        return valueString;
+        outString.insert(n, ",");
+        n -= 3;
     }
 
-    const size_t numOfCommas = (valueString.size() - 1) / 3;
+    outString.insert(0, "$");
 
-    for (size_t i = 1; i <= numOfCommas; ++i)
-    {
-        valueString.insert((valueString.size() - (i - 1)) - (i * 3), ",");
-    }
-
-    return valueString;
+    return outString;
 }
 
 
