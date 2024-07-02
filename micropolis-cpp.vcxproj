@@ -57,6 +57,7 @@
     <ClInclude Include="src\BindFunction.h" />
     <ClInclude Include="src\Budget.h" />
     <ClInclude Include="src\BudgetWindow.h" />
+    <ClInclude Include="src\Button.h" />
     <ClInclude Include="src\CityProperties.h" />
     <ClInclude Include="src\Colors.h" />
     <ClInclude Include="src\Connection.h" />
