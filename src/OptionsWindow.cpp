@@ -139,19 +139,11 @@ void OptionsWindow::draw()
 
 void OptionsWindow::onMouseDown(const Point<int>& point)
 {
-	for (auto& [checkbox, rect, checked] : CheckBoxes)
-	{
-		const SDL_Point pt{ point.x, point.y };
-		const SDL_Rect adjustedRect{ rect.x + area().x, rect.y + area().y, rect.w, rect.h };
-
-		if (SDL_PointInRect(&pt, &adjustedRect))
-		{
-			checked = !checked;
-			drawChecks();
-			setOptionsFromCheckboxValues(mOptions);
-		}
-	}
-
+	compareCheckboxes(point);
+	
+	drawChecks();
+	setOptionsFromCheckboxValues(mOptions);
+	
 	for (auto& [button, rect] : Buttons)
 	{
 		const SDL_Point pt{ point.x, point.y };
@@ -204,6 +196,21 @@ void OptionsWindow::onKeyDown(int32_t key)
 void OptionsWindow::onShow()
 {
 	drawChecks();
+}
+
+
+void OptionsWindow::compareCheckboxes(const Point<int>& point)
+{
+	for (auto& [checkbox, rect, checked] : CheckBoxes)
+	{
+		const SDL_Point pt{ point.x, point.y };
+		const SDL_Rect adjustedRect{ rect.x + area().x, rect.y + area().y, rect.w, rect.h };
+
+		if (SDL_PointInRect(&pt, &adjustedRect))
+		{
+			checked = !checked;
+		}
+	}
 }
 
 
