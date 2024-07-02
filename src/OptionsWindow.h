@@ -60,7 +60,9 @@ private:
 
     void onShow() override;
 
-    void compareCheckboxes(const Point<int>& point);
+    void checkCheckboxesForClick(const Point<int>& point);
+    void checkButtonsForClick(const Point<int>& point);
+
     void drawChecks();
 
     void optionsChangedTrigger();
