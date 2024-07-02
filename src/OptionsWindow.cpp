@@ -62,6 +62,14 @@ namespace
 		options.playMusic = std::get<bool>(CheckBoxes[4]);
 		options.playSound = std::get<bool>(CheckBoxes[5]);
 	}
+
+
+	void postQuit()
+	{
+		SDL_Event event{};
+		event.type = SDL_QUIT;
+		SDL_PushEvent(&event);
+	}
 };
 
 
@@ -160,6 +168,13 @@ void OptionsWindow::onMouseDown(const Point<int>& point)
 
 			case Button::Return:
 				hide();
+				break;
+
+			case Button::Quit:
+				postQuit();
+				break;
+
+			default:
 				break;
 			}
 		}
