@@ -141,7 +141,6 @@ void OptionsWindow::onMouseDown(const Point<int>& point)
 			checked = !checked;
 			drawChecks();
 			setOptionsFromCheckboxValues(mOptions);
-			return; // can only change on checkbox at a time, no overlap.
 		}
 	}
 
