@@ -190,12 +190,12 @@ void OptionsWindow::checkCheckboxesForClick(const Point<int>& point)
 
 void OptionsWindow::checkButtonsForClick(const Point<int>& point)
 {
-	for (auto& [button, rect] : Buttons)
+	for (auto& [button, buttonRect] : Buttons)
 	{
 		const SDL_Point pt{ point.x, point.y };
-		const SDL_Rect adjustedRect{ rect.x + area().x, rect.y + area().y, rect.w, rect.h };
+		const SDL_Rect adjustedButtonRect{ buttonRect.x + area().x, buttonRect.y + area().y, buttonRect.w, buttonRect.h };
 
-		if (SDL_PointInRect(&pt, &adjustedRect))
+		if (SDL_PointInRect(&pt, &adjustedButtonRect))
 		{
 			switch (button)
 			{
