@@ -29,17 +29,6 @@
 class OptionsWindow : public WindowBase
 {
 public:
-    enum class Button
-    {
-        Return,
-        New,
-        Open,
-        Save,
-        Quit,
-        Accept
-    };
-
-
     struct Options
     {
         bool autoBudget{ false };
@@ -49,7 +38,6 @@ public:
         bool playMusic{ true };
         bool playSound{ true };
     };
-
 
     using Callback = std::add_pointer<void(const Options&)>::type;
 

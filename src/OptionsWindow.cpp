@@ -11,16 +11,6 @@ namespace
 	constexpr SDL_Rect BgRect{ 0, 0, 256, 256 };
 	constexpr SDL_Rect CheckedBox{ 261, 13, 14, 12 };
 
-	constexpr std::array Buttons =
-	{
-		std::make_tuple(OptionsWindow::Button::Return, SDL_Rect{ 61, 31, 142, 20 }),
-		std::make_tuple(OptionsWindow::Button::New, SDL_Rect{ 61, 63, 142, 20 }),
-		std::make_tuple(OptionsWindow::Button::Open, SDL_Rect{ 61, 87, 142, 20 }),
-		std::make_tuple(OptionsWindow::Button::Save, SDL_Rect{ 61, 111, 142, 20 }),
-		std::make_tuple(OptionsWindow::Button::Quit, SDL_Rect{ 61, 145, 142, 20 }),
-		std::make_tuple(OptionsWindow::Button::Accept, SDL_Rect{ 61, 224, 142, 20 })
-	};
-
 	enum class CheckBox
 	{
 		AutoBudget,
@@ -94,17 +84,14 @@ OptionsWindow::OptionsWindow(SDL_Renderer* renderer):
 void OptionsWindow::initButtons()
 {
 	/*
-	std::make_tuple(OptionsWindow::Button::Return, SDL_Rect{ 61, 31, 142, 20 }),
 	std::make_tuple(OptionsWindow::Button::New, SDL_Rect{ 61, 63, 142, 20 }),
 	std::make_tuple(OptionsWindow::Button::Open, SDL_Rect{ 61, 87, 142, 20 }),
 	std::make_tuple(OptionsWindow::Button::Save, SDL_Rect{ 61, 111, 142, 20 }),
-	std::make_tuple(OptionsWindow::Button::Quit, SDL_Rect{ 61, 145, 142, 20 }),
-	std::make_tuple(OptionsWindow::Button::Accept, SDL_Rect{ 61, 224, 142, 20 })
 	*/
 
-	mButtons.emplace_back(::Button{ std::bind(&OptionsWindow::buttonReturnClicked, this), SDL_Rect{61, 31, 142, 20} });
-	mButtons.emplace_back(::Button{ std::bind(&OptionsWindow::buttonQuitClicked, this), SDL_Rect{61, 145, 142, 20} });
-	mButtons.emplace_back(::Button{ std::bind(&OptionsWindow::buttonAcceptClicked, this), SDL_Rect{61, 224, 142, 20} });
+	mButtons.emplace_back(Button{ std::bind(&OptionsWindow::buttonReturnClicked, this), SDL_Rect{61, 31, 142, 20} });
+	mButtons.emplace_back(Button{ std::bind(&OptionsWindow::buttonQuitClicked, this), SDL_Rect{61, 145, 142, 20} });
+	mButtons.emplace_back(Button{ std::bind(&OptionsWindow::buttonAcceptClicked, this), SDL_Rect{61, 224, 142, 20} });
 }
 
 
