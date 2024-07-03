@@ -443,6 +443,41 @@ void resetGame()
 }
 
 
+void newGame()
+{
+    fileIo->clearSaveFilename();
+    resetGame();
+    DrawBigMap();
+}
+
+
+void openGame()
+{
+    if (fileIo->pickOpenFile())
+    {
+        resetGame();
+        LoadCity(fileIo->fullPath(), cityProperties, budget);
+        DrawBigMap();
+    }
+}
+
+
+void saveGame()
+{
+    if (!fileIo->filePicked() || SDL_GetModState() & KMOD_SHIFT)
+    {
+        if (!fileIo->pickSaveFile())
+        {
+            {
+                return;
+            }
+        }
+    }
+
+    SaveCity(fileIo->fullPath(), cityProperties, budget);
+}
+
+
 void buildBigTileset()
 {
     SDL_Surface* srcSurface = IMG_Load("images/tiles.xpm");
@@ -682,24 +717,11 @@ void handleKeyEvent(SDL_Event& event)
         break;
 
     case SDLK_F2:
-        if (!fileIo->filePicked() || SDL_GetModState() & KMOD_SHIFT)
-        {
-            if (!fileIo->pickSaveFile())
-            {
-                break;
-            }
-        }
-
-        SaveCity(fileIo->fullPath(), cityProperties, budget);
+        saveGame();
         break;
 
     case SDLK_F3:
-        if (fileIo->pickOpenFile())
-        {
-            resetGame();
-            LoadCity(fileIo->fullPath(), cityProperties, budget);
-            DrawBigMap();
-        }
+        openGame();
         break;
 
     case SDLK_F4:
@@ -715,9 +737,7 @@ void handleKeyEvent(SDL_Event& event)
         break;
 
     case SDLK_F7:
-        fileIo->clearSaveFilename();
-        resetGame();
-        DrawBigMap();
+        newGame();
         break;
 
     case SDLK_F9:
