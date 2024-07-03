@@ -50,16 +50,9 @@ public:
     OptionsWindow(SDL_Renderer* renderer);
 
     void optionsChangedConnect(CallbackOptionsChanged);
-    void optionsChangedDisconnect();
-
     void newGameCallbackConnect(CallbackSignal);
-    void newGameCallbackDisconnect();
-
-    void saveGameCallbackConnect(CallbackSignal);
-    void saveGameCallbackDisconnect();
-
     void openGameCallbackConnect(CallbackSignal);
-    void openGameCallbackDisconnect();
+    void saveGameCallbackConnect(CallbackSignal);
 
     void setOptions(const Options&);
 
@@ -79,6 +72,9 @@ private:
     void checkButtonsForClick(const Point<int>& point);
 
     void buttonReturnClicked();
+    void buttonNewClicked();
+    void buttonOpenClicked();
+    void buttonSaveClicked();
     void buttonAcceptClicked();
     void buttonQuitClicked();
 
@@ -93,8 +89,8 @@ private:
     CallbackOptionsChanged mOptionsChangedCallback;
 
     CallbackSignal mNewGameCallback;
-    CallbackSignal mSaveGameCallback;
     CallbackSignal mOpenGameCallback;
+    CallbackSignal mSaveGameCallback;
 
     std::vector<::Button> mButtons;
 

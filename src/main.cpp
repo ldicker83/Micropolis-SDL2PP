@@ -1176,8 +1176,6 @@ void initUI()
 
 void cleanUp()
 {
-    optionsWindow->optionsChangedDisconnect();
-
     deinitTimers();
 
     SDL_DestroyTexture(BigTileset.texture);

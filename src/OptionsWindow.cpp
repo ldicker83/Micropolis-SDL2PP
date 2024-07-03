@@ -83,13 +83,10 @@ OptionsWindow::OptionsWindow(SDL_Renderer* renderer):
 
 void OptionsWindow::initButtons()
 {
-	/*
-	std::make_tuple(OptionsWindow::Button::New, SDL_Rect{ 61, 63, 142, 20 }),
-	std::make_tuple(OptionsWindow::Button::Open, SDL_Rect{ 61, 87, 142, 20 }),
-	std::make_tuple(OptionsWindow::Button::Save, SDL_Rect{ 61, 111, 142, 20 }),
-	*/
-
 	mButtons.emplace_back(Button{ std::bind(&OptionsWindow::buttonReturnClicked, this), SDL_Rect{61, 31, 142, 20} });
+	mButtons.emplace_back(Button{ std::bind(&OptionsWindow::buttonNewClicked, this), SDL_Rect{61, 63, 142, 20} });
+	mButtons.emplace_back(Button{ std::bind(&OptionsWindow::buttonOpenClicked, this), SDL_Rect{61, 87, 142, 20} });
+	mButtons.emplace_back(Button{ std::bind(&OptionsWindow::buttonSaveClicked, this), SDL_Rect{61, 111, 142, 20} });
 	mButtons.emplace_back(Button{ std::bind(&OptionsWindow::buttonQuitClicked, this), SDL_Rect{61, 145, 142, 20} });
 	mButtons.emplace_back(Button{ std::bind(&OptionsWindow::buttonAcceptClicked, this), SDL_Rect{61, 224, 142, 20} });
 }
@@ -101,33 +98,9 @@ void OptionsWindow::optionsChangedConnect(CallbackOptionsChanged callback)
 }
 
 
-void OptionsWindow::optionsChangedDisconnect()
-{
-	mOptionsChangedCallback = nullptr;
-}
-
-
 void OptionsWindow::newGameCallbackConnect(CallbackSignal callback)
 {
 	mNewGameCallback = callback;
-}
-
-
-void OptionsWindow::newGameCallbackDisconnect()
-{
-	mNewGameCallback = nullptr;
-}
-
-
-void OptionsWindow::saveGameCallbackConnect(CallbackSignal callback)
-{
-	mSaveGameCallback = callback;
-}
-
-
-void OptionsWindow::saveGameCallbackDisconnect()
-{
-	mSaveGameCallback = nullptr;
 }
 
 
@@ -137,9 +110,9 @@ void OptionsWindow::openGameCallbackConnect(CallbackSignal callback)
 }
 
 
-void OptionsWindow::openGameCallbackDisconnect()
+void OptionsWindow::saveGameCallbackConnect(CallbackSignal callback)
 {
-	mOpenGameCallback = nullptr;
+	mSaveGameCallback = callback;
 }
 
 
@@ -238,6 +211,27 @@ void OptionsWindow::checkButtonsForClick(const Point<int>& point)
 
 void OptionsWindow::buttonReturnClicked()
 {
+	hide();
+}
+
+
+void OptionsWindow::buttonNewClicked()
+{
+	mNewGameCallback();
+	hide();
+}
+
+
+void OptionsWindow::buttonOpenClicked()
+{
+	mOpenGameCallback();
+	hide();
+}
+
+
+void OptionsWindow::buttonSaveClicked()
+{
+	mSaveGameCallback();
 	hide();
 }
 
