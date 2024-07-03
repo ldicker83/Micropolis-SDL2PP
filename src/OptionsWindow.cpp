@@ -95,26 +95,15 @@ void OptionsWindow::initButtons()
 }
 
 
-void OptionsWindow::optionsChangedConnect(Callback callback)
+void OptionsWindow::optionsChangedConnect(CallbackOptionsChanged callback)
 {
-	if (std::find(mOptionsChanged.begin(), mOptionsChanged.end(), callback) != mOptionsChanged.end())
-	{
-		throw std::runtime_error("OptionsWindow::optionsChangedConnect(): Connecting duplicate callback.");
-	}
-
-	mOptionsChanged.push_back(callback);
+	mOptionsChangedCallback = callback;
 }
 
 
-void OptionsWindow::optionsChangedDisconnect(Callback callback)
+void OptionsWindow::optionsChangedDisconnect(CallbackOptionsChanged callback)
 {
-	auto it = std::find(mOptionsChanged.begin(), mOptionsChanged.end(), callback);
-	if (it == mOptionsChanged.end())
-	{
-		throw std::runtime_error("OptionsWindow::optionsChangedConnect(): Disconnecting callback that was never connected.");
-	}
-
-	mOptionsChanged.erase(it);
+	mOptionsChangedCallback = nullptr;
 }
 
 
@@ -249,8 +238,5 @@ void OptionsWindow::drawChecks()
 
 void OptionsWindow::optionsChangedTrigger()
 {
-	for (auto& callback : mOptionsChanged)
-	{
-		callback(mOptions);
-	}
+	mOptionsChangedCallback(mOptions);
 }

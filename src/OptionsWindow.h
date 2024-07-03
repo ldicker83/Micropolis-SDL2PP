@@ -39,7 +39,7 @@ public:
         bool playSound{ true };
     };
 
-    using Callback = std::add_pointer<void(const Options&)>::type;
+    using CallbackOptionsChanged = std::function<void(const Options&)>;
 
 public:
     OptionsWindow() = delete;
@@ -48,8 +48,8 @@ public:
 
     OptionsWindow(SDL_Renderer* renderer);
 
-    void optionsChangedConnect(Callback);
-    void optionsChangedDisconnect(Callback);
+    void optionsChangedConnect(CallbackOptionsChanged);
+    void optionsChangedDisconnect(CallbackOptionsChanged);
 
     void setOptions(const Options&);
 
@@ -80,7 +80,7 @@ private:
     Texture mTexture;
     Texture mCheckTexture;
 
-    std::vector<Callback> mOptionsChanged;
+    CallbackOptionsChanged mOptionsChangedCallback;
 
     std::vector<::Button> mButtons;
 
