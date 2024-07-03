@@ -1156,6 +1156,9 @@ void initUI()
     optionsWindow = std::make_unique<OptionsWindow>(MainWindowRenderer);
     centerWindow(*optionsWindow);
     optionsWindow->optionsChangedConnect(optionsChanged);
+    optionsWindow->newGameCallbackConnect(newGame);
+    optionsWindow->saveGameCallbackConnect(saveGame);
+    optionsWindow->openGameCallbackConnect(openGame);
 
     queryWindow = std::make_unique<QueryWindow>(MainWindowRenderer);
     centerWindow(*queryWindow);
