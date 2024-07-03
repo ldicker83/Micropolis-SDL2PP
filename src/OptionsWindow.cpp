@@ -101,9 +101,45 @@ void OptionsWindow::optionsChangedConnect(CallbackOptionsChanged callback)
 }
 
 
-void OptionsWindow::optionsChangedDisconnect(CallbackOptionsChanged callback)
+void OptionsWindow::optionsChangedDisconnect()
 {
 	mOptionsChangedCallback = nullptr;
+}
+
+
+void OptionsWindow::newGameCallbackConnect(CallbackSignal callback)
+{
+	mNewGameCallback = callback;
+}
+
+
+void OptionsWindow::newGameCallbackDisconnect()
+{
+	mNewGameCallback = nullptr;
+}
+
+
+void OptionsWindow::saveGameCallbackConnect(CallbackSignal callback)
+{
+	mSaveGameCallback = callback;
+}
+
+
+void OptionsWindow::saveGameCallbackDisconnect()
+{
+	mSaveGameCallback = nullptr;
+}
+
+
+void OptionsWindow::openGameCallbackConnect(CallbackSignal callback)
+{
+	mOpenGameCallback = callback;
+}
+
+
+void OptionsWindow::openGameCallbackDisconnect()
+{
+	mOpenGameCallback = nullptr;
 }
 
 

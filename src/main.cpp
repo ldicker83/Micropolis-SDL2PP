@@ -1153,7 +1153,7 @@ void initUI()
 
 void cleanUp()
 {
-    optionsWindow->optionsChangedDisconnect(optionsChanged);
+    optionsWindow->optionsChangedDisconnect();
 
     deinitTimers();
 

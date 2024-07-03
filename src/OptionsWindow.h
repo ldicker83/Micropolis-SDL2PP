@@ -40,6 +40,7 @@ public:
     };
 
     using CallbackOptionsChanged = std::function<void(const Options&)>;
+    using CallbackSignal = std::function<void(void)>;
 
 public:
     OptionsWindow() = delete;
@@ -49,7 +50,16 @@ public:
     OptionsWindow(SDL_Renderer* renderer);
 
     void optionsChangedConnect(CallbackOptionsChanged);
-    void optionsChangedDisconnect(CallbackOptionsChanged);
+    void optionsChangedDisconnect();
+
+    void newGameCallbackConnect(CallbackSignal);
+    void newGameCallbackDisconnect();
+
+    void saveGameCallbackConnect(CallbackSignal);
+    void saveGameCallbackDisconnect();
+
+    void openGameCallbackConnect(CallbackSignal);
+    void openGameCallbackDisconnect();
 
     void setOptions(const Options&);
 
@@ -81,6 +91,10 @@ private:
     Texture mCheckTexture;
 
     CallbackOptionsChanged mOptionsChangedCallback;
+
+    CallbackSignal mNewGameCallback;
+    CallbackSignal mSaveGameCallback;
+    CallbackSignal mOpenGameCallback;
 
     std::vector<::Button> mButtons;
 
