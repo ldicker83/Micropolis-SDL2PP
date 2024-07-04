@@ -12,6 +12,8 @@
 
 #include <memory>
 
+#include <functional>
+
 #include <SDL2/SDL.h>
 
 #include "Budget.h"
@@ -49,10 +51,6 @@ public:
 
 	BudgetWindow(SDL_Renderer* renderer, const StringRender& stringRenderer, Budget& budget);
 
-	void reset();
-
-	bool accepted() const { return mAccepted; }
-
 	void draw() override;
 	void update() override;
 
@@ -65,7 +63,6 @@ private:
 	void onPositionChanged(const Point<int>& pos) override;
 
 	Budget& mBudget;
-	bool mAccepted{ false };
 
 	SDL_Renderer* mRenderer{ nullptr };
 	const StringRender& mStringRenderer;
