@@ -704,6 +704,7 @@ void handleKeyEvent(SDL_Event& event)
     {
     case SDLK_ESCAPE:
         GuiWindowStack.hide();
+        GuiModalWindows.hide();
 
         optionsWindow->setOptions({ autoBudget(), autoBulldoze(), autoGoto(), disastersEnabled(), false, false });
         optionsWindow->show();
