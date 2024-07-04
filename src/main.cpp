@@ -1100,6 +1100,12 @@ void gameInit()
 }
 
 
+void budgetAccepted()
+{
+
+}
+
+
 void optionsChanged(const OptionsWindow::Options& options)
 {
     autoBudget(options.autoBudget);
@@ -1146,6 +1152,7 @@ void initUI()
 
     budgetWindow = std::make_unique<BudgetWindow>(MainWindowRenderer, *stringRenderer, budget);
     centerWindow(*budgetWindow);
+    budgetWindow->acceptedSignalConnect(budgetAccepted);
 
     graphWindow = std::make_unique<GraphWindow>(MainWindowRenderer);
     centerWindow(*graphWindow);
