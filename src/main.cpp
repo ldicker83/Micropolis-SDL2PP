@@ -50,6 +50,7 @@
 #include "Texture.h"
 #include "ToolPalette.h"
 
+#include "WindowGroup.h"
 #include "WindowStack.h"
 
 #include <algorithm>
@@ -158,6 +159,7 @@ namespace
 
 
     WindowStack GuiWindowStack;
+    WindowGroup GuiModalWindows;
 
 
     unsigned int speedModifier()
@@ -202,6 +204,14 @@ namespace
         for (auto timer : Timers)
         {
             SDL_RemoveTimer(timer);
+        }
+    }
+
+    void showBudgetIfBudgetNeedsAttention()
+    {
+        if (!AutoBudget && budget.NeedsAttention())
+        {
+            budgetWindow->show();
         }
     }
 };
@@ -300,7 +310,12 @@ void simUpdate()
 {
     updateDate();
 
-    if (newMonth() && graphWindow->visible()) { graphWindow->update(); }
+    if (newMonth() && graphWindow->visible())
+    {
+        graphWindow->update();
+    }
+
+    showBudgetIfBudgetNeedsAttention();
 
     scoreDoer(cityProperties);
 }
@@ -1170,6 +1185,9 @@ void initUI()
     GuiWindowStack.addWindow(optionsWindow.get());
     GuiWindowStack.addWindow(queryWindow.get());
 
+    GuiModalWindows.addWindow(optionsWindow.get());
+    GuiModalWindows.addWindow(budgetWindow.get());
+
     UiRects.push_back(&UiHeaderRect);
 }
 
@@ -1183,18 +1201,6 @@ void cleanUp()
 
     SDL_DestroyRenderer(MainWindowRenderer);
     SDL_DestroyWindow(MainWindow);
-}
-
-
-bool modalWindowVisible()
-{
-    /**
-     * \fixme   Not a fan of the special case code here that may get bigger as time
-     *          goes on. Would prerfer to add a method to windows to show as modal
-     *          and only do this if a modal window is visible. Or something to that
-     *          effect. Would be far less prone to issues than this.
-     */
-    return budget.NeedsAttention() || budgetWindow->visible() || optionsWindow->visible();
 }
 
 
@@ -1215,19 +1221,12 @@ void GameLoop()
         pendingTool(toolPalette->tool());
         drawSprites();
 
-        if (modalWindowVisible())
+        if (GuiModalWindows.windowVisible())
         {
             SDL_SetRenderDrawColor(MainWindowRenderer, 0, 0, 0, 175);
             SDL_RenderFillRect(MainWindowRenderer, nullptr);
             
-            if (optionsWindow->visible())
-            {
-                optionsWindow->draw();
-            }
-            else
-            {
-                budgetWindow->draw();
-            }
+            GuiModalWindows.draw();
         }
         else
         {
