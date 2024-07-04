@@ -12,6 +12,8 @@
 
 #include <memory>
 
+#include <functional>
+
 #include <SDL2/SDL.h>
 
 #include "Budget.h"
@@ -42,6 +44,8 @@ public:
 	static constexpr auto ButtonStateNormal = 0;
 	static constexpr auto ButtonStatePressed = 1;
 
+	using CallbackSignal = std::function<void(void)>;
+
 public:
 	BudgetWindow() = delete;
 	BudgetWindow(const BudgetWindow&) = delete;
@@ -52,6 +56,8 @@ public:
 	void reset();
 
 	bool accepted() const { return mAccepted; }
+
+	void acceptedSignalConnect(CallbackSignal);
 
 	void draw() override;
 	void update() override;
@@ -66,6 +72,8 @@ private:
 
 	Budget& mBudget;
 	bool mAccepted{ false };
+
+	CallbackSignal mAcceptedSignal;
 
 	SDL_Renderer* mRenderer{ nullptr };
 	const StringRender& mStringRenderer;
