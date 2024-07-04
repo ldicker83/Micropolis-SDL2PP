@@ -92,7 +92,7 @@ private:
     CallbackSignal mOpenGameCallback;
     CallbackSignal mSaveGameCallback;
 
-    std::vector<::Button> mButtons;
+    std::vector<Button> mButtons;
 
     Options mOptions;
 
