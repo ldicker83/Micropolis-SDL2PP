@@ -44,16 +44,12 @@ public:
 	static constexpr auto ButtonStateNormal = 0;
 	static constexpr auto ButtonStatePressed = 1;
 
-	using CallbackSignal = std::function<void(void)>;
-
 public:
 	BudgetWindow() = delete;
 	BudgetWindow(const BudgetWindow&) = delete;
 	const BudgetWindow& operator=(const BudgetWindow&) = delete;
 
 	BudgetWindow(SDL_Renderer* renderer, const StringRender& stringRenderer, Budget& budget);
-
-	void acceptedSignalConnect(CallbackSignal);
 
 	void draw() override;
 	void update() override;
@@ -67,8 +63,6 @@ private:
 	void onPositionChanged(const Point<int>& pos) override;
 
 	Budget& mBudget;
-
-	CallbackSignal mAcceptedSignal;
 
 	SDL_Renderer* mRenderer{ nullptr };
 	const StringRender& mStringRenderer;

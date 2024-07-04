@@ -226,7 +226,6 @@ void BudgetWindow::handleMouseDown(const ButtonId id)
 		break;
 
 	case ButtonId::Accept:
-		mAcceptedSignal();
 		mButtonDownId = ButtonId::None;
 		hide();
 		break;
@@ -257,12 +256,6 @@ void BudgetWindow::onMouseDown(const Point<int>& pos)
 void BudgetWindow::onMouseUp()
 {
 	mButtonDownId = ButtonId::None;
-}
-
-
-void BudgetWindow::acceptedSignalConnect(CallbackSignal callback)
-{
-	mAcceptedSignal = callback;
 }
 
 
