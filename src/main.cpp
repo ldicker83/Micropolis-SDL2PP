@@ -1234,12 +1234,6 @@ void GameLoop()
             else
             {
                 budgetWindow->draw();
-
-                if (budgetWindow->accepted())
-                {
-                    budgetWindow->reset();
-                    budgetWindow->hide();
-                }
             }
         }
         else

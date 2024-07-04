@@ -53,10 +53,6 @@ public:
 
 	BudgetWindow(SDL_Renderer* renderer, const StringRender& stringRenderer, Budget& budget);
 
-	void reset();
-
-	bool accepted() const { return mAccepted; }
-
 	void acceptedSignalConnect(CallbackSignal);
 
 	void draw() override;
@@ -71,7 +67,6 @@ private:
 	void onPositionChanged(const Point<int>& pos) override;
 
 	Budget& mBudget;
-	bool mAccepted{ false };
 
 	CallbackSignal mAcceptedSignal;
 

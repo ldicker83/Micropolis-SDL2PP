@@ -160,12 +160,6 @@ BudgetWindow::BudgetWindow(SDL_Renderer* renderer, const StringRender& stringRen
 }
 
 
-void BudgetWindow::reset()
-{
-	mAccepted = false;
-}
-
-
 void BudgetWindow::onPositionChanged(const Point<int>& pos)
 {
 	for (auto id : buttons)
@@ -232,9 +226,9 @@ void BudgetWindow::handleMouseDown(const ButtonId id)
 		break;
 
 	case ButtonId::Accept:
-		mAccepted = true;
 		mAcceptedSignal();
 		mButtonDownId = ButtonId::None;
+		hide();
 		break;
 
 	default:
