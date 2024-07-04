@@ -45,6 +45,20 @@ WindowBase* WindowStack::front()
 }
 
 
+bool WindowStack::windowVisible() const
+{
+	for (auto* window : mWindowList)
+	{
+		if (window->visible())
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+
 bool WindowStack::pointInWindow(const Point<int>& point) const
 {
 	for (auto* window : mWindowList)

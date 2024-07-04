@@ -19,6 +19,8 @@ public:
 
 	WindowBase* front();
 
+	bool windowVisible() const;
+
 	bool pointInWindow(const Point<int>& point) const;
 
 	void updateStack(const Point<int>& point);
