@@ -8,7 +8,6 @@
 /icons/64
 *.psd
 .DS_Store
-/images
 /xcode/Micropolis-SDL2PP.xcodeproj/project.xcworkspace/xcuserdata
 /xcode/Micropolis-SDL2PP.xcodeproj/xcuserdata
 /xcode/.DS_Store
