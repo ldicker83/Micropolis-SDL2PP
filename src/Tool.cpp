@@ -31,7 +31,7 @@
 #include <string>
 #include <stdexcept>
 
-int specialBase = CHURCH;
+int specialBase = Church;
 
 namespace
 {
@@ -143,11 +143,11 @@ ToolResult putDownPark(int mapH, int mapV, Budget& budget)
 
         if (value == 4)
         {
-            tile = FOUNTAIN | BURNBIT | BULLBIT | ANIMBIT;
+            tile = Fountain | BURNBIT | BULLBIT | AnimationBit;
         }
         else
         {
-            tile = (value + WOODS2) | BURNBIT | BULLBIT;
+            tile = (value + Woods2) | BURNBIT | BULLBIT;
         }
 
         if (Map[mapH][mapV] == 0)
@@ -183,7 +183,7 @@ ToolResult putDownNetwork(int mapH, int mapV, Budget& budget)
 
     if (budget.CanAfford(Tools.at(Tool::Network).cost))
     {
-        Map[mapH][mapV] = TELEBASE | CONDBIT | BURNBIT | BULLBIT | ANIMBIT;
+        Map[mapH][mapV] = TELEBASE | CONDBIT | BURNBIT | BULLBIT | AnimationBit;
         budget.Spend(Tools.at(Tool::Network).cost);
         return ToolResult::Success;
     }
@@ -199,122 +199,122 @@ int checkBigZone(int id, int* deltaHPtr, int* deltaVPtr)
 {
     switch (id)
     {
-    case POWERPLANT: // check coal plant
-    case PORT: // check sea port
-    case NUCLEAR: // check nuc plant
-    case STADIUM: // check stadium
+    case PowerPlant: // check coal plant
+    case Port: // check sea port
+    case NuclearPower: // check nuc plant
+    case Stadium: // check stadium
         *deltaHPtr = 0;
         *deltaVPtr = 0;
         return (4);
 
-    case POWERPLANT + 1: // check coal plant
-    case COALSMOKE3: // check coal plant, smoke
-    case COALSMOKE3 + 1: // check coal plant, smoke
-    case COALSMOKE3 + 2: // check coal plant, smoke
-    case PORT + 1: // check sea port
-    case NUCLEAR + 1: // check nuc plant
-    case STADIUM + 1: // check stadium
+    case PowerPlant + 1: // check coal plant
+    case CoalPowerSmoke3: // check coal plant, smoke
+    case CoalPowerSmoke3 + 1: // check coal plant, smoke
+    case CoalPowerSmoke3 + 2: // check coal plant, smoke
+    case Port + 1: // check sea port
+    case NuclearPower + 1: // check nuc plant
+    case Stadium + 1: // check stadium
         *deltaHPtr = -1;
         *deltaVPtr = 0;
         return (4);
 
-    case POWERPLANT + 4: // check coal plant
-    case PORT + 4: // check sea port
-    case NUCLEAR + 4: // check nuc plant
-    case STADIUM + 4: // check stadium
+    case PowerPlant + 4: // check coal plant
+    case Port + 4: // check sea port
+    case NuclearPower + 4: // check nuc plant
+    case Stadium + 4: // check stadium
         *deltaHPtr = 0;
         *deltaVPtr = -1;
         return (4);
 
-    case POWERPLANT + 5: // check coal plant
-    case PORT + 5: // check sea port
-    case NUCLEAR + 5: // check nuc plant
-    case STADIUM + 5: // check stadium
+    case PowerPlant + 5: // check coal plant
+    case Port + 5: // check sea port
+    case NuclearPower + 5: // check nuc plant
+    case Stadium + 5: // check stadium
         *deltaHPtr = -1;
         *deltaVPtr = -1;
         return (4);
 
         // check airport
         //*** first row ***
-    case AIRPORT:
+    case Airport:
         *deltaHPtr = 0;
         *deltaVPtr = 0;
         return (6);
 
-    case AIRPORT + 1:
+    case Airport + 1:
         *deltaHPtr = -1;
         *deltaVPtr = 0;
         return (6);
 
-    case AIRPORT + 2:
+    case Airport + 2:
         *deltaHPtr = -2;
         *deltaVPtr = 0;
         return (6);
 
-    case AIRPORT + 3:
+    case Airport + 3:
         *deltaHPtr = -3;
         *deltaVPtr = 0;
         return (6);
 
         //*** second row ***
-    case AIRPORT + 6:
+    case Airport + 6:
         *deltaHPtr = 0;
         *deltaVPtr = -1;
         return (6);
 
-    case AIRPORT + 7:
+    case Airport + 7:
         *deltaHPtr = -1;
         *deltaVPtr = -1;
         return (6);
 
-    case AIRPORT + 8:
+    case Airport + 8:
         *deltaHPtr = -2;
         *deltaVPtr = -1;
         return (6);
 
-    case AIRPORT + 9:
+    case Airport + 9:
         *deltaHPtr = -3;
         *deltaVPtr = -1;
         return (6);
 
         //*** third row ***
-    case AIRPORT + 12:
+    case Airport + 12:
         *deltaHPtr = 0;
         *deltaVPtr = -2;
         return (6);
 
-    case AIRPORT + 13:
+    case Airport + 13:
         *deltaHPtr = -1;
         *deltaVPtr = -2;
         return (6);
 
-    case AIRPORT + 14:
+    case Airport + 14:
         *deltaHPtr = -2;
         *deltaVPtr = -2;
         return (6);
 
-    case AIRPORT + 15:
+    case Airport + 15:
         *deltaHPtr = -3;
         *deltaVPtr = -2;
         return (6);
 
         //*** fourth row ***
-    case AIRPORT + 18:
+    case Airport + 18:
         *deltaHPtr = 0;
         *deltaVPtr = -3;
         return (6);
 
-    case AIRPORT + 19:
+    case Airport + 19:
         *deltaHPtr = -1;
         *deltaVPtr = -3;
         return (6);
 
-    case AIRPORT + 20:
+    case Airport + 20:
         *deltaHPtr = -2;
         *deltaVPtr = -3;
         return (6);
 
-    case AIRPORT + 21:
+    case Airport + 21:
         *deltaHPtr = -3;
         *deltaVPtr = -3;
         return (6);
@@ -330,23 +330,23 @@ int checkBigZone(int id, int* deltaHPtr, int* deltaVPtr)
 bool tally(int tileValue)
 {
     /* can we autobulldoze this tile? */
-    return (((tileValue >= FIRSTRIVEDGE) && (tileValue <= LASTRUBBLE)) ||
-        ((tileValue >= (POWERBASE + 2)) && (tileValue <= (POWERBASE + 12))) ||
-        ((tileValue >= TINYEXP) && (tileValue <= (LASTTINYEXP + 2))));/* ??? */
+    return (((tileValue >= RiverEdgeFirst) && (tileValue <= RubbleLast)) ||
+        ((tileValue >= (PowerBase + 2)) && (tileValue <= (PowerBase + 12))) ||
+        ((tileValue >= ExplosionTiny) && (tileValue <= (ExplosionTinyLast + 2))));/* ??? */
 }
 
 
 int checkSize(int temp)
 {
     /* check for the normal com, resl, ind 3x3 zones & the fireDept & PoliceDept */
-    if (((temp >= (ResidentialBase - 1)) && (temp <= (PORTBASE - 1))) ||
-        ((temp >= (LASTPOWERPLANT + 1)) && (temp <= (POLICESTATION + 4))))
+    if (((temp >= (ResidentialBase - 1)) && (temp <= (PortBase - 1))) ||
+        ((temp >= (PowerPlantLast + 1)) && (temp <= (PoliceStation + 4))))
     {
         return (3);
     }
-    else if (((temp >= PORTBASE) && (temp <= LASTPORT)) ||
-        ((temp >= COALBASE) && (temp <= LASTPOWERPLANT)) ||
-        ((temp >= STADIUMBASE) && (temp <= LASTZONE)))
+    else if (((temp >= PortBase) && (temp <= PortLast)) ||
+        ((temp >= CoalPowerBase) && (temp <= PowerPlantLast)) ||
+        ((temp >= StadiumBase) && (temp <= ZoneLast)))
     {
         return (4);
     }
@@ -478,7 +478,7 @@ ToolResult checkArea(const int mapH, const int mapV, const int base, const int s
             // special case to get nuclear plant animation working
             else if (animate && col == 1 && row == 2)
             {
-                Map[mapX][mapY] = tileBase + BNCNBIT + ANIMBIT;
+                Map[mapX][mapY] = tileBase + BNCNBIT + AnimationBit;
             }
             else
             {
@@ -499,31 +499,31 @@ ToolResult checkArea(const int mapH, const int mapV, const int base, const int s
 /* search table for zone status string match */
 static int idArray[28] =
 {
-    DIRT,
-    RIVER,
-    TREEBASE,
-    RUBBLE,
-    FLOOD,
-    RADTILE,
-    FIRE,
-    ROADBASE,
-    POWERBASE,
-    RAILBASE,
+    Dirt,
+    River,
+    TreeBase,
+    Rubble,
+    Flood,
+    RadiationTile,
+    FireBase,
+    RoadBase,
+    PowerBase,
+    RailBase,
     ResidentialBase,
-    COMBASE,
-    INDBASE,
-    PORTBASE,
-    AIRPORTBASE,
-    COALBASE,
-    FIRESTBASE,
-    POLICESTBASE,
-    STADIUMBASE,
-    NUCLEARBASE,
+    CommercialBase,
+    IndustryBase,
+    PortBase,
+    AirportBase,
+    CoalPowerBase,
+    FireStationBase,
+    PoliceStationBase,
+    StadiumBase,
+    NuclearPowerBase,
     827, // crossed out lightning bolt
     832, // radar dish first frame
-    FOUNTAIN,
+    Fountain,
     INDBASE2,
-    FOOTBALLGAME1,
+    FootballGame1,
     VBRDG0,
     952, // radiation icon first frame
     956 // white tile?
@@ -611,9 +611,9 @@ const std::string& queryString(int tileValue)
 void doZoneStatus(int x, int y)
 {
     int tileNum = maskedTileValue(x, y);
-    if (tileNum >= COALSMOKE1 && tileNum < FOOTBALLGAME1)
+    if (tileNum >= CoalPowerSmoke1 && tileNum < FootballGame1)
     {
-        tileNum = COALBASE;
+        tileNum = CoalPowerBase;
     }
 
     std::array<std::string, 5> statusStr;
@@ -636,9 +636,9 @@ void putRubble(const int mapX, const int mapY, const int size)
             if (CoordinatesValid({ x, y }))
             {
                 int cellValue = maskedTileValue(x, y);
-                if ((cellValue != RADTILE) && (cellValue != 0))
+                if ((cellValue != RadiationTile) && (cellValue != 0))
                 {
-                    Map[x][y] = (animationEnabled() ? (TINYEXP + RandomRange(0, 2)) : SOMETINYEXP) | ANIMBIT | BULLBIT;
+                    Map[x][y] = (animationEnabled() ? (ExplosionTiny + RandomRange(0, 2)) : ExplosionTinySome) | AnimationBit | BULLBIT;
                 }
             }
         }
@@ -731,7 +731,7 @@ ToolResult bulldozer_tool(int x, int y, Budget& budget)
     }
     else
     {
-        if (temp == RIVER || temp == REDGE || temp == CHANNEL)
+        if (temp == River || temp == RiverEdge || temp == RiverChannel)
         {
             if (budget.CanAfford(5)) /// \fixme Magic Number
             {
@@ -824,7 +824,7 @@ ToolResult commercial_tool(int x, int y, Budget& budget)
         return ToolResult::OutOfBounds;
     }
 
-    return checkArea(x, y, COMBASE, 3, false, Tool::Commercial, budget);
+    return checkArea(x, y, CommercialBase, 3, false, Tool::Commercial, budget);
 }
 
 
@@ -835,7 +835,7 @@ ToolResult industrial_tool(int x, int y, Budget& budget)
         return ToolResult::OutOfBounds;
     }
 
-    return checkArea(x, y, INDBASE, 3, false, Tool::Industrial, budget);
+    return checkArea(x, y, IndustryBase, 3, false, Tool::Industrial, budget);
 }
 
 
@@ -846,7 +846,7 @@ ToolResult police_dept_tool(int x, int y, Budget& budget)
         return ToolResult::OutOfBounds;
     }
 
-    return checkArea(x, y, POLICESTBASE, 3, false, Tool::Police, budget);
+    return checkArea(x, y, PoliceStationBase, 3, false, Tool::Police, budget);
 }
 
 
@@ -857,7 +857,7 @@ ToolResult fire_dept_tool(int x, int y, Budget& budget)
         return ToolResult::OutOfBounds;
     }
 
-    return checkArea(x, y, FIRESTBASE, 3, false , Tool::Fire, budget);
+    return checkArea(x, y, FireStationBase, 3, false , Tool::Fire, budget);
 }
 
 
@@ -868,7 +868,7 @@ ToolResult stadium_tool(int x, int y, Budget& budget)
         return ToolResult::OutOfBounds;
     }
 
-    return checkArea(x, y, STADIUMBASE, 4, false, Tool::Stadium, budget);
+    return checkArea(x, y, StadiumBase, 4, false, Tool::Stadium, budget);
 }
 
 
@@ -879,7 +879,7 @@ ToolResult coal_power_plant_tool(int x, int y, Budget& budget)
         return ToolResult::OutOfBounds;
     }
 
-    return checkArea(x, y, COALBASE, 4, false, Tool::Coal, budget);
+    return checkArea(x, y, CoalPowerBase, 4, false, Tool::Coal, budget);
 }
 
 
@@ -890,7 +890,7 @@ ToolResult nuclear_power_plant_tool(int x, int y, Budget& budget)
         return ToolResult::OutOfBounds;
     }
 
-    return checkArea(x, y, NUCLEARBASE, 4, true, Tool::Nuclear, budget);
+    return checkArea(x, y, NuclearPowerBase, 4, true, Tool::Nuclear, budget);
 }
 
 
@@ -901,7 +901,7 @@ ToolResult seaport_tool(int x, int y, Budget& budget)
         return ToolResult::OutOfBounds;
     }
 
-    return checkArea(x, y, PORTBASE, 4, false, Tool::Seaport, budget);
+    return checkArea(x, y, PortBase, 4, false, Tool::Seaport, budget);
 }
 
 
@@ -912,7 +912,7 @@ ToolResult airport_tool(int x, int y, Budget& budget)
         return ToolResult::OutOfBounds;
     }
 
-    return checkArea(x, y, AIRPORTBASE, 6, false, Tool::Airport, budget);
+    return checkArea(x, y, AirportBase, 6, false, Tool::Airport, budget);
 }
 
 

@@ -21,7 +21,7 @@ void animateTiles()
     for (int i = SimWidth * SimHeight; i > 0; i--)
     {
         int tilevalue = (*tMapPtr);
-        if (tilevalue & ANIMBIT)
+        if (tilevalue & AnimationBit)
         {
             const int tileflags = tilevalue & ALLBITS;
             tilevalue &= LOMASK;

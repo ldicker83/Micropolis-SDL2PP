@@ -26,7 +26,7 @@
 
 bool tileIsNuclear(const int tile)
 {
-    return ((tile & LOMASK) == NUCLEAR);
+    return ((tile & LOMASK) == NuclearPower);
 }
 
 
@@ -39,28 +39,28 @@ bool tileIsArsonable(const int tile)
 bool tileIsRiverEdge(const int tile)
 {
     const int masked = tile & LOMASK;
-    return masked >= FIRSTRIVEDGE && masked <= LASTRIVEDGE;
+    return masked >= RiverEdgeFirst && masked <= RiverEdgeLast;
 }
 
 
 bool tileIsFloodable(const int tile)
 {
     const int masked = tile & LOMASK;
-    return masked == DIRT || ((tile & BULLBIT) || (tile & BURNBIT));
+    return masked == Dirt || ((tile & BULLBIT) || (tile & BURNBIT));
 }
 
 
 bool canSpreadFloodTo(const int tile)
 {
     const int masked = tile & LOMASK;
-    return (masked == DIRT) || (tile & BURNBIT) || (masked >= RUBBLE && (masked <= LASTRUBBLE));
+    return (masked == Dirt) || (tile & BURNBIT) || (masked >= Rubble && (masked <= RubbleLast));
 }
 
 
 bool tileIsVulnerable(const int tile)
 {
     const unsigned int unmasked = tile & LOMASK;
-    return !(unmasked < ResidentialBase) || (unmasked > LASTZONE) || (tile & ZONEBIT);
+    return !(unmasked < ResidentialBase) || (unmasked > ZoneLast) || (tile & ZONEBIT);
 }
 
 
@@ -122,11 +122,11 @@ void MakeEarthquake()
         {
             if (z & 0x3)
             {
-                Map[x][y] = (RUBBLE + BULLBIT) + (Rand16() & 3);
+                Map[x][y] = (Rubble + BULLBIT) + (Rand16() & 3);
             }
             else
             {
-                Map[x][y] = (FIRE + ANIMBIT) + (Rand16() & 7);
+                Map[x][y] = (FireBase + AnimationBit) + (Rand16() & 7);
             }
         }
     }
@@ -144,9 +144,9 @@ void MakeFire()
         if(tileIsArsonable(cell))
         {
             const int tile = maskedTileValue(x, y);
-            if ((tile > LASTRIVEDGE) && (tile < LASTZONE))
+            if ((tile > RiverEdgeLast) && (tile < ZoneLast))
             {
-                Map[x][y] = FIRE + RandomRange(0, 7) | ANIMBIT;
+                Map[x][y] = FireBase + RandomRange(0, 7) | AnimationBit;
                 SendMesAt(NotificationId::FireReported, x, y);
                 return;
             }
@@ -176,7 +176,7 @@ void MakeFlood()
                 {
                     if(tileIsFloodable(cell))
                     {
-                        Map[floodX][floodY] = FLOOD;
+                        Map[floodX][floodY] = Flood;
                         FloodCount = 30;
                         SendMesAt(NotificationId::FloodingReported, floodX, floodY);
                         FloodX = floodX;
@@ -213,7 +213,7 @@ void DoFlood()
                         {
                             FireZone(x, y, cell);
                         }
-                        Map[x][y] = FLOOD + RandomRange(0, 2);
+                        Map[x][y] = Flood + RandomRange(0, 2);
                     }
                 }
             }

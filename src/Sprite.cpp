@@ -358,7 +358,7 @@ bool tryOther(int Tpoo, int Told, int Tnew)
         return false;
     }
 
-    if ((Tpoo == POWERBASE) || (Tpoo == POWERBASE + 1) || (Tpoo == RAILBASE) || (Tpoo == RAILBASE + 1))
+    if ((Tpoo == PowerBase) || (Tpoo == PowerBase + 1) || (Tpoo == RailBase) || (Tpoo == RailBase + 1))
     {
         return true;
     }
@@ -450,10 +450,10 @@ bool spritesCollided(SimSprite& s1, SimSprite& s2)
 
 bool tileIsWet(int x)
 {
-    return ((x == POWERBASE) ||
-        (x == POWERBASE + 1) ||
-        (x == RAILBASE) ||
-        (x == RAILBASE + 1) ||
+    return ((x == PowerBase) ||
+        (x == PowerBase + 1) ||
+        (x == RailBase) ||
+        (x == RailBase + 1) ||
         (x == BRWH) ||
         (x == BRWV));
 }
@@ -467,13 +467,13 @@ void oFireZone(int Xloc, int Yloc, int ch)
     RateOfGrowthMap.value({ Xloc >> 3, Yloc >> 3 }) = rogVal - 20;
 
     ch &= LOMASK;
-    if (ch < PORTBASE)
+    if (ch < PortBase)
     {
         XYmax = 2;
     }
     else
     {
-        if (ch == AIRPORT)
+        if (ch == Airport)
         {
             XYmax = 5;
         }
@@ -489,7 +489,7 @@ void oFireZone(int Xloc, int Yloc, int ch)
         {
             const int Xtem = Xloc + x;
             const int Ytem = Yloc + y;
-            if ((Map[Xtem][Ytem] & LOMASK) >= ROADBASE)
+            if ((Map[Xtem][Ytem] & LOMASK) >= RoadBase)
             {
                 Map[Xtem][Ytem] |= BULLBIT;
             }
@@ -520,7 +520,7 @@ void startFire(const Point<int>& location)
         return;
     }
 
-    Map[mapCoords.x][mapCoords.y] = FIRE + RandomRange(0, 3) + ANIMBIT;
+    Map[mapCoords.x][mapCoords.y] = FireBase + RandomRange(0, 3) + AnimationBit;
 }
 
 
@@ -536,32 +536,32 @@ void destroyTile(const Point<int>& location)
     const int unmaskedTile = tileValue(mapCoords.x, mapCoords.y);
     const int tile = maskedTileValue(mapCoords.x, mapCoords.y);
 
-    if (tile >= TREEBASE)
+    if (tile >= TreeBase)
     {
         /* TILE_IS_BRIDGE(t) */
         if (!(unmaskedTile & BURNBIT))
         {
-            if ((tile >= ROADBASE) && (tile <= LASTROAD))
+            if ((tile >= RoadBase) && (tile <= RoadLast))
             {
-                Map[mapCoords.x][mapCoords.y] = RIVER;
+                Map[mapCoords.x][mapCoords.y] = River;
                 return;
             }
         }
         if (unmaskedTile & ZONEBIT)
         {
             oFireZone(mapCoords.x, mapCoords.y, unmaskedTile);
-            if (tile > RZB)
+            if (tile > ResidentialZoneBase)
             {
                 makeExplosionAt(location);
             }
         }
         if (tileIsWet(tile))
         {
-            Map[mapCoords.x][mapCoords.y] = RIVER;
+            Map[mapCoords.x][mapCoords.y] = River;
         }
         else
         {
-            Map[mapCoords.x][mapCoords.y] = (animationEnabled() ? TINYEXP : (LASTTINYEXP - 3)) | BULLBIT | ANIMBIT;
+            Map[mapCoords.x][mapCoords.y] = (animationEnabled() ? ExplosionTiny : (ExplosionTinyLast - 3)) | BULLBIT | AnimationBit;
         }
     }
 }
@@ -637,7 +637,7 @@ void updateTrain(SimSprite& sprite)
 
         int c = getTile(sprite.position + CheckVector[checkDirection] + Vector<int>{ 48, 0});
 
-        if (((c >= RAILBASE) && (c <= LASTRAIL)) || /* track? */
+        if (((c >= RailBase) && (c <= RailLast)) || /* track? */
             (c == RAILVPOWERH) ||
             (c == RAILHPOWERV))
         {
@@ -657,7 +657,7 @@ void updateTrain(SimSprite& sprite)
                 sprite.frame = TrainPic2[checkDirection];
             }
 
-            if ((c == RAILBASE) || (c == (RAILBASE + 1)))
+            if ((c == RailBase) || (c == (RailBase + 1)))
             {
                 sprite.frame = 4;
             }
@@ -824,9 +824,9 @@ void updateShip(SimSprite& sprite)
 {
     static const std::array<Vector<int>, 9> CheckDirection{ {{0,0}, {0,-1}, {1,-1}, {1,0}, {1,1}, {0,1}, {-1,1}, {-1,0}, {-1,-1}} };
     static const std::array<Vector<int>, 9> MoveVector{ {{0,0}, {0,-2}, {2,-2}, {2,0}, {2,2}, {0,2}, {-2,2}, {-2,0}, {-2,-2}} };
-    static const std::array<int, 8> BtClrTab{ RIVER, CHANNEL, POWERBASE, POWERBASE + 1, RAILBASE, RAILBASE + 1, BRWH, BRWV };
+    static const std::array<int, 8> BtClrTab{ River, RiverChannel, PowerBase, PowerBase + 1, RailBase, RailBase + 1, BRWH, BRWV };
 
-    int t = RIVER;
+    int t = River;
     int tem, pem;
 
     if (sprite.sound_count > 0)
@@ -884,7 +884,7 @@ void updateShip(SimSprite& sprite)
             if (CoordinatesValid(position))
             {
                 t = maskedTileValue(position.x, position.y);
-                if ((t == CHANNEL) || (t == BRWH) || (t == BRWV) || tryOther(t, sprite.dir, z))
+                if ((t == RiverChannel) || (t == BRWH) || (t == BRWV) || tryOther(t, sprite.dir, z))
                 {
                     sprite.new_dir = z;
                     sprite.frame = turnTo(sprite.frame, sprite.new_dir);
@@ -1044,7 +1044,7 @@ void updateMonster(SimSprite& sprite)
 
     c = getTile(sprite.position + sprite.hot);
     
-    if ((c == -1) || ((c == RIVER) && (sprite.count != 0)))
+    if ((c == -1) || ((c == River) && (sprite.count != 0)))
     {
         sprite.active = false;
     }
@@ -1211,7 +1211,7 @@ void generateShip()
     case 0:
         for (int x = 4; x < SimWidth - 2; x++)
         {
-            if (Map[x][0] == CHANNEL)
+            if (Map[x][0] == RiverChannel)
             {
                 makeShipAt({ x, 0 });
                 return;
@@ -1222,7 +1222,7 @@ void generateShip()
     case 1:
         for (int y = 1; y < SimHeight - 2; y++)
         {
-            if (Map[0][y] == CHANNEL)
+            if (Map[0][y] == RiverChannel)
             {
                 makeShipAt({ 0, y });
                 return;
@@ -1233,7 +1233,7 @@ void generateShip()
     case 2:
         for (int x = 4; x < SimWidth - 2; x++)
         {
-            if (Map[x][SimHeight - 2] == CHANNEL)
+            if (Map[x][SimHeight - 2] == RiverChannel)
             {
                 makeShipAt({ x, SimHeight - 2 });
                 return;
@@ -1244,7 +1244,7 @@ void generateShip()
     case 3:
         for (int y = 1; y < SimHeight - 2; y++)
         {
-            if (Map[SimWidth - 2][y] == CHANNEL)
+            if (Map[SimWidth - 2][y] == RiverChannel)
             {
                 makeShipAt({ SimWidth - 2, y });
                 return;
@@ -1269,7 +1269,7 @@ bool findSpawnPosition()
     {
         const int x = RandomRange(0, SimWidth - 20) + 10;
         const int y = RandomRange(0, SimHeight - 10) + 5;
-        if ((Map[x][y] == RIVER) || (Map[x][y] == RIVER + BULLBIT))
+        if ((Map[x][y] == River) || (Map[x][y] == River + BULLBIT))
         {
             makeMonsterAt({ x, y });
             return true;

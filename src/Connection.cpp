@@ -71,8 +71,8 @@ ToolResult _LayDoze(int x, int y, Budget& budget)
 
     switch (NeutralizeRoad(Map[x][y]))
     {
-    case HBRIDGE:
-    case VBRIDGE:
+    case BridgeHorizontal:
+    case BridgeVertical:
     case BRWV:
     case BRWH:
     case HBRDG0:
@@ -85,13 +85,13 @@ ToolResult _LayDoze(int x, int y, Budget& budget)
     case VBRDG3:
     case HPOWER:
     case VPOWER:
-    case HRAIL:
-    case VRAIL: // Dozing over water, replace with water.
-        Map[x][y] = RIVER;
+    case RailHorizontal:
+    case RailVertical: // Dozing over water, replace with water.
+        Map[x][y] = River;
         break;
 
     default: // Dozing on land, replace with land.  Simple, eh?
-        Map[x][y] = DIRT;
+        Map[x][y] = Dirt;
         break;
     }
 
@@ -111,13 +111,13 @@ ToolResult _LayRoad(int x, int y, Budget& budget)
 
     switch (Map[x][y] & LOMASK)
     {
-    case DIRT:
+    case Dirt:
         Map[x][y] = ROADS | BULLBIT | BURNBIT;
         break;
 
-    case RIVER: // Road on Water
-    case REDGE:
-    case CHANNEL: // Check how to build bridges, if possible.
+    case River: // Road on Water
+    case RiverEdge:
+    case RiverChannel: // Check how to build bridges, if possible.
         if (budget.CurrentFunds() < 50)
         {
             return ToolResult::InsufficientFunds;
@@ -128,9 +128,9 @@ ToolResult _LayRoad(int x, int y, Budget& budget)
         if (x < (SimWidth - 1))
         {
             const int adjTile = NeutralizeRoad(Map[x + 1][y]);
-            if ((adjTile == VRAILROAD) || (adjTile == HBRIDGE) || ((adjTile >= ROADS) && (adjTile <= HROADPOWER)))
+            if ((adjTile == VRAILROAD) || (adjTile == BridgeHorizontal) || ((adjTile >= ROADS) && (adjTile <= RoadPowerHorizontal)))
             {
-                Map[x][y] = HBRIDGE | BULLBIT;
+                Map[x][y] = BridgeHorizontal | BULLBIT;
                 break;
             }
         }
@@ -138,9 +138,9 @@ ToolResult _LayRoad(int x, int y, Budget& budget)
         if (x > 0)
         {
             const int adjTile = NeutralizeRoad(Map[x - 1][y]);
-            if ((adjTile == VRAILROAD) || (adjTile == HBRIDGE) || ((adjTile >= ROADS) && (adjTile <= INTERSECTION)))
+            if ((adjTile == VRAILROAD) || (adjTile == BridgeHorizontal) || ((adjTile >= ROADS) && (adjTile <= RoadIntersection)))
             {
-                Map[x][y] = HBRIDGE | BULLBIT;
+                Map[x][y] = BridgeHorizontal | BULLBIT;
                 break;
             }
         }
@@ -148,9 +148,9 @@ ToolResult _LayRoad(int x, int y, Budget& budget)
         if (y < (SimHeight - 1))
         {
             const int adjTile = NeutralizeRoad(Map[x][y + 1]);
-            if ((adjTile == HRAILROAD) || (adjTile == VROADPOWER) || ((adjTile >= VBRIDGE) && (adjTile <= INTERSECTION)))
+            if ((adjTile == HRAILROAD) || (adjTile == RoadPowerVertical) || ((adjTile >= BridgeVertical) && (adjTile <= RoadIntersection)))
             {
-                Map[x][y] = VBRIDGE | BULLBIT;
+                Map[x][y] = BridgeVertical | BULLBIT;
                 break;
             }
         }
@@ -158,9 +158,9 @@ ToolResult _LayRoad(int x, int y, Budget& budget)
         if (y > 0)
         {
             const int adjTile = NeutralizeRoad(Map[x][y - 1]);
-            if ((adjTile == HRAILROAD) || (adjTile == VROADPOWER) || ((adjTile >= VBRIDGE) && (adjTile <= INTERSECTION)))
+            if ((adjTile == HRAILROAD) || (adjTile == RoadPowerVertical) || ((adjTile >= BridgeVertical) && (adjTile <= RoadIntersection)))
             {
-                Map[x][y] = VBRIDGE | BULLBIT;
+                Map[x][y] = BridgeVertical | BULLBIT;
                 break;
             }
         }
@@ -169,11 +169,11 @@ ToolResult _LayRoad(int x, int y, Budget& budget)
         return ToolResult::InvalidOperation;
 
     case LHPOWER: // Road on power
-        Map[x][y] = VROADPOWER | CONDBIT | BURNBIT | BULLBIT;
+        Map[x][y] = RoadPowerVertical | CONDBIT | BURNBIT | BULLBIT;
         break;
 
     case LVPOWER: // Road on power #2
-        Map[x][y] = HROADPOWER | CONDBIT | BURNBIT | BULLBIT;
+        Map[x][y] = RoadPowerHorizontal | CONDBIT | BURNBIT | BULLBIT;
         break;
 
     case LHRAIL: // Road on rail
@@ -204,13 +204,13 @@ ToolResult _LayRail(int x, int y, Budget& budget)
 
     switch (NeutralizeRoad(Map[x][y] & LOMASK))
     {
-    case DIRT: // Rail on Dirt
+    case Dirt: // Rail on Dirt
         Map[x][y] = LHRAIL | BULLBIT | BURNBIT;
         break;
 
-    case RIVER: // Rail on Water
-    case REDGE:
-    case CHANNEL: // Check how to build underwater tunnel, if possible.
+    case River: // Rail on Water
+    case RiverEdge:
+    case RiverChannel: // Check how to build underwater tunnel, if possible.
         if (budget.CurrentFunds() < 100)
         {
             return ToolResult::InsufficientFunds;
@@ -220,9 +220,9 @@ ToolResult _LayRail(int x, int y, Budget& budget)
         if (x < (SimWidth - 1))
         {
             const int adjTile = NeutralizeRoad(Map[x + 1][y]);
-            if ((adjTile == RAILHPOWERV) || (adjTile == RAILBASE) || ((adjTile >= LHRAIL) && (adjTile <= HRAILROAD)))
+            if ((adjTile == RAILHPOWERV) || (adjTile == RailBase) || ((adjTile >= LHRAIL) && (adjTile <= HRAILROAD)))
             {
-                Map[x][y] = HRAIL | BULLBIT;
+                Map[x][y] = RailHorizontal | BULLBIT;
                 break;
             }
         }
@@ -230,9 +230,9 @@ ToolResult _LayRail(int x, int y, Budget& budget)
         if (x > 0)
         {
             const int adjTile = NeutralizeRoad(Map[x - 1][y]);
-            if ((adjTile == RAILHPOWERV) || (adjTile == RAILBASE) || ((adjTile > VRAIL) && (adjTile < VRAILROAD)))
+            if ((adjTile == RAILHPOWERV) || (adjTile == RailBase) || ((adjTile > RailVertical) && (adjTile < VRAILROAD)))
             {
-                Map[x][y] = HRAIL | BULLBIT;
+                Map[x][y] = RailHorizontal | BULLBIT;
                 break;
             }
         }
@@ -240,9 +240,9 @@ ToolResult _LayRail(int x, int y, Budget& budget)
         if (y < (SimHeight - 1))
         {
             const int adjTile = NeutralizeRoad(Map[x][y + 1]);
-            if ((adjTile == RAILVPOWERH) || (adjTile == VRAILROAD) || ((adjTile > HRAIL) && (adjTile < HRAILROAD)))
+            if ((adjTile == RAILVPOWERH) || (adjTile == VRAILROAD) || ((adjTile > RailHorizontal) && (adjTile < HRAILROAD)))
             {
-                Map[x][y] = VRAIL | BULLBIT;
+                Map[x][y] = RailVertical | BULLBIT;
                 break;
             }
         }
@@ -250,9 +250,9 @@ ToolResult _LayRail(int x, int y, Budget& budget)
         if (y > 0)
         {
             const int adjTile = NeutralizeRoad(Map[x][y - 1]);
-            if ((adjTile == RAILVPOWERH) || (adjTile == VRAILROAD) || ((adjTile > HRAIL) && (adjTile < HRAILROAD)))
+            if ((adjTile == RAILVPOWERH) || (adjTile == VRAILROAD) || ((adjTile > RailHorizontal) && (adjTile < HRAILROAD)))
             {
-                Map[x][y] = VRAIL | BULLBIT;
+                Map[x][y] = RailVertical | BULLBIT;
                 break;
             }
         }
@@ -296,13 +296,13 @@ ToolResult _LayWire(int x, int y, Budget& budget)
 
     switch (NeutralizeRoad(Map[x][y] & LOMASK))
     {
-    case DIRT: // Wire on Dirt
+    case Dirt: // Wire on Dirt
         Map[x][y] = 210 | CONDBIT | BURNBIT | BULLBIT;
         break;
 
-    case RIVER: // Wire on Water
-    case REDGE:
-    case CHANNEL: // Check how to lay underwater wire, if possible.
+    case River: // Wire on Water
+    case RiverEdge:
+    case RiverChannel: // Check how to lay underwater wire, if possible.
         if (budget.CurrentFunds() < 25)
         {
             return ToolResult::InsufficientFunds;
@@ -587,7 +587,7 @@ ToolResult CanConnectTile(int x, int y, Tool tool, Budget& budget)
     {
         const int tile = NeutralizeRoad(Map[x][y]);
         // Maybe this should check BULLBIT instead of checking tile values?
-        if (((tile >= TINYEXP) && (tile <= LASTTINYEXP)) || ((tile < 64) && (tile != 0)))
+        if (((tile >= ExplosionTiny) && (tile <= ExplosionTinyLast)) || ((tile < 64) && (tile != 0)))
         {
             return ToolResult::Success;
         }
@@ -595,12 +595,12 @@ ToolResult CanConnectTile(int x, int y, Tool tool, Budget& budget)
 
     switch (Map[x][y])
     {
-    case DIRT:
+    case Dirt:
         break;
 
-    case RIVER: // Road on Water
-    case REDGE:
-    case CHANNEL: // Check how to build bridges, if possible.
+    case River: // Road on Water
+    case RiverEdge:
+    case RiverChannel: // Check how to build bridges, if possible.
         return ToolResult::InvalidOperation;
 
     case ROADS:
@@ -631,7 +631,7 @@ ToolResult ConnectTile(int x, int y, Tool tool, Budget& budget)
         {
             Tile = NeutralizeRoad(Tile);
             // Maybe this should check BULLBIT instead of checking tile values?
-            if (((Tile >= TINYEXP) && (Tile <= LASTTINYEXP)) || ((Tile < 64) && (Tile != 0)))
+            if (((Tile >= ExplosionTiny) && (Tile <= ExplosionTinyLast)) || ((Tile < 64) && (Tile != 0)))
             {
                 budget.Spend(1);
                 Map[x][y] = 0;

@@ -90,7 +90,7 @@ bool powerBitSet(const Point<int>& location)
 bool testPowerBit(const Point<int>& location)
 {
     const auto tile = maskedTileValue(location.x, location.y);
-    if ((tile == NUCLEAR) || (tile == POWERPLANT))
+    if ((tile == NuclearPower) || (tile == PowerPlant))
     {
         return true;
     }

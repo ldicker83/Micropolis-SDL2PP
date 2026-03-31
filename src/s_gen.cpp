@@ -28,9 +28,9 @@
 
 
 #define WATER_LOW	RIVER /* 2 */
-#define WATER_HIGH	LASTRIVEDGE /* 20 */
-#define WOODS_LOW	TREEBASE /* 21 */
-#define WOODS_HIGH	UNUSED_TRASH2 /* 39 */
+#define WATER_HIGH	RIVER_EDGE_LAST /* 20 */
+constexpr int WOODS_LOW = TreeBase;
+constexpr int WOODS_HIGH = Unused2;
 
 
 constexpr auto RADIUS = 18;
@@ -67,7 +67,7 @@ void ClearMap()
     {
         for (int y = 0; y < SimHeight; y++)
         {
-            Map[x][y] = DIRT;
+            Map[x][y] = Dirt;
         }
     }
 }
@@ -79,9 +79,9 @@ void ClearUnnatural()
     {
         for (int y = 0; y < SimHeight; y++)
         {
-            if (Map[x][y] > WOODS)
+            if (Map[x][y] > Woods)
             {
-                Map[x][y] = DIRT;
+                Map[x][y] = Dirt;
             }
         }
     }
@@ -120,14 +120,14 @@ void PutOnMap(int Mchar, int Xoff, int Yoff)
     if (temp != 0)
     {
         temp = temp & LOMASK;
-        if (temp == RIVER)
+        if (temp == River)
         {
-            if (Mchar != CHANNEL)
+            if (Mchar != RiverChannel)
             {
                 return;
             }
         }
-        if (temp == CHANNEL)
+        if (temp == RiverChannel)
         {
             return;
         }
@@ -174,7 +174,7 @@ void SmoothTrees()
 
                 if (temp)
                 {
-                    if (temp != WOODS)
+                    if (temp != Woods)
                     {
                         if ((MapX + MapY) & 1)
                         {
@@ -210,7 +210,7 @@ void SmoothRiver()
     {
         for (int MapY = 0; MapY < SimHeight; MapY++)
         {
-            if (Map[MapX][MapY] == REDGE)
+            if (Map[MapX][MapY] == RiverEdge)
             {
                 int bitindex = 0;
 
@@ -220,7 +220,7 @@ void SmoothRiver()
                     int Xtem = MapX + DX[z];
                     int Ytem = MapY + DY[z];
                     if (CoordinatesValid({ Xtem, Ytem }) &&
-                        ((Map[Xtem][Ytem] & LOMASK) != DIRT) &&
+                        ((Map[Xtem][Ytem] & LOMASK) != Dirt) &&
                         (((Map[Xtem][Ytem] & LOMASK) < WOODS_LOW) ||
                             ((Map[Xtem][Ytem] & LOMASK) > WOODS_HIGH)))
                     {
@@ -231,7 +231,7 @@ void SmoothRiver()
 
                 int temp = REdTab[bitindex & 15];
 
-                if ((temp != RIVER) && (RandomRange(0, 1)))
+                if ((temp != River) && (RandomRange(0, 1)))
                 {
                     temp++;
                 }
@@ -262,9 +262,9 @@ void TreeSplash(int xloc, int yloc)
             return;
         }
 
-        if ((Map[MapX][MapY] & LOMASK) == DIRT)
+        if ((Map[MapX][MapY] & LOMASK) == Dirt)
         {
-            Map[MapX][MapY] = WOODS + BLBNBIT;
+            Map[MapX][MapY] = Woods + BLBNBIT;
         }
     }
 }
@@ -431,7 +431,7 @@ void MakeNakedIsland()
     {
         for (int y = 0; y < SimHeight; y++)
         {
-            Map[x][y] = RIVER;
+            Map[x][y] = River;
         }
     }
     
@@ -439,7 +439,7 @@ void MakeNakedIsland()
     {
         for (int y = 5; y < SimHeight - 5; y++)
         {
-            Map[x][y] = DIRT;
+            Map[x][y] = Dirt;
         }
     }
    

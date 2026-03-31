@@ -41,7 +41,7 @@ constexpr auto MiscHistoryLength = 240;
 #define CONDBIT	0x4000 /* 10 bit 14 */
 #define BURNBIT	0x2000 /* 8 bit 13 */
 #define BULLBIT	0x1000 /* 4 bit 12 */
-#define ANIMBIT	0x0800 /* 2 bit 11 */
+constexpr int AnimationBit = 0x0800;
 #define ZONEBIT	0x0400 /* 1 bit 10 */
 #define ALLBITS	0xFC00 /* mask for upper 6 bits	*/
 #define LOMASK	0x03FF /* mask for low 10 bits	*/

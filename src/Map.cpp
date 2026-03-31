@@ -105,12 +105,12 @@ bool tileIsRoad(const Point<int> coordinates)
 
 	const auto tile = maskedTileValue(coordinates);
 
-	if (tile < ROADBASE || tile > LASTRAIL)
+	if (tile < RoadBase || tile > RailLast)
 	{
 		return false;
 	}
 
-	if ((tile >= POWERBASE) && (tile < RAILHPOWERV))
+	if ((tile >= PowerBase) && (tile < RAILHPOWERV))
 	{
 		return false;
 	}
@@ -142,7 +142,7 @@ void DrawBigMapSegment(const Point<int>& begin, const Point<int>& end)
 			// Blink lightning bolt in unpowered zone center
 			if (blink() && tileIsZoned(tile) && !tilePowered(tile))
 			{
-				tile = LIGHTNINGBOLT;
+				tile = LightningBolt;
 			}
 
 			drawRect = { row * drawRect.w, col * drawRect.h, drawRect.w, drawRect.h };

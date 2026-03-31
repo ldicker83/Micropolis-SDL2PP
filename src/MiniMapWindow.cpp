@@ -459,7 +459,7 @@ void MiniMapWindow::drawPowerMap()
 
             bool colored{ true };
 
-            if (tile <= LASTFIRE)
+            if (tile <= FireLast)
             {
                 colored = false;
             }
@@ -475,7 +475,7 @@ void MiniMapWindow::drawPowerMap()
                 }
                 else
                 {
-                    tile = DIRT;
+                    tile = Dirt;
                     colored = false;
                 }
             }
@@ -513,7 +513,7 @@ void MiniMapWindow::drawLilTransMap()
 
             if ((tile >= ResidentialBase) ||
                 ((tile >= BRWXXX7) && tile <= 220) ||
-                (tile == UNUSED_TRASH6))
+                (tile == Unsed6))
             {
                 tile = 0;
             }

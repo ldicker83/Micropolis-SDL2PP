@@ -42,27 +42,27 @@ namespace
 
     int getPollutionValue(int tileValue)
     {
-        if (tileValue < POWERBASE)
+        if (tileValue < PowerBase)
         {
-            if (tileValue >= HTRFBASE) /* heavy traf  */
+            if (tileValue >= TrafficHeavyBase) /* heavy traf  */
             {
                 return (/* 25 */ 75);
             }
 
-            if (tileValue >= LTRFBASE) /* light traf  */
+            if (tileValue >= TrafficLightBase) /* light traf  */
             {
                 return (/* 10 */ 50);
             }
 
-            if (tileValue < ROADBASE)
+            if (tileValue < RoadBase)
             {
-                if (tileValue > FIREBASE)
+                if (tileValue > FireBase)
                 {
                     return (/* 60 */ 90);
                 }
 
                 /* XXX: Why negative pollution from radiation? */
-                if (tileValue >= RADTILE) /* radioactivity  */
+                if (tileValue >= RadiationTile) /* radioactivity  */
                 {
                     return (/* -40 */ 255);
                 }
@@ -70,17 +70,17 @@ namespace
             return 0;
         }
 
-        if (tileValue <= LASTIND)
+        if (tileValue <= IndutryLast)
         {
             return (0);
         }
 
-        if (tileValue < PORTBASE) /* Ind  */
+        if (tileValue < PortBase) /* Ind  */
         {
             return (50);
         }
 
-        if (tileValue <= LASTPOWERPLANT) /* prt, aprt, cpp */
+        if (tileValue <= PowerPlantLast) /* prt, aprt, cpp */
         {
             return (/* 60 */ 100);
         }
@@ -132,7 +132,7 @@ namespace
                 const int tile = (Map[xx][yy] & LOMASK);
                 if (tile)
                 {
-                    if (tile < RUBBLE)
+                    if (tile < Rubble)
                     {
                         /* inc terrainMem */
                         //Qtem.value({ point.x / 2, point.y / 2 }) += 15;
@@ -200,7 +200,7 @@ namespace
 
             const Point<int> coord{ x % SimWidth, x / SimWidth };
             const auto tile = maskedTileValue(coord.x, coord.y);
-            if (tile < ROADBASE)
+            if (tile < RoadBase)
             {
                 LandValueMap.value(coord.skewInverseBy({ 2, 2 })) = 0;
                 continue;
@@ -370,17 +370,17 @@ int getPopulationDensity(int tile)
         return housePopulation();
     }
 
-    if (tile < COMBASE)
+    if (tile < CommercialBase)
     {
         return residentialZonePopulation(tile);
     }
 
-    if (tile < INDBASE)
+    if (tile < IndustryBase)
     {
         return commercialZonePopulation(tile) * 8;
     }
 
-    if (tile < PORTBASE)
+    if (tile < PortBase)
     {
         return industrialZonePopulation(tile) * 8;
     }

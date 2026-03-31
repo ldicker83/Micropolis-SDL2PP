@@ -80,7 +80,7 @@ namespace
             if (CoordinatesValid(SimulationTarget))
             {
                 int tile = maskedTileValue(SimulationTarget);
-                if ((tile >= ROADBASE) && (tile < POWERBASE))
+                if ((tile >= RoadBase) && (tile < PowerBase))
                 {
                     /* check for rail */
                     const Point<int> trafficDensityMapCoordinates = SimulationTarget.skewInverseBy({ 2, 2 });
@@ -145,8 +145,8 @@ namespace
 
     bool driveDone()
     {
-        static int TARGL[3] = { COMBASE, LHTHR, LHTHR };
-        static int TARGH[3] = { NUCLEAR, PORT, COMBASE }; // for destinations
+        static int TARGL[3] = { CommercialBase, LHTHR, LHTHR };
+        static int TARGH[3] = { NuclearPower, Port, CommercialBase }; // for destinations
 
         // R>C C>I I>R
         for (int i{}; i < AdjacentVector.size(); ++i)
