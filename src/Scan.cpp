@@ -129,7 +129,7 @@ namespace
         {
             for (int yy = (point.y * 2); yy <= (point.y * 2) + 1; ++yy)
             {
-                const int tile = (Map[xx][yy] & LOMASK);
+                const int tile = (Map[xx][yy] & LowerMask);
                 if (tile)
                 {
                     if (tile < Rubble)
@@ -419,9 +419,9 @@ void scanPopulationDensity()
         for (int y{}; y < SimHeight; ++y)
         {
             int tile = tileValue({ x, y });
-            if (tile & ZONEBIT)
+            if (tile & ZonedBit)
             {
-                tile = tile & LOMASK;
+                tile = tile & LowerMask;
                 tile = std::clamp(getPopulationDensity(tile) * 8, 0, 254);
                 tem.value({ x / 2, y / 2 }) = tile;
                 axisTotal += { x, y };

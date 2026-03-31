@@ -466,7 +466,7 @@ void oFireZone(int Xloc, int Yloc, int ch)
     const auto rogVal = RateOfGrowthMap.value({ Xloc >> 3, Yloc >> 3 });
     RateOfGrowthMap.value({ Xloc >> 3, Yloc >> 3 }) = rogVal - 20;
 
-    ch &= LOMASK;
+    ch &= LowerMask;
     if (ch < PortBase)
     {
         XYmax = 2;
@@ -489,9 +489,9 @@ void oFireZone(int Xloc, int Yloc, int ch)
         {
             const int Xtem = Xloc + x;
             const int Ytem = Yloc + y;
-            if ((Map[Xtem][Ytem] & LOMASK) >= RoadBase)
+            if ((Map[Xtem][Ytem] & LowerMask) >= RoadBase)
             {
-                Map[Xtem][Ytem] |= BULLBIT;
+                Map[Xtem][Ytem] |= BulldozableBit;
             }
         }
     }
@@ -510,17 +510,17 @@ void startFire(const Point<int>& location)
     const int unmaskedTile = tileValue(mapCoords.x, mapCoords.y);
     const int tile = maskedTileValue(mapCoords.x, mapCoords.y);
 
-    if ((!(unmaskedTile & BURNBIT)) && (tile != 0))
+    if ((!(unmaskedTile & BurnableBit)) && (tile != 0))
     {
         return;
     }
 
-    if (unmaskedTile & ZONEBIT)
+    if (unmaskedTile & ZonedBit)
     {
         return;
     }
 
-    Map[mapCoords.x][mapCoords.y] = FireBase + RandomRange(0, 3) + AnimationBit;
+    Map[mapCoords.x][mapCoords.y] = FireBase + RandomRange(0, 3) + AnimatedBit;
 }
 
 
@@ -539,7 +539,7 @@ void destroyTile(const Point<int>& location)
     if (tile >= TreeBase)
     {
         /* TILE_IS_BRIDGE(t) */
-        if (!(unmaskedTile & BURNBIT))
+        if (!(unmaskedTile & BurnableBit))
         {
             if ((tile >= RoadBase) && (tile <= RoadLast))
             {
@@ -547,7 +547,7 @@ void destroyTile(const Point<int>& location)
                 return;
             }
         }
-        if (unmaskedTile & ZONEBIT)
+        if (unmaskedTile & ZonedBit)
         {
             oFireZone(mapCoords.x, mapCoords.y, unmaskedTile);
             if (tile > ResidentialZoneBase)
@@ -561,7 +561,7 @@ void destroyTile(const Point<int>& location)
         }
         else
         {
-            Map[mapCoords.x][mapCoords.y] = (animationEnabled() ? ExplosionTiny : (ExplosionTinyLast - 3)) | BULLBIT | AnimationBit;
+            Map[mapCoords.x][mapCoords.y] = (animationEnabled() ? ExplosionTiny : (ExplosionTinyLast - 3)) | BulldozableBit | AnimatedBit;
         }
     }
 }
@@ -1269,7 +1269,7 @@ bool findSpawnPosition()
     {
         const int x = RandomRange(0, SimWidth - 20) + 10;
         const int y = RandomRange(0, SimHeight - 10) + 5;
-        if ((Map[x][y] == River) || (Map[x][y] == River + BULLBIT))
+        if ((Map[x][y] == River) || (Map[x][y] == River + BulldozableBit))
         {
             makeMonsterAt({ x, y });
             return true;

@@ -46,7 +46,7 @@ namespace
 
     unsigned int NeutralizeRoad(int tile)
     {
-        unsigned int outValue = tile & LOMASK;
+        unsigned int outValue = tile & LowerMask;
         if ((outValue >= 64) && (outValue <= 207))
         {
             outValue = (tile & 0x000F) + 64;
@@ -64,7 +64,7 @@ ToolResult _LayDoze(int x, int y, Budget& budget)
         return ToolResult::InsufficientFunds; // no mas dinero.
     }
 
-    if (!(tileValue(x, y) & BULLBIT))
+    if (!(tileValue(x, y) & BulldozableBit))
     {
         return ToolResult::CannotBulldoze; // Check dozeable bit.
     }
@@ -109,10 +109,10 @@ ToolResult _LayRoad(int x, int y, Budget& budget)
         return ToolResult::InsufficientFunds;
     }
 
-    switch (Map[x][y] & LOMASK)
+    switch (Map[x][y] & LowerMask)
     {
     case Dirt:
-        Map[x][y] = ROADS | BULLBIT | BURNBIT;
+        Map[x][y] = ROADS | BulldozableBit | BurnableBit;
         break;
 
     case River: // Road on Water
@@ -130,7 +130,7 @@ ToolResult _LayRoad(int x, int y, Budget& budget)
             const int adjTile = NeutralizeRoad(Map[x + 1][y]);
             if ((adjTile == VRAILROAD) || (adjTile == BridgeHorizontal) || ((adjTile >= ROADS) && (adjTile <= RoadPowerHorizontal)))
             {
-                Map[x][y] = BridgeHorizontal | BULLBIT;
+                Map[x][y] = BridgeHorizontal | BulldozableBit;
                 break;
             }
         }
@@ -140,7 +140,7 @@ ToolResult _LayRoad(int x, int y, Budget& budget)
             const int adjTile = NeutralizeRoad(Map[x - 1][y]);
             if ((adjTile == VRAILROAD) || (adjTile == BridgeHorizontal) || ((adjTile >= ROADS) && (adjTile <= RoadIntersection)))
             {
-                Map[x][y] = BridgeHorizontal | BULLBIT;
+                Map[x][y] = BridgeHorizontal | BulldozableBit;
                 break;
             }
         }
@@ -150,7 +150,7 @@ ToolResult _LayRoad(int x, int y, Budget& budget)
             const int adjTile = NeutralizeRoad(Map[x][y + 1]);
             if ((adjTile == HRAILROAD) || (adjTile == RoadPowerVertical) || ((adjTile >= BridgeVertical) && (adjTile <= RoadIntersection)))
             {
-                Map[x][y] = BridgeVertical | BULLBIT;
+                Map[x][y] = BridgeVertical | BulldozableBit;
                 break;
             }
         }
@@ -160,7 +160,7 @@ ToolResult _LayRoad(int x, int y, Budget& budget)
             const int adjTile = NeutralizeRoad(Map[x][y - 1]);
             if ((adjTile == HRAILROAD) || (adjTile == RoadPowerVertical) || ((adjTile >= BridgeVertical) && (adjTile <= RoadIntersection)))
             {
-                Map[x][y] = BridgeVertical | BULLBIT;
+                Map[x][y] = BridgeVertical | BulldozableBit;
                 break;
             }
         }
@@ -169,19 +169,19 @@ ToolResult _LayRoad(int x, int y, Budget& budget)
         return ToolResult::InvalidOperation;
 
     case LHPOWER: // Road on power
-        Map[x][y] = RoadPowerVertical | CONDBIT | BURNBIT | BULLBIT;
+        Map[x][y] = RoadPowerVertical | ConductiveBit | BurnableBit | BulldozableBit;
         break;
 
     case LVPOWER: // Road on power #2
-        Map[x][y] = RoadPowerHorizontal | CONDBIT | BURNBIT | BULLBIT;
+        Map[x][y] = RoadPowerHorizontal | ConductiveBit | BurnableBit | BulldozableBit;
         break;
 
     case LHRAIL: // Road on rail
-        Map[x][y] = HRAILROAD | BURNBIT | BULLBIT;
+        Map[x][y] = HRAILROAD | BurnableBit | BulldozableBit;
         break;
 
     case LVRAIL: // Road on rail #2
-        Map[x][y] = VRAILROAD | BURNBIT | BULLBIT;
+        Map[x][y] = VRAILROAD | BurnableBit | BulldozableBit;
         break;
 
     default: // Can't do road
@@ -202,10 +202,10 @@ ToolResult _LayRail(int x, int y, Budget& budget)
         return ToolResult::InsufficientFunds;
     }
 
-    switch (NeutralizeRoad(Map[x][y] & LOMASK))
+    switch (NeutralizeRoad(Map[x][y] & LowerMask))
     {
     case Dirt: // Rail on Dirt
-        Map[x][y] = LHRAIL | BULLBIT | BURNBIT;
+        Map[x][y] = LHRAIL | BulldozableBit | BurnableBit;
         break;
 
     case River: // Rail on Water
@@ -222,7 +222,7 @@ ToolResult _LayRail(int x, int y, Budget& budget)
             const int adjTile = NeutralizeRoad(Map[x + 1][y]);
             if ((adjTile == RAILHPOWERV) || (adjTile == RailBase) || ((adjTile >= LHRAIL) && (adjTile <= HRAILROAD)))
             {
-                Map[x][y] = RailHorizontal | BULLBIT;
+                Map[x][y] = RailHorizontal | BulldozableBit;
                 break;
             }
         }
@@ -232,7 +232,7 @@ ToolResult _LayRail(int x, int y, Budget& budget)
             const int adjTile = NeutralizeRoad(Map[x - 1][y]);
             if ((adjTile == RAILHPOWERV) || (adjTile == RailBase) || ((adjTile > RailVertical) && (adjTile < VRAILROAD)))
             {
-                Map[x][y] = RailHorizontal | BULLBIT;
+                Map[x][y] = RailHorizontal | BulldozableBit;
                 break;
             }
         }
@@ -242,7 +242,7 @@ ToolResult _LayRail(int x, int y, Budget& budget)
             const int adjTile = NeutralizeRoad(Map[x][y + 1]);
             if ((adjTile == RAILVPOWERH) || (adjTile == VRAILROAD) || ((adjTile > RailHorizontal) && (adjTile < HRAILROAD)))
             {
-                Map[x][y] = RailVertical | BULLBIT;
+                Map[x][y] = RailVertical | BulldozableBit;
                 break;
             }
         }
@@ -252,7 +252,7 @@ ToolResult _LayRail(int x, int y, Budget& budget)
             const int adjTile = NeutralizeRoad(Map[x][y - 1]);
             if ((adjTile == RAILVPOWERH) || (adjTile == VRAILROAD) || ((adjTile > RailHorizontal) && (adjTile < HRAILROAD)))
             {
-                Map[x][y] = RailVertical | BULLBIT;
+                Map[x][y] = RailVertical | BulldozableBit;
                 break;
             }
         }
@@ -261,19 +261,19 @@ ToolResult _LayRail(int x, int y, Budget& budget)
         return ToolResult::InvalidOperation;
 
     case LHPOWER: // Rail on power
-        Map[x][y] = RAILVPOWERH | CONDBIT | BURNBIT | BULLBIT;
+        Map[x][y] = RAILVPOWERH | ConductiveBit | BurnableBit | BulldozableBit;
         break;
 
     case LVPOWER: // Rail on power #2 
-        Map[x][y] = RAILHPOWERV | CONDBIT | BURNBIT | BULLBIT;
+        Map[x][y] = RAILHPOWERV | ConductiveBit | BurnableBit | BulldozableBit;
         break;
 
     case ROADS: // Rail on road
-        Map[x][y] = VRAILROAD | BURNBIT | BULLBIT;
+        Map[x][y] = VRAILROAD | BurnableBit | BulldozableBit;
         break;
 
     case ROADSV: // Rail on road #2
-        Map[x][y] = HRAILROAD | BURNBIT | BULLBIT;
+        Map[x][y] = HRAILROAD | BurnableBit | BulldozableBit;
         break;
 
     default: // Can't do rail
@@ -294,10 +294,10 @@ ToolResult _LayWire(int x, int y, Budget& budget)
         return ToolResult::InsufficientFunds;
     }
 
-    switch (NeutralizeRoad(Map[x][y] & LOMASK))
+    switch (NeutralizeRoad(Map[x][y] & LowerMask))
     {
     case Dirt: // Wire on Dirt
-        Map[x][y] = 210 | CONDBIT | BURNBIT | BULLBIT;
+        Map[x][y] = 210 | ConductiveBit | BurnableBit | BulldozableBit;
         break;
 
     case River: // Wire on Water
@@ -313,12 +313,12 @@ ToolResult _LayWire(int x, int y, Budget& budget)
         if (x < (SimWidth - 1))
         {
             int adjTile = Map[x + 1][y];
-            if (adjTile & CONDBIT)
+            if (adjTile & ConductiveBit)
             {
                 adjTile = NeutralizeRoad(adjTile);
                 if ((adjTile != 77) && (adjTile != 221) && (adjTile != 208))
                 {
-                    Map[x][y] = 209 | CONDBIT | BULLBIT;
+                    Map[x][y] = 209 | ConductiveBit | BulldozableBit;
                     break;
                 }
             }
@@ -327,12 +327,12 @@ ToolResult _LayWire(int x, int y, Budget& budget)
         if (x > 0)
         {
             int adjTile = Map[x - 1][y];
-            if (adjTile & CONDBIT)
+            if (adjTile & ConductiveBit)
             {
                 adjTile = NeutralizeRoad(adjTile);
                 if ((adjTile != 77) && (adjTile != 221) && (adjTile != 208))
                 {
-                    Map[x][y] = 209 | CONDBIT | BULLBIT;
+                    Map[x][y] = 209 | ConductiveBit | BulldozableBit;
                     break;
                 }
             }
@@ -341,12 +341,12 @@ ToolResult _LayWire(int x, int y, Budget& budget)
         if (y < (SimHeight - 1))
         {
             int adjTile = Map[x][y + 1];
-            if (adjTile & CONDBIT)
+            if (adjTile & ConductiveBit)
             {
                 adjTile = NeutralizeRoad(adjTile);
                 if ((adjTile != 78) && (adjTile != 222) && (adjTile != 209))
                 {
-                    Map[x][y] = 208 | CONDBIT | BULLBIT;
+                    Map[x][y] = 208 | ConductiveBit | BulldozableBit;
                     break;
                 }
             }
@@ -355,12 +355,12 @@ ToolResult _LayWire(int x, int y, Budget& budget)
         if (y > 0)
         {
             int adjTile = Map[x][y - 1];
-            if (adjTile & CONDBIT)
+            if (adjTile & ConductiveBit)
             {
                 adjTile = NeutralizeRoad(adjTile);
                 if ((adjTile != 78) && (adjTile != 222) && (adjTile != 209))
                 {
-                    Map[x][y] = 208 | CONDBIT | BULLBIT;
+                    Map[x][y] = 208 | ConductiveBit | BulldozableBit;
                     break;
                 }
             }
@@ -370,19 +370,19 @@ ToolResult _LayWire(int x, int y, Budget& budget)
         return ToolResult::InvalidOperation;
 
     case ROADS: // Wire on Road
-        Map[x][y] = 77 | CONDBIT | BURNBIT | BULLBIT;
+        Map[x][y] = 77 | ConductiveBit | BurnableBit | BulldozableBit;
         break;
 
     case ROADSV: // Wire on Road #2
-        Map[x][y] = 78 | CONDBIT | BURNBIT | BULLBIT;
+        Map[x][y] = 78 | ConductiveBit | BurnableBit | BulldozableBit;
         break;
 
     case LHRAIL: // Wire on rail
-        Map[x][y] = 221 | CONDBIT | BURNBIT | BULLBIT;
+        Map[x][y] = 221 | ConductiveBit | BurnableBit | BulldozableBit;
         break;
 
     case LVRAIL: // Wire on rail #2
-        Map[x][y] = 222 | CONDBIT | BURNBIT | BULLBIT;
+        Map[x][y] = 222 | ConductiveBit | BurnableBit | BulldozableBit;
         break;
 
     default: // Can't do wire
@@ -396,7 +396,7 @@ ToolResult _LayWire(int x, int y, Budget& budget)
 
 void _FixSingle(int x, int y)
 {
-    int Tile = NeutralizeRoad(Map[x][y] & LOMASK);
+    int Tile = NeutralizeRoad(Map[x][y] & LowerMask);
     int adjTile = 0;
 
     // Cleanup Road
@@ -438,7 +438,7 @@ void _FixSingle(int x, int y)
             }
         }
 
-        Map[x][y] = _RoadTable[adjTile] | BULLBIT | BURNBIT;
+        Map[x][y] = _RoadTable[adjTile] | BulldozableBit | BurnableBit;
         return;
     }
 
@@ -482,7 +482,7 @@ void _FixSingle(int x, int y)
             }
         }
 
-        Map[x][y] = _RailTable[adjTile] | BULLBIT | BURNBIT;
+        Map[x][y] = _RailTable[adjTile] | BulldozableBit | BurnableBit;
         return;
     }
 
@@ -493,7 +493,7 @@ void _FixSingle(int x, int y)
         if (y > 0)
         {
             Tile = Map[x][y - 1];
-            if (Tile & CONDBIT)
+            if (Tile & ConductiveBit)
             {
                 Tile = NeutralizeRoad(Tile);
                 if ((Tile != 209) && (Tile != 78) && (Tile != 222))
@@ -506,7 +506,7 @@ void _FixSingle(int x, int y)
         if (x < (SimWidth - 1))
         {
             Tile = Map[x + 1][y];
-            if (Tile & CONDBIT)
+            if (Tile & ConductiveBit)
             {
                 Tile = NeutralizeRoad(Tile);
                 if ((Tile != 208) && (Tile != 77) && (Tile != 221))
@@ -519,7 +519,7 @@ void _FixSingle(int x, int y)
         if (y < (SimHeight - 1))
         {
             Tile = Map[x][y + 1];
-            if (Tile & CONDBIT)
+            if (Tile & ConductiveBit)
             {
                 Tile = NeutralizeRoad(Tile);
                 if ((Tile != 209) && (Tile != 78) && (Tile != 222))
@@ -532,7 +532,7 @@ void _FixSingle(int x, int y)
         if (x > 0)
         {
             Tile = Map[x - 1][y];
-            if (Tile & CONDBIT)
+            if (Tile & ConductiveBit)
             {
                 Tile = NeutralizeRoad(Tile);
                 if ((Tile != 208) && (Tile != 77) && (Tile != 221))
@@ -542,7 +542,7 @@ void _FixSingle(int x, int y)
             }
         }
 
-        Map[x][y] = _WireTable[adjTile] | BULLBIT | BURNBIT | CONDBIT;
+        Map[x][y] = _WireTable[adjTile] | BulldozableBit | BurnableBit | ConductiveBit;
         return;
     }
 }
@@ -583,7 +583,7 @@ ToolResult CanConnectTile(int x, int y, Tool tool, Budget& budget)
         return ToolResult::InsufficientFunds;
     }
 
-    if (autoBulldoze() && (budget.CurrentFunds() > 0) && (Map[x][y] & BULLBIT))
+    if (autoBulldoze() && (budget.CurrentFunds() > 0) && (Map[x][y] & BulldozableBit))
     {
         const int tile = NeutralizeRoad(Map[x][y]);
         // Maybe this should check BULLBIT instead of checking tile values?
@@ -627,7 +627,7 @@ ToolResult ConnectTile(int x, int y, Tool tool, Budget& budget)
     // AutoDoze
     if (tool == Tool::Rail || tool == Tool::Road || tool == Tool::Wire)
     {
-        if (autoBulldoze() && (budget.CurrentFunds() > 0) && (Tile & BULLBIT))
+        if (autoBulldoze() && (budget.CurrentFunds() > 0) && (Tile & BulldozableBit))
         {
             Tile = NeutralizeRoad(Tile);
             // Maybe this should check BULLBIT instead of checking tile values?

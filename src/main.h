@@ -37,18 +37,18 @@ constexpr auto MiscHistoryLength = 240;
 
 
 /* Status Bits */
-#define PWRBIT	0x8000 /* 20 bit 15 */
-#define CONDBIT	0x4000 /* 10 bit 14 */
-#define BURNBIT	0x2000 /* 8 bit 13 */
-#define BULLBIT	0x1000 /* 4 bit 12 */
-constexpr int AnimationBit = 0x0800;
-#define ZONEBIT	0x0400 /* 1 bit 10 */
-#define ALLBITS	0xFC00 /* mask for upper 6 bits	*/
-#define LOMASK	0x03FF /* mask for low 10 bits	*/
+constexpr int PowerBit = 0x8000; /* 20 bit 15 */
+constexpr int ConductiveBit = 0x4000; /* 10 bit 14 */
+constexpr int BurnableBit = 0x2000; /* 8 bit 13 */
+constexpr int BulldozableBit = 0x1000; /* 4 bit 12 */
+constexpr int AnimatedBit = 0x0800;
+constexpr int ZonedBit = 0x0400; /* 1 bit 10 */
+constexpr int UpperMask = 0xFC00; /* mask for upper 6 bits	*/
+constexpr int LowerMask = 0x03FF; /* mask for low 10 bits	*/
 
-#define BLBNBIT		(BULLBIT+BURNBIT)
-#define BLBNCNBIT	(BULLBIT+BURNBIT+CONDBIT)
-#define BNCNBIT		(BURNBIT+CONDBIT)
+constexpr int BLBNBIT = BulldozableBit + BurnableBit;
+constexpr int BLBNCNBIT = BulldozableBit + BurnableBit + ConductiveBit;
+constexpr int BNCNBIT = BurnableBit + ConductiveBit;
 
 extern int CurrentTile; // unmasked tile value
 extern int CurrentTileMasked; // masked tile value

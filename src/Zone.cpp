@@ -24,8 +24,8 @@
 #include <algorithm>
 
 
-#define ASCBIT (AnimationBit | CONDBIT | BURNBIT)
-#define REGBIT (CONDBIT | BURNBIT)
+#define ASCBIT (AnimatedBit | ConductiveBit | BurnableBit)
+#define REGBIT (ConductiveBit | BurnableBit)
 
 const std::array<Vector<int>, 4> AdjacentVector =
 { {
@@ -57,11 +57,11 @@ bool setZonePower(const Point<int>& location)
 {
     if (testPowerBit(location))
     {
-        tileValue(location) |= PWRBIT;
+        tileValue(location) |= PowerBit;
         return true;
     }
 
-    tileValue(location) &= ~PWRBIT;
+    tileValue(location) &= ~PowerBit;
     return false;
 }
 
@@ -97,7 +97,7 @@ void zonePlop(const int base)
     }
 
     setZonePower(SimulationTarget);
-    tileValue(SimulationTarget) |= ZONEBIT + BULLBIT;
+    tileValue(SimulationTarget) |= ZonedBit + BulldozableBit;
 }
 
 
@@ -471,7 +471,7 @@ void increaseIndustry(int population, int value)
 
 void convertResidentialToHomes(int value)
 {
-    tileValue(SimulationTarget) = ResidentialEmpty | BLBNCNBIT | ZONEBIT;
+    tileValue(SimulationTarget) = ResidentialEmpty | BLBNCNBIT | ZonedBit;
 
     for (int x{ SimulationTarget.x - 1 }; x <= SimulationTarget.x + 1; ++x)
     {

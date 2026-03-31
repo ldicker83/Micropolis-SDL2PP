@@ -463,13 +463,13 @@ void MiniMapWindow::drawPowerMap()
             {
                 colored = false;
             }
-            else if (unmaskedTile & ZONEBIT)
+            else if (unmaskedTile & ZonedBit)
             {
-                tileColor = (unmaskedTile & PWRBIT) ? Colors::Red : Colors::LightBlue;
+                tileColor = (unmaskedTile & PowerBit) ? Colors::Red : Colors::LightBlue;
             }
             else
             {
-                if (unmaskedTile & CONDBIT)
+                if (unmaskedTile & ConductiveBit)
                 {
                     tileColor = Colors::LightGrey;
                 }
@@ -513,7 +513,7 @@ void MiniMapWindow::drawLilTransMap()
 
             if ((tile >= ResidentialBase) ||
                 ((tile >= BRWXXX7) && tile <= 220) ||
-                (tile == Unsed6))
+                (tile == Unused6))
             {
                 tile = 0;
             }

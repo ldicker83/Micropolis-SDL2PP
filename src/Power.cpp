@@ -112,7 +112,7 @@ bool isTileConductive(SearchDirection direction)
 
     if (moveSimulationTarget(direction))
     {
-        if ((tileValue(SimulationTarget) & CONDBIT) && !testPowerBit(SimulationTarget))
+        if ((tileValue(SimulationTarget) & ConductiveBit) && !testPowerBit(SimulationTarget))
         {
             SimulationTarget = saved;
             return true;

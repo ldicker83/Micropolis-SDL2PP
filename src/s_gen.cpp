@@ -57,7 +57,7 @@ int ERand(int limit)
 
 bool IsTree(int cell)
 {
-    return (((cell & LOMASK) >= WOODS_LOW) && ((cell & LOMASK) <= WOODS_HIGH));
+    return (((cell & LowerMask) >= WOODS_LOW) && ((cell & LowerMask) <= WOODS_HIGH));
 }
 
 
@@ -119,7 +119,7 @@ void PutOnMap(int Mchar, int Xoff, int Yoff)
     int temp = Map[Xloc][Yloc];
     if (temp != 0)
     {
-        temp = temp & LOMASK;
+        temp = temp & LowerMask;
         if (temp == River)
         {
             if (Mchar != RiverChannel)
@@ -200,10 +200,10 @@ void SmoothRiver()
 
     static int REdTab[16] =
     {
-        13 + BULLBIT, 13 + BULLBIT, 17 + BULLBIT, 15 + BULLBIT,
-        5 + BULLBIT, 2, 19 + BULLBIT, 17 + BULLBIT,
-        9 + BULLBIT, 11 + BULLBIT, 2, 13 + BULLBIT,
-        7 + BULLBIT, 9 + BULLBIT, 5 + BULLBIT, 2
+        13 + BulldozableBit, 13 + BulldozableBit, 17 + BulldozableBit, 15 + BulldozableBit,
+        5 + BulldozableBit, 2, 19 + BulldozableBit, 17 + BulldozableBit,
+        9 + BulldozableBit, 11 + BulldozableBit, 2, 13 + BulldozableBit,
+        7 + BulldozableBit, 9 + BulldozableBit, 5 + BulldozableBit, 2
     };
 
     for (int MapX = 0; MapX < SimWidth; MapX++)
@@ -220,9 +220,9 @@ void SmoothRiver()
                     int Xtem = MapX + DX[z];
                     int Ytem = MapY + DY[z];
                     if (CoordinatesValid({ Xtem, Ytem }) &&
-                        ((Map[Xtem][Ytem] & LOMASK) != Dirt) &&
-                        (((Map[Xtem][Ytem] & LOMASK) < WOODS_LOW) ||
-                            ((Map[Xtem][Ytem] & LOMASK) > WOODS_HIGH)))
+                        ((Map[Xtem][Ytem] & LowerMask) != Dirt) &&
+                        (((Map[Xtem][Ytem] & LowerMask) < WOODS_LOW) ||
+                            ((Map[Xtem][Ytem] & LowerMask) > WOODS_HIGH)))
                     {
                         bitindex++;
                     }
@@ -262,7 +262,7 @@ void TreeSplash(int xloc, int yloc)
             return;
         }
 
-        if ((Map[MapX][MapY] & LOMASK) == Dirt)
+        if ((Map[MapX][MapY] & LowerMask) == Dirt)
         {
             Map[MapX][MapY] = Woods + BLBNBIT;
         }

@@ -73,17 +73,17 @@ void DoFire()
             if (CoordinatesValid({ Xtem, Ytem }))
             {
                 int c = Map[Xtem][Ytem];
-                if (c & BURNBIT)
+                if (c & BurnableBit)
                 {
-                    if (c & ZONEBIT)
+                    if (c & ZonedBit)
                     {
                         FireZone(Xtem, Ytem, c);
-                        if ((c & LOMASK) > IndustrialZoneBase) //  Explode
+                        if ((c & LowerMask) > IndustrialZoneBase) //  Explode
                         {
                             makeExplosionAt({ (Xtem * 16) + 8, (Ytem * 16) + 8 });
                         }
                     }
-                    Map[Xtem][Ytem] = FireBase + RandomRange(0, 3) + AnimationBit;
+                    Map[Xtem][Ytem] = FireBase + RandomRange(0, 3) + AnimatedBit;
                 }
             }
         }
@@ -106,7 +106,7 @@ void DoFire()
     }
     if (!RandomRange(0, Rate))
     {
-        Map[SimulationTarget.x][SimulationTarget.y] = Rubble + RandomRange(0, 3) + BULLBIT;
+        Map[SimulationTarget.x][SimulationTarget.y] = Rubble + RandomRange(0, 3) + BulldozableBit;
     }
 }
 
@@ -133,7 +133,7 @@ void DoMeltdown(const int x, const int y)
     {
         for (int col = (y - 1); col < (y + 3); ++col)
         {
-            Map[row][col] = FireBase + RandomRange(0, 3) | AnimationBit;
+            Map[row][col] = FireBase + RandomRange(0, 3) | AnimatedBit;
         }
     }
 
@@ -149,12 +149,12 @@ void DoMeltdown(const int x, const int y)
 
         const int tile = Map[radiationX][radiationY];
 
-        if (tile & ZONEBIT)
+        if (tile & ZonedBit)
         {
             continue;
         }
 
-        if ((tile & BURNBIT) || tile == Dirt)
+        if ((tile & BurnableBit) || tile == Dirt)
         {
             Map[radiationX][radiationY] = RadiationTile;
         }
@@ -175,7 +175,7 @@ void DoRail(const Point<int>& position)
         if (RandomRange(0, 511) == 0)
         {
             const unsigned int tile = tileValue(position.x, position.y);
-            if (!(tile & CONDBIT))
+            if (!(tile & ConductiveBit))
             {
                 if (RoadEffect < RandomRange(0, 31))
                 {
@@ -185,7 +185,7 @@ void DoRail(const Point<int>& position)
                     }
                     else
                     {
-                        Map[position.x][position.y] = Rubble + RandomRange(0, 3) + BULLBIT;
+                        Map[position.x][position.y] = Rubble + RandomRange(0, 3) + BulldozableBit;
                     }
                     return;
                 }
@@ -243,19 +243,19 @@ bool DoBridge()
   static int HDx[7] = { -2,  2, -2, -1,  0,  1,  2 };
   static int HDy[7] = { -1, -1,  0,  0,  0,  0,  0 };
   static int HBRTAB[7] = {
-    HBRDG1 | BULLBIT, HBRDG3 | BULLBIT, HBRDG0 | BULLBIT,
-    River, BRWH | BULLBIT, River, HBRDG2 | BULLBIT };
+    HBRDG1 | BulldozableBit, HBRDG3 | BulldozableBit, HBRDG0 | BulldozableBit,
+    River, BRWH | BulldozableBit, River, HBRDG2 | BulldozableBit };
   static int HBRTAB2[7] = {
-    River, River, BridgeHorizontal | BULLBIT, BridgeHorizontal | BULLBIT, BridgeHorizontal | BULLBIT,
-    BridgeHorizontal | BULLBIT, BridgeHorizontal | BULLBIT };
+    River, River, BridgeHorizontal | BulldozableBit, BridgeHorizontal | BulldozableBit, BridgeHorizontal | BulldozableBit,
+    BridgeHorizontal | BulldozableBit, BridgeHorizontal | BulldozableBit };
   static int VDx[7] = {  0,  1,  0,  0,  0,  0,  1 };
   static int VDy[7] = { -2, -2, -1,  0,  1,  2,  2 };
   static int VBRTAB[7] = {
-    VBRDG0 | BULLBIT, VBRDG1 | BULLBIT, River, BRWV | BULLBIT,
-    River, VBRDG2 | BULLBIT, VBRDG3 | BULLBIT };
+    VBRDG0 | BulldozableBit, VBRDG1 | BulldozableBit, River, BRWV | BulldozableBit,
+    River, VBRDG2 | BulldozableBit, VBRDG3 | BulldozableBit };
   static int VBRTAB2[7] = {
-    BridgeVertical | BULLBIT, River, BridgeVertical | BULLBIT, BridgeVertical | BULLBIT,
-    BridgeVertical | BULLBIT, BridgeVertical | BULLBIT, River };
+    BridgeVertical | BulldozableBit, River, BridgeVertical | BulldozableBit, BridgeVertical | BulldozableBit,
+    BridgeVertical | BulldozableBit, BridgeVertical | BulldozableBit, River };
   int z, x, y, MPtem;
 
   if (CurrentTileMasked == BRWV) { /*  Vertical bridge close */
@@ -265,7 +265,7 @@ bool DoBridge()
 	x = SimulationTarget.x + VDx[z];
 	y = SimulationTarget.y + VDy[z];
 	if (CoordinatesValid({ x, y }))
-	  if ((Map[x][y] & LOMASK) == (VBRTAB[z] & LOMASK))
+	  if ((Map[x][y] & LowerMask) == (VBRTAB[z] & LowerMask))
 	    Map[x][y] = VBRTAB2[z];
       }
     return true;
@@ -277,7 +277,7 @@ bool DoBridge()
 	x = SimulationTarget.x + HDx[z];
 	y = SimulationTarget.y + HDy[z];
 	if (CoordinatesValid({ x, y }))
-	  if ((Map[x][y] & LOMASK) == (HBRTAB[z] & LOMASK))
+	  if ((Map[x][y] & LowerMask) == (HBRTAB[z] & LowerMask))
 	    Map[x][y] = HBRTAB2[z];
       }
     return true;
@@ -337,7 +337,7 @@ void DoRoad()
     {
         if (!(Rand16() & 511))
         {
-            if (!(CurrentTile & CONDBIT))
+            if (!(CurrentTile & ConductiveBit))
             {
                 if (RoadEffect < (Rand16() & 31))
                 {
@@ -347,7 +347,7 @@ void DoRoad()
                     }
                     else
                     {
-                        Map[SimulationTarget.x][SimulationTarget.y] = Rubble + (Rand16() & 3) + BULLBIT;
+                        Map[SimulationTarget.x][SimulationTarget.y] = Rubble + (Rand16() & 3) + BulldozableBit;
                     }
                     return;
                 }
@@ -355,7 +355,7 @@ void DoRoad()
         }
     }
 
-    if (!(CurrentTile & BURNBIT)) /* If Bridge */
+    if (!(CurrentTile & BurnableBit)) /* If Bridge */
     {
         RoadTotal += 4;
         if (DoBridge())
@@ -391,11 +391,11 @@ void DoRoad()
     {
         int z = ((CurrentTileMasked - RoadBase) & 15) + DensityTable[Density];
         
-        z += CurrentTile & (ALLBITS - AnimationBit);
+        z += CurrentTile & (UpperMask - AnimatedBit);
         
         if (Density)
         {
-            z += AnimationBit;
+            z += AnimatedBit;
         }
 
         Map[SimulationTarget.x][SimulationTarget.y] = z;
@@ -418,11 +418,11 @@ void RepairZone(int ZCent, int zsize)
       cnt++;
       if (CoordinatesValid({ xx, yy })) {
 	ThCh = Map[xx][yy];
-	if (ThCh & ZONEBIT) continue;
-	if (ThCh & AnimationBit) continue;
-	ThCh = ThCh & LOMASK;
+	if (ThCh & ZonedBit) continue;
+	if (ThCh & AnimatedBit) continue;
+	ThCh = ThCh & LowerMask;
 	if ((ThCh < Rubble) || (ThCh >= RoadBase)) {
-	  Map[xx][yy] = ZCent - 3 - zsize + cnt + CONDBIT + BURNBIT;
+	  Map[xx][yy] = ZCent - 3 - zsize + cnt + ConductiveBit + BurnableBit;
 	}
       }
     }
@@ -441,7 +441,7 @@ void DrawStadium(int z)
         }
     }
  
-    Map[SimulationTarget.x][SimulationTarget.y] |= ZONEBIT | PWRBIT;
+    Map[SimulationTarget.x][SimulationTarget.y] |= ZonedBit | PowerBit;
 }
 
 
@@ -454,7 +454,7 @@ void CoalSmoke(int mx, int my)
 
     for (x = 0; x < 4; x++)
     {
-        Map[mx + dx[x]][my + dy[x]] = SmTb[x] | AnimationBit | CONDBIT | PWRBIT | BURNBIT;
+        Map[mx + dx[x]][my + dy[x]] = SmTb[x] | AnimatedBit | ConductiveBit | PowerBit | BurnableBit;
     }
 }
 
@@ -558,8 +558,8 @@ void DoSPZone(bool powered, const CityProperties& properties)
             if (!((CityTime + SimulationTarget.x + SimulationTarget.y) & 31)) // post release
             {
                 DrawStadium(StatdiumFull);
-                Map[SimulationTarget.x + 1][SimulationTarget.y] = FootballGame1 + AnimationBit;
-                Map[SimulationTarget.x + 1][SimulationTarget.y + 1] = FootballGame2 + AnimationBit;
+                Map[SimulationTarget.x + 1][SimulationTarget.y] = FootballGame1 + AnimatedBit;
+                Map[SimulationTarget.x + 1][SimulationTarget.y + 1] = FootballGame2 + AnimatedBit;
             }
         }
         return;
@@ -582,14 +582,14 @@ void DoSPZone(bool powered, const CityProperties& properties)
 
         if (powered) // post
         { 
-            if ((Map[SimulationTarget.x + 1][SimulationTarget.y - 1] & LOMASK) == Radar)
+            if ((Map[SimulationTarget.x + 1][SimulationTarget.y - 1] & LowerMask) == Radar)
             {
-                Map[SimulationTarget.x + 1][SimulationTarget.y - 1] = Radar + AnimationBit + CONDBIT + BURNBIT;
+                Map[SimulationTarget.x + 1][SimulationTarget.y - 1] = Radar + AnimatedBit + ConductiveBit + BurnableBit;
             }
         }
         else
         {
-            Map[SimulationTarget.x + 1][SimulationTarget.y - 1] = Radar + CONDBIT + BURNBIT;
+            Map[SimulationTarget.x + 1][SimulationTarget.y - 1] = Radar + ConductiveBit + BurnableBit;
         }
 
         if (powered)
@@ -656,7 +656,7 @@ void MapScan(int x1, int x2, const CityProperties& properties)
                         continue;
                     }
 
-                    if (CurrentTile & CONDBIT)
+                    if (CurrentTile & ConductiveBit)
                     {
                         setZonePower({ x, y });
                     }
@@ -667,7 +667,7 @@ void MapScan(int x1, int x2, const CityProperties& properties)
                         continue;
                     }
 
-                    if (CurrentTile & ZONEBIT) // process Zones
+                    if (CurrentTile & ZonedBit) // process Zones
                     {
                         updateZone({ x, y }, properties);
                         continue;
@@ -680,7 +680,7 @@ void MapScan(int x1, int x2, const CityProperties& properties)
                     }
                     if ((CurrentTileMasked >= ExplosionTinySome) && (CurrentTileMasked <= ExplosionTinyLast)) // clear AniRubble
                     {
-                        Map[x][y] = Rubble + (Rand16() & 3) + BULLBIT;
+                        Map[x][y] = Rubble + (Rand16() & 3) + BulldozableBit;
                     }
                 }
             }
@@ -1092,7 +1092,7 @@ void DoNilPower()
         for (int y = 0; y < SimHeight; y++)
         {
             int z = Map[x][y];
-            if (z & ZONEBIT)
+            if (z & ZonedBit)
             {
                 SimulationTarget = { x, y };
                 setZonePower({ x, y });
@@ -1427,7 +1427,7 @@ void FireZone(int Xloc, int Yloc, int ch)
     const auto rogVal = RateOfGrowthMap.value({ Xloc / 8, Yloc / 8 });
     RateOfGrowthMap.value({ Xloc / 8, Yloc / 8 }) = rogVal - 20;
 
-    ch = ch & LOMASK;
+    ch = ch & LowerMask;
     if (ch < PortBase)
     {
         XYmax = 2;
@@ -1455,9 +1455,9 @@ void FireZone(int Xloc, int Yloc, int ch)
                 continue;
             }
 
-            if ((int)(Map[Xtem][Ytem] & LOMASK) >= RoadBase) // post release
+            if ((int)(Map[Xtem][Ytem] & LowerMask) >= RoadBase) // post release
             {
-                Map[Xtem][Ytem] |= BULLBIT;
+                Map[Xtem][Ytem] |= BulldozableBit;
             }
         }
     }

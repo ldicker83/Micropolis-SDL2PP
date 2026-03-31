@@ -76,24 +76,24 @@ unsigned int maskedTileValue(const Point<int>& location)
 
 unsigned int maskedTileValue(const int x, const int y)
 {
-	return tileValue(x, y) & LOMASK;
+	return tileValue(x, y) & LowerMask;
 }
 
 
 unsigned int maskedTileValue(unsigned int tile)
 {
-	return tile & LOMASK;
+	return tile & LowerMask;
 }
 
 
 bool tilePowered(const unsigned int tile)
 {
-	return tile & PWRBIT;
+	return tile & PowerBit;
 }
 
 bool tileIsZoned(const unsigned int tile)
 {
-	return tile & ZONEBIT;
+	return tile & ZonedBit;
 }
 
 bool tileIsRoad(const Point<int> coordinates)
