@@ -36,7 +36,7 @@ int HospitalCount, ChurchCount, StadiumCount;
 int PoliceStationCount, FireStationCount;
 int CoalPowerPlantCount, NuclearPowerPlantCount, SeaPortCount, AirportCount;
 
-int HospitalNeeded, ChurchNeeded;
+int HospitalBuildCount, ChurchBuildCount;
 int CrimeAverage, PolluteAverage, LVAverage;
 
 int CityTime;

@@ -59,7 +59,7 @@ extern int ResidentialZoneCount, CommercialZoneCount, IndustrialZoneCount, Combi
 extern int HospitalCount, ChurchCount, StadiumCount;
 extern int PoliceStationCount, FireStationCount;
 extern int CoalPowerPlantCount, NuclearPowerPlantCount, SeaPortCount, AirportCount;
-extern int HospitalNeeded, ChurchNeeded;
+extern int HospitalBuildCount, ChurchBuildCount;
 extern int CrimeAverage, PolluteAverage, LVAverage;
 
 extern int StartingYear;

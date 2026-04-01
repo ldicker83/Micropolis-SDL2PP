@@ -932,28 +932,28 @@ void TakeCensus(Budget& budget)
 
     if (HospitalCount < (ResidentialPopulationCount / 256))
     {
-        HospitalNeeded = 1;
+        HospitalBuildCount = 1;
     }
     if (HospitalCount > (ResidentialPopulationCount / 256))
     {
-        HospitalNeeded = -1;
+        HospitalBuildCount = -1;
     }
     if (HospitalCount == (ResidentialPopulationCount / 256))
     {
-        HospitalNeeded = 0;
+        HospitalBuildCount = 0;
     }
 
     if (ChurchCount < (ResidentialPopulationCount / 256))
     {
-        ChurchNeeded = 1;
+        ChurchBuildCount = 1;
     }
     if (ChurchCount > (ResidentialPopulationCount / 256))
     {
-        ChurchNeeded = -1;
+        ChurchBuildCount = -1;
     }
     if (ChurchCount == (ResidentialPopulationCount / 256))
     {
-        ChurchNeeded = 0;
+        ChurchBuildCount = 0;
     }
 }
 

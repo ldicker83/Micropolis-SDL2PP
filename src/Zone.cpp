@@ -154,7 +154,7 @@ void spawnHospital()
             RepairZone(Hospital, 3);
         }
 
-        if (HospitalNeeded == -1)
+        if (HospitalBuildCount == -1)
         {
             if (!RandomRange(0, 20))
             {
@@ -176,7 +176,7 @@ void spawnChurch()
             RepairZone(Church, 3);
         }
 
-        if (ChurchNeeded == -1)
+        if (ChurchBuildCount == -1)
         {
             if (!RandomRange(0, 20))
             {
@@ -239,10 +239,10 @@ void setSmoke(bool ZonePower)
 
 void makeHospital()
 {
-    if (HospitalNeeded > 0)
+    if (HospitalBuildCount > 0)
     {
         zonePlop(Hospital - 4);
-        HospitalNeeded = false;
+        HospitalBuildCount = 0;
         return;
     }
 }
@@ -250,10 +250,10 @@ void makeHospital()
 
 void makeChurch()
 {
-    if (ChurchNeeded > 0)
+    if (ChurchBuildCount > 0)
     {
         zonePlop(Church - 4);
-        ChurchNeeded = false;
+        ChurchBuildCount = 0;
         return;
     }
 }
