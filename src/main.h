@@ -53,13 +53,13 @@ constexpr int BNCNBIT = BurnableBit + ConductiveBit;
 extern int CurrentTile; // unmasked tile value
 extern int CurrentTileMasked; // masked tile value
 
-extern int RoadTotal, RailTotal, FirePop;
-extern int ResPop, ComPop, IndPop, TotalPop, LastTotalPop;
-extern int ResZPop, ComZPop, IndZPop, TotalZPop;
-extern int HospPop, ChurchPop, StadiumPop;
-extern int PolicePop, FireStPop;
-extern int CoalPop, NuclearPop, PortPop, APortPop;
-extern int NeedHosp, NeedChurch;
+extern int RoadCount, RailCount, BurningTileCount;
+extern int ResidentialPopulationCount, CommercialPopulationCount, IndustrialPopulationCount, PopulationTotal, PreviousPopulationTotal;
+extern int ResidentialZoneCount, CommercialZoneCount, IndustrialZoneCount, CombinedZoneCount;
+extern int HospitalCount, ChurchCount, StadiumCount;
+extern int PoliceStationCount, FireStationCount;
+extern int CoalPowerPlantCount, NuclearPowerPlantCount, SeaPortCount, AirportCount;
+extern int HospitalNeeded, ChurchNeeded;
 extern int CrimeAverage, PolluteAverage, LVAverage;
 
 extern int StartingYear;

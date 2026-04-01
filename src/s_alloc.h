@@ -47,13 +47,13 @@ extern EffectMap ComRate;
 
 using GraphHistory = std::array<int, HistoryLength>;
 
-extern GraphHistory ResHis;
-extern GraphHistory ComHis;
-extern GraphHistory IndHis;
+extern GraphHistory ResidentialPopulationHistory;
+extern GraphHistory CommercialPopulationHistory;
+extern GraphHistory IndustrialPopulationHistory;
 extern GraphHistory MoneyHis;
-extern GraphHistory PollutionHis;
-extern GraphHistory CrimeHis;
-extern GraphHistory MiscHis;
+extern GraphHistory PollutionHistory;
+extern GraphHistory CrimeHistory;
+extern GraphHistory MiscHistory;
 
 extern GraphHistory ResHis120Years;
 extern GraphHistory ComHis120Years;
@@ -63,9 +63,9 @@ extern GraphHistory PollutionHis120Years;
 extern GraphHistory CrimeHis120Years;
 extern GraphHistory MiscHis120Years;
 
-extern int ResHisMax;
-extern int ComHisMax;
-extern int IndHisMax;
+extern int ResidentialPopulationHistoryHighest;
+extern int CommercialPopulationHistoryHighest;
+extern int IndustrialPopulationHistoryHighest;
 
 void initMapArrays();
 bool moveSimulationTarget(SearchDirection direction);

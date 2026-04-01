@@ -28,23 +28,23 @@ Point<int> SimulationTarget{};
 int CurrentTile; // unmasked tile value
 int CurrentTileMasked; // masked tile value
 
-int RoadTotal, RailTotal, FirePop;
+int RoadCount, RailCount, BurningTileCount;
 
-int ResPop, ComPop, IndPop, TotalPop, LastTotalPop;
-int ResZPop, ComZPop, IndZPop, TotalZPop; // zone counts
-int HospPop, ChurchPop, StadiumPop;
-int PolicePop, FireStPop;
-int CoalPop, NuclearPop, PortPop, APortPop;
+int ResidentialPopulationCount, CommercialPopulationCount, IndustrialPopulationCount, PopulationTotal, PreviousPopulationTotal;
+int ResidentialZoneCount, CommercialZoneCount, IndustrialZoneCount, CombinedZoneCount;
+int HospitalCount, ChurchCount, StadiumCount;
+int PoliceStationCount, FireStationCount;
+int CoalPowerPlantCount, NuclearPowerPlantCount, SeaPortCount, AirportCount;
 
-int NeedHosp, NeedChurch;
+int HospitalNeeded, ChurchNeeded;
 int CrimeAverage, PolluteAverage, LVAverage;
 
 int CityTime;
 int StartingYear;
 
-int ResHisMax;
-int ComHisMax;
-int IndHisMax;
+int ResidentialPopulationHistoryHighest;
+int CommercialPopulationHistoryHighest;
+int IndustrialPopulationHistoryHighest;
 
 int RoadEffect, PoliceEffect, FireEffect;
 
@@ -66,14 +66,14 @@ EffectMap FireProtectionMap({ EighthWorldWidth, EighthWorldHeight });
 
 EffectMap ComRate({ EighthWorldWidth, EighthWorldHeight });
 
-GraphHistory ResHis{};
-GraphHistory ComHis{};
-GraphHistory IndHis{};
+GraphHistory ResidentialPopulationHistory{};
+GraphHistory CommercialPopulationHistory{};
+GraphHistory IndustrialPopulationHistory{};
 
 GraphHistory MoneyHis{};
-GraphHistory PollutionHis{};
-GraphHistory CrimeHis{};
-GraphHistory MiscHis{};
+GraphHistory PollutionHistory{};
+GraphHistory CrimeHistory{};
+GraphHistory MiscHistory{};
 
 GraphHistory ResHis120Years{};
 GraphHistory ComHis120Years{};
@@ -111,14 +111,14 @@ namespace
 
     void resetHistoryArrays()
     {
-        ResHis.fill(0);
-        ComHis.fill(0);
-        IndHis.fill(0);
+        ResidentialPopulationHistory.fill(0);
+        CommercialPopulationHistory.fill(0);
+        IndustrialPopulationHistory.fill(0);
 
         MoneyHis.fill(0);
-        PollutionHis.fill(0);
-        CrimeHis.fill(0);
-        MiscHis.fill(0);
+        PollutionHistory.fill(0);
+        CrimeHistory.fill(0);
+        MiscHistory.fill(0);
 
         ResHis120Years.fill(0);
         ComHis120Years.fill(0);
@@ -129,7 +129,7 @@ namespace
         CrimeHis120Years.fill(0);
         MiscHis120Years.fill(0);
 
-        MiscHis.fill(0);
+        MiscHistory.fill(0);
         resetPowerMap();
     }
 };

@@ -273,7 +273,7 @@ void CheckGrowth()
         return;
     }
 
-    int currentPopulation = ((ResPop)+(ComPop * 8) + (IndPop * 8)) * 20;
+    int currentPopulation = ((ResidentialPopulationCount)+(CommercialPopulationCount * 8) + (IndustrialPopulationCount * 8)) * 20;
     NotificationId growthMessageId = NotificationId::None;
 
     if (LastCityPop)
@@ -324,56 +324,56 @@ void SendMessages(const Budget& budget)
 
     CheckGrowth();
 
-    TotalZPop = ResZPop + ComZPop + IndZPop;
-    int PowerPop = NuclearPop + CoalPop;
+    CombinedZoneCount = ResidentialZoneCount + CommercialZoneCount + IndustrialZoneCount;
+    int PowerPop = NuclearPowerPlantCount + CoalPowerPlantCount;
 
     switch (CityTime % 64)
     {
 
     case 1:
-        if ((TotalZPop / 4) >= ResZPop) /* need Res */
+        if ((CombinedZoneCount / 4) >= ResidentialZoneCount) /* need Res */
         {
             SendMes(NotificationId::ResidentialNeeded);
         }
         break;
 
     case 5:
-        if ((TotalZPop / 8) >= ComZPop) /* need Com */
+        if ((CombinedZoneCount / 8) >= CommercialZoneCount) /* need Com */
         {
             SendMes(NotificationId::CommercialNeeded);
         }
         break;
 
     case 10:
-        if ((TotalZPop / 8) >= IndZPop) /* need Ind */
+        if ((CombinedZoneCount / 8) >= IndustrialZoneCount) /* need Ind */
         {
             SendMes(NotificationId::IndustrialNeeded);
         }
         break;
 
     case 14:
-        if ((TotalZPop > 10) && ((TotalZPop << 1) > RoadTotal))
+        if ((CombinedZoneCount > 10) && ((CombinedZoneCount << 1) > RoadCount))
         {
             SendMes(NotificationId::RoadsNeeded);
         }
         break;
 
     case 18:
-        if ((TotalZPop > 50) && (TotalZPop > RailTotal))
+        if ((CombinedZoneCount > 50) && (CombinedZoneCount > RailCount))
         {
             SendMes(NotificationId::RailNeeded);
         }
         break;
 
     case 22:
-        if ((TotalZPop > 10) && (PowerPop == 0)) /* need Power */
+        if ((CombinedZoneCount > 10) && (PowerPop == 0)) /* need Power */
         {
             SendMes(NotificationId::PowerNeeded);
         }
         break;
 
     case 26:
-        if ((ResPop > 500) && (StadiumPop == 0)) /* need Stad */
+        if ((ResidentialPopulationCount > 500) && (StadiumCount == 0)) /* need Stad */
         {
             SendMes(NotificationId::StadiumNeeded);
             ResCap = 1;
@@ -385,7 +385,7 @@ void SendMessages(const Budget& budget)
         break;
 
     case 28:
-        if ((IndPop > 70) && (PortPop == 0))
+        if ((IndustrialPopulationCount > 70) && (SeaPortCount == 0))
         {
             SendMes(NotificationId::SeaportNeeded);
             IndCap = 1;
@@ -394,7 +394,7 @@ void SendMessages(const Budget& budget)
         break;
 
     case 30:
-        if ((ComPop > 100) && (APortPop == 0))
+        if ((CommercialPopulationCount > 100) && (AirportCount == 0))
         {
             SendMes(NotificationId::AirportNeeded);
             ComCap = 1;
@@ -431,14 +431,14 @@ void SendMessages(const Budget& budget)
         break;
 
     case 45:
-        if ((TotalPop > 60) && (FireStPop == 0))
+        if ((PopulationTotal > 60) && (FireStationCount == 0))
         {
             SendMes(NotificationId::FireDepartmentNeeded);
         }
         break;
 
     case 48:
-        if ((TotalPop > 60) && (PolicePop == 0))
+        if ((PopulationTotal > 60) && (PoliceStationCount == 0))
         {
             SendMes(NotificationId::PoliceDepartmentNeeded);
         }
@@ -452,21 +452,21 @@ void SendMessages(const Budget& budget)
         break;
 
     case 54:
-        if ((RoadEffect < 20) && (RoadTotal > 30))
+        if ((RoadEffect < 20) && (RoadCount > 30))
         {
             SendMes(NotificationId::RoadsDeteriorating);
         }
         break;
 
     case 57:
-        if ((FireEffect < 700) && (TotalPop > 20))
+        if ((FireEffect < 700) && (PopulationTotal > 20))
         {
             SendMes(NotificationId::FireDefunded);
         }
         break;
 
     case 60:
-        if ((PoliceEffect < 700) && (TotalPop > 20))
+        if ((PoliceEffect < 700) && (PopulationTotal > 20))
         {
             SendMes(NotificationId::PoliceDefunded);
         }

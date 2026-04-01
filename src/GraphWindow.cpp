@@ -38,12 +38,12 @@ namespace
 
 	std::map<ButtonId, Graph> HistoryGraphTable
 	{
-		{ ButtonId::Residential, { ResHis, "Residential", Colors::LightGreen, { 0 } } },
-		{ ButtonId::Commercial, { ComHis, "Commercial", Colors::DarkBlue, { 0 } } },
-		{ ButtonId::Industrial, { IndHis, "Industrial", Colors::Gold, { 0 } } },
+		{ ButtonId::Residential, { ResidentialPopulationHistory, "Residential", Colors::LightGreen, { 0 } } },
+		{ ButtonId::Commercial, { CommercialPopulationHistory, "Commercial", Colors::DarkBlue, { 0 } } },
+		{ ButtonId::Industrial, { IndustrialPopulationHistory, "Industrial", Colors::Gold, { 0 } } },
 		{ ButtonId::Money, { MoneyHis, "Cash Flow", Colors::Turquoise, { 0 } } },
-		{ ButtonId::Crime, { CrimeHis, "Crime", Colors::Red, { 0 } } },
-		{ ButtonId::Pollution, { PollutionHis, "Pollution", Colors::Olive, { 0 } } }
+		{ ButtonId::Crime, { CrimeHistory, "Crime", Colors::Red, { 0 } } },
+		{ ButtonId::Pollution, { PollutionHistory, "Pollution", Colors::Olive, { 0 } } }
 	};
 
 

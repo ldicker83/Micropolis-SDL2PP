@@ -1191,7 +1191,7 @@ void generateTrain(const Point<int>& position)
     // What exactly does 'train groove' mean?
     constexpr Vector<int> TrainGroove{-39, 6};
 
-    if (TotalPop > 20 && getSprite(SimSprite::Type::Train) == nullptr && RandomRange(0, 25) == 0)
+    if (PopulationTotal > 20 && getSprite(SimSprite::Type::Train) == nullptr && RandomRange(0, 25) == 0)
     {
         makeSprite(SimSprite::Type::Train, position.skewBy({ 16, 16 }) + TrainGroove);
     }

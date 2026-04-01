@@ -167,7 +167,7 @@ void DoMeltdown(const int x, const int y)
 
 void DoRail(const Point<int>& position)
 {
-    RailTotal++;
+    RailCount++;
     generateTrain(position);
    
     if (RoadEffect < 30) // Deteriorating  Rail
@@ -331,7 +331,7 @@ void DoRoad()
         TrafficHeavyBase    // Heavy Traffic
     };
 
-    RoadTotal++;
+    RoadCount++;
 
     if (RoadEffect < 30) // Deteriorating Roads
     {
@@ -357,7 +357,7 @@ void DoRoad()
 
     if (!(CurrentTile & BurnableBit)) /* If Bridge */
     {
-        RoadTotal += 4;
+        RoadCount += 4;
         if (DoBridge())
         {
             return;
@@ -376,7 +376,7 @@ void DoRoad()
     }
     else
     {
-        RoadTotal++;
+        RoadCount++;
         trafficDensity = 2;
     }
 
@@ -470,7 +470,7 @@ void DoSPZone(bool powered, const CityProperties& properties)
     switch (CurrentTileMasked)
     {
     case PowerPlant:
-        CoalPop++;
+        CoalPowerPlantCount++;
         if (!(CityTime & 7)) /* post */
         {
             RepairZone(PowerPlant, 4);
@@ -485,7 +485,7 @@ void DoSPZone(bool powered, const CityProperties& properties)
             DoMeltdown(SimulationTarget.x, SimulationTarget.y);
             return;
         }
-        NuclearPop++;
+        NuclearPowerPlantCount++;
         if (!(CityTime & 7)) /* post */
         {
             RepairZone(NuclearPower, 4);
@@ -494,7 +494,7 @@ void DoSPZone(bool powered, const CityProperties& properties)
         return;
 
     case FireStation:
-        FireStPop++;
+        FireStationCount++;
         if (!(CityTime & 7)) /* post */
         {
             RepairZone(FireStation, 3);
@@ -521,7 +521,7 @@ void DoSPZone(bool powered, const CityProperties& properties)
         return;
 
     case PoliceStation:
-        PolicePop++;
+        PoliceStationCount++;
         if (!(CityTime & 7))
         {
             RepairZone(PoliceStation, 3); /* post */
@@ -548,7 +548,7 @@ void DoSPZone(bool powered, const CityProperties& properties)
         return;
 
     case Stadium:
-        StadiumPop++;
+        StadiumCount++;
         if (!(CityTime & 15))
         {
             RepairZone(Stadium, 4);
@@ -565,7 +565,7 @@ void DoSPZone(bool powered, const CityProperties& properties)
         return;
 
     case StatdiumFull:
-        StadiumPop++;
+        StadiumCount++;
         if (!((CityTime + SimulationTarget.x + SimulationTarget.y) & 7))	/* post release */
         {
             DrawStadium(Stadium);
@@ -573,7 +573,7 @@ void DoSPZone(bool powered, const CityProperties& properties)
         return;
 
     case Airport:
-        APortPop++;
+        AirportCount++;
         
         if (!(CityTime & 7))
         {
@@ -599,7 +599,7 @@ void DoSPZone(bool powered, const CityProperties& properties)
         return;
 
     case Port:
-        PortPop++;
+        SeaPortCount++;
         if ((CityTime & 15) == 0)
         {
             RepairZone(Port, 4);
@@ -638,7 +638,7 @@ void MapScan(int x1, int x2, const CityProperties& properties)
                     {
                         if (CurrentTileMasked >= FireBase)
                         {
-                            FirePop++;
+                            BurningTileCount++;
                             if (!(Rand16() & 3)) // 1 in 4 times
                             {
                                 DoFire();
@@ -699,36 +699,36 @@ void SetValves(const CityProperties& properties, const Budget& budget)
     float Rratio, Cratio, Iratio, temp;
     float NormResPop, PjResPop, PjComPop, PjIndPop;
 
-    MiscHis[1] = static_cast<int>(EMarket);
-    MiscHis[2] = ResPop;
-    MiscHis[3] = ComPop;
-    MiscHis[4] = IndPop;
-    MiscHis[5] = RValve;
-    MiscHis[6] = CValve;
-    MiscHis[7] = IValve;
-    MiscHis[10] = CrimeRamp;
-    MiscHis[11] = PolluteRamp;
-    MiscHis[12] = LVAverage;
-    MiscHis[13] = CrimeAverage;
-    MiscHis[14] = PolluteAverage;
-    MiscHis[15] = properties.GameLevel();
-    MiscHis[16] = static_cast<int>(cityClass());
-    MiscHis[17] = cityScore();
+    MiscHistory[1] = static_cast<int>(EMarket);
+    MiscHistory[2] = ResidentialPopulationCount;
+    MiscHistory[3] = CommercialPopulationCount;
+    MiscHistory[4] = IndustrialPopulationCount;
+    MiscHistory[5] = RValve;
+    MiscHistory[6] = CValve;
+    MiscHistory[7] = IValve;
+    MiscHistory[10] = CrimeRamp;
+    MiscHistory[11] = PolluteRamp;
+    MiscHistory[12] = LVAverage;
+    MiscHistory[13] = CrimeAverage;
+    MiscHistory[14] = PolluteAverage;
+    MiscHistory[15] = properties.GameLevel();
+    MiscHistory[16] = static_cast<int>(cityClass());
+    MiscHistory[17] = cityScore();
 
-    NormResPop = static_cast<float>(ResPop / 8);
-    LastTotalPop = TotalPop;
-    TotalPop = static_cast<int>(NormResPop) + ComPop + IndPop;
+    NormResPop = static_cast<float>(ResidentialPopulationCount / 8);
+    PreviousPopulationTotal = PopulationTotal;
+    PopulationTotal = static_cast<int>(NormResPop) + CommercialPopulationCount + IndustrialPopulationCount;
 
-    if (NormResPop) Employment = ((ComHis[1] + IndHis[1]) / NormResPop);
+    if (NormResPop) Employment = ((CommercialPopulationHistory[1] + IndustrialPopulationHistory[1]) / NormResPop);
     else Employment = 1;
 
     Migration = NormResPop * (Employment - 1);
     Births = NormResPop * 0.02f; 			/* Birth Rate  */
     PjResPop = NormResPop + Migration + Births;	/* Projected Res.Pop  */
 
-    if (float result = static_cast<float>(ComHis[1] + IndHis[1]))
+    if (float result = static_cast<float>(CommercialPopulationHistory[1] + IndustrialPopulationHistory[1]))
     {
-        LaborBase = (ResHis[1] / result);
+        LaborBase = (ResidentialPopulationHistory[1] / result);
     }
     else
     {
@@ -747,10 +747,10 @@ void SetValves(const CityProperties& properties, const Budget& budget)
     // Point of this? It adds this all up then just ignores the result?
     for (int z = 0; z < 2; z++)
     {
-        temp = static_cast<float>(ResHis[z] + ComHis[z] + IndHis[z]);
+        temp = static_cast<float>(ResidentialPopulationHistory[z] + CommercialPopulationHistory[z] + IndustrialPopulationHistory[z]);
     }
 
-    IntMarket = (NormResPop + ComPop + IndPop) / 3.7f;
+    IntMarket = (NormResPop + CommercialPopulationCount + IndustrialPopulationCount) / 3.7f;
 
     PjComPop = IntMarket * LaborBase;
 
@@ -770,7 +770,7 @@ void SetValves(const CityProperties& properties, const Budget& budget)
         break;
     }
 
-    PjIndPop = IndPop * LaborBase * temp;
+    PjIndPop = IndustrialPopulationCount * LaborBase * temp;
     if (PjIndPop < 5)
     {
         PjIndPop = 5;
@@ -784,17 +784,17 @@ void SetValves(const CityProperties& properties, const Budget& budget)
     {
         Rratio = 1.3f;
     }
-    if (ComPop)
+    if (CommercialPopulationCount)
     {
-        Cratio = (PjComPop / ComPop);
+        Cratio = (PjComPop / CommercialPopulationCount);
     }
     else
     {
         Cratio = PjComPop;
     }
-    if (IndPop)
+    if (IndustrialPopulationCount)
     {
-        Iratio = (PjIndPop / IndPop);
+        Iratio = (PjIndPop / IndustrialPopulationCount);
     }
     else
     {
@@ -877,24 +877,24 @@ void ClearCensus()
 {
     PoweredZoneCount = 0;
     UnpoweredZoneCount = 0;
-    FirePop = 0;
-    RoadTotal = 0;
-    RailTotal = 0;
-    ResPop = 0;
-    ComPop = 0;
-    IndPop = 0;
-    ResZPop = 0;
-    ComZPop = 0;
-    IndZPop = 0;
-    HospPop = 0;
-    ChurchPop = 0;
-    PolicePop = 0;
-    FireStPop = 0;
-    StadiumPop = 0;
-    CoalPop = 0;
-    NuclearPop = 0;
-    PortPop = 0;
-    APortPop = 0;
+    BurningTileCount = 0;
+    RoadCount = 0;
+    RailCount = 0;
+    ResidentialPopulationCount = 0;
+    CommercialPopulationCount = 0;
+    IndustrialPopulationCount = 0;
+    ResidentialZoneCount = 0;
+    CommercialZoneCount = 0;
+    IndustrialZoneCount = 0;
+    HospitalCount = 0;
+    ChurchCount = 0;
+    PoliceStationCount = 0;
+    FireStationCount = 0;
+    StadiumCount = 0;
+    CoalPowerPlantCount = 0;
+    NuclearPowerPlantCount = 0;
+    SeaPortCount = 0;
+    AirportCount = 0;
     resetPowerStack(); // Reset before Mapscan
 
     FireStationMap.reset();
@@ -905,55 +905,55 @@ void ClearCensus()
 void TakeCensus(Budget& budget)
 {
     /* put census#s in Historical Graphs and scroll data  */
-    std::rotate(ResHis.rbegin(), ResHis.rbegin() + 1, ResHis.rend());
-    std::rotate(ComHis.rbegin(), ComHis.rbegin() + 1, ComHis.rend());
-    std::rotate(IndHis.rbegin(), IndHis.rbegin() + 1, IndHis.rend());
-    std::rotate(CrimeHis.rbegin(), CrimeHis.rbegin() + 1, CrimeHis.rend());
-    std::rotate(PollutionHis.rbegin(), PollutionHis.rbegin() + 1, PollutionHis.rend());
+    std::rotate(ResidentialPopulationHistory.rbegin(), ResidentialPopulationHistory.rbegin() + 1, ResidentialPopulationHistory.rend());
+    std::rotate(CommercialPopulationHistory.rbegin(), CommercialPopulationHistory.rbegin() + 1, CommercialPopulationHistory.rend());
+    std::rotate(IndustrialPopulationHistory.rbegin(), IndustrialPopulationHistory.rbegin() + 1, IndustrialPopulationHistory.rend());
+    std::rotate(CrimeHistory.rbegin(), CrimeHistory.rbegin() + 1, CrimeHistory.rend());
+    std::rotate(PollutionHistory.rbegin(), PollutionHistory.rbegin() + 1, PollutionHistory.rend());
     std::rotate(MoneyHis.rbegin(), MoneyHis.rbegin() + 1, MoneyHis.rend());
 
-    ResHisMax = *std::max_element(ResHis.begin(), ResHis.end());
-    ComHisMax = *std::max_element(ComHis.begin(), ComHis.end());
-    IndHisMax = *std::max_element(IndHis.begin(), IndHis.end());
+    ResidentialPopulationHistoryHighest = *std::max_element(ResidentialPopulationHistory.begin(), ResidentialPopulationHistory.end());
+    CommercialPopulationHistoryHighest = *std::max_element(CommercialPopulationHistory.begin(), CommercialPopulationHistory.end());
+    IndustrialPopulationHistoryHighest = *std::max_element(IndustrialPopulationHistory.begin(), IndustrialPopulationHistory.end());
 
-    ResHis[0] = ResPop / 8; // magic number
-    ComHis[0] = ComPop;
-    IndHis[0] = IndPop;
+    ResidentialPopulationHistory[0] = ResidentialPopulationCount / 8; // magic number
+    CommercialPopulationHistory[0] = CommercialPopulationCount;
+    IndustrialPopulationHistory[0] = IndustrialPopulationCount;
 
     CrimeRamp += (CrimeAverage - CrimeRamp) / 4; // magic number
-    CrimeHis[0] = CrimeRamp;
+    CrimeHistory[0] = CrimeRamp;
 
     PolluteRamp += (PolluteAverage - PolluteRamp) / 4; // magic number
-    PollutionHis[0] = PolluteRamp;
+    PollutionHistory[0] = PolluteRamp;
 
     MoneyHis[0] = std::clamp((budget.CashFlow() / 20) + 128, 0, 255); // scale to 0..255
-    CrimeHis[0] = std::clamp(CrimeHis[0], 0, 255);
-    PollutionHis[0] = std::clamp(PollutionHis[0], 0, 255);
+    CrimeHistory[0] = std::clamp(CrimeHistory[0], 0, 255);
+    PollutionHistory[0] = std::clamp(PollutionHistory[0], 0, 255);
 
-    if (HospPop < (ResPop / 256))
+    if (HospitalCount < (ResidentialPopulationCount / 256))
     {
-        NeedHosp = 1;
+        HospitalNeeded = 1;
     }
-    if (HospPop > (ResPop / 256))
+    if (HospitalCount > (ResidentialPopulationCount / 256))
     {
-        NeedHosp = -1;
+        HospitalNeeded = -1;
     }
-    if (HospPop == (ResPop / 256))
+    if (HospitalCount == (ResidentialPopulationCount / 256))
     {
-        NeedHosp = 0;
+        HospitalNeeded = 0;
     }
 
-    if (ChurchPop < (ResPop / 256))
+    if (ChurchCount < (ResidentialPopulationCount / 256))
     {
-        NeedChurch = 1;
+        ChurchNeeded = 1;
     }
-    if (ChurchPop > (ResPop / 256))
+    if (ChurchCount > (ResidentialPopulationCount / 256))
     {
-        NeedChurch = -1;
+        ChurchNeeded = -1;
     }
-    if (ChurchPop == (ResPop / 256))
+    if (ChurchCount == (ResidentialPopulationCount / 256))
     {
-        NeedChurch = 0;
+        ChurchNeeded = 0;
     }
 }
 
@@ -968,12 +968,12 @@ void Take2Census()
     std::rotate(PollutionHis120Years.rbegin(), PollutionHis120Years.rbegin() + 1, PollutionHis120Years.rend());
     std::rotate(MoneyHis120Years.rbegin(), MoneyHis120Years.rbegin() + 1, MoneyHis120Years.rend());
 
-    ResHis120Years[0] = ResPop / 8; // magic number
-    ComHis120Years[0] = ComPop;
-    IndHis120Years[0] = IndPop;
+    ResHis120Years[0] = ResidentialPopulationCount / 8; // magic number
+    ComHis120Years[0] = CommercialPopulationCount;
+    IndHis120Years[0] = IndustrialPopulationCount;
 
-    CrimeHis120Years[0] = CrimeHis[0];
-    PollutionHis120Years[0] = PollutionHis[0];
+    CrimeHis120Years[0] = CrimeHistory[0];
+    PollutionHis120Years[0] = PollutionHistory[0];
     MoneyHis120Years[0] = MoneyHis[0];
 }
 
@@ -987,13 +987,13 @@ void CollectTax(const CityProperties& properties, Budget& budget)
     //int z = AvCityTax / 48;  // post
     AvCityTax = 0;
     
-    budget.PoliceFundsNeeded(PolicePop * 100);
-    budget.FireFundsNeeded(FireStPop * 100);
-    budget.RoadFundsNeeded(static_cast<int>((RoadTotal + (RailTotal * 2)) * RLevels[properties.GameLevel()]));
+    budget.PoliceFundsNeeded(PoliceStationCount * 100);
+    budget.FireFundsNeeded(FireStationCount * 100);
+    budget.RoadFundsNeeded(static_cast<int>((RoadCount + (RailCount * 2)) * RLevels[properties.GameLevel()]));
 
-    budget.TaxIncome(static_cast<int>(((static_cast<float>(TotalPop) * LVAverage) / 120.0f) * budget.TaxRate() * FLevels[properties.GameLevel()])); //yuck
+    budget.TaxIncome(static_cast<int>(((static_cast<float>(PopulationTotal) * LVAverage) / 120.0f) * budget.TaxRate() * FLevels[properties.GameLevel()])); //yuck
 
-    if (TotalPop) // if there are people to tax
+    if (PopulationTotal) // if there are people to tax
     {
         budget.update();
     }
@@ -1057,16 +1057,16 @@ void InitSimMemory()
 {
     SetCommonInits();
 
-    ResHis.fill(0);
-    ComHis.fill(0);
-    IndHis.fill(0);
+    ResidentialPopulationHistory.fill(0);
+    CommercialPopulationHistory.fill(0);
+    IndustrialPopulationHistory.fill(0);
     MoneyHis.fill(128); // magic number
-    CrimeHis.fill(0);
-    PollutionHis.fill(0);
+    CrimeHistory.fill(0);
+    PollutionHistory.fill(0);
 
     CrimeRamp = 0;
     PolluteRamp = 0;
-    TotalPop = 0;
+    PopulationTotal = 0;
     RValve = 0;
     CValve = 0;
     IValve = 0;
@@ -1137,19 +1137,19 @@ void SimLoadInit(CityProperties& properties)
     static int ScoreWaitTab[9] = { 0, 30 * 48, 5 * 48, 5 * 48, 10 * 48,
                      5 * 48, 10 * 48, 5 * 48, 10 * 48 };
 
-    EMarket = (float)MiscHis[1];
-    ResPop = MiscHis[2];
-    ComPop = MiscHis[3];
-    IndPop = MiscHis[4];
-    RValve = MiscHis[5];
-    CValve = MiscHis[6];
-    IValve = MiscHis[7];
-    CrimeRamp = MiscHis[10];
-    PolluteRamp = MiscHis[11];
-    LVAverage = MiscHis[12];
-    CrimeAverage = MiscHis[13];
-    PolluteAverage = MiscHis[14];
-    properties.GameLevel(MiscHis[15]);
+    EMarket = (float)MiscHistory[1];
+    ResidentialPopulationCount = MiscHistory[2];
+    CommercialPopulationCount = MiscHistory[3];
+    IndustrialPopulationCount = MiscHistory[4];
+    RValve = MiscHistory[5];
+    CValve = MiscHistory[6];
+    IValve = MiscHistory[7];
+    CrimeRamp = MiscHistory[10];
+    PolluteRamp = MiscHistory[11];
+    LVAverage = MiscHistory[12];
+    CrimeAverage = MiscHistory[13];
+    PolluteAverage = MiscHistory[14];
+    properties.GameLevel(MiscHistory[15]);
 
     if (CityTime < 0)
     {
@@ -1163,8 +1163,8 @@ void SimLoadInit(CityProperties& properties)
 
     SetCommonInits();
 
-    cityClass(static_cast<CityClass>(MiscHis[16]));
-    cityScore(MiscHis[17]);
+    cityClass(static_cast<CityClass>(MiscHistory[16]));
+    cityScore(MiscHistory[17]);
 
     if ((cityClass() > CityClass::Megalopolis) || (cityClass() < CityClass::Village))
     {
@@ -1383,7 +1383,7 @@ void DoSimInit(CityProperties& properties, Budget& budget)
     scanPopulationDensity();
     fireAnalysis();
     newMap(true);
-    TotalPop = 1;
+    PopulationTotal = 1;
     DoInitialEval = 1;
 }
 

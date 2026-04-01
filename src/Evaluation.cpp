@@ -226,16 +226,16 @@ void ChangeEval()
 
 void GetAssessedValue()
 {
-    int assesedValue = RoadTotal * 5;
-    assesedValue += RailTotal * 10;
-    assesedValue += PolicePop * 1000;
-    assesedValue += FireStPop * 1000;
-    assesedValue += HospPop * 400;
-    assesedValue += StadiumPop * 3000;
-    assesedValue += PortPop * 5000;
-    assesedValue += APortPop * 10000;
-    assesedValue += CoalPop * 3000;
-    assesedValue += NuclearPop * 6000;
+    int assesedValue = RoadCount * 5;
+    assesedValue += RailCount * 10;
+    assesedValue += PoliceStationCount * 1000;
+    assesedValue += FireStationCount * 1000;
+    assesedValue += HospitalCount * 400;
+    assesedValue += StadiumCount * 3000;
+    assesedValue += SeaPortCount * 5000;
+    assesedValue += AirportCount * 10000;
+    assesedValue += CoalPowerPlantCount * 3000;
+    assesedValue += NuclearPowerPlantCount * 6000;
     CityAssessedValue = assesedValue * 1000;
 }
 
@@ -243,7 +243,7 @@ void GetAssessedValue()
 void DoPopNum()
 {
     int oldCityPop{ CityPop };
-    CityPop = (ResPop + (ComPop * 8) + (IndPop * 8)) * 20;
+    CityPop = (ResidentialPopulationCount + (CommercialPopulationCount * 8) + (IndustrialPopulationCount * 8)) * 20;
     
     if (oldCityPop == 0)
     {
@@ -304,10 +304,10 @@ int GetUnemployment()
 {
     float ratio{ 0.0f };
 
-    int base{ (ComPop + IndPop) * 8 };
+    int base{ (CommercialPopulationCount + IndustrialPopulationCount) * 8 };
     if (base)
     {
-        ratio = (static_cast<float>(ResPop)) / base;
+        ratio = (static_cast<float>(ResidentialPopulationCount)) / base;
     }
     else
     {
@@ -326,7 +326,7 @@ int GetUnemployment()
 
 int GetFire()
 {
-    return std::clamp(FirePop * 5, 0, 255);
+    return std::clamp(BurningTileCount * 5, 0, 255);
 }
 
 
@@ -443,7 +443,7 @@ void DoProblems(const Budget& budget)
 
 void CityEvaluation(const Budget& budget)
 {
-    if (TotalPop)
+    if (PopulationTotal)
     {
         GetAssessedValue();
         DoPopNum();

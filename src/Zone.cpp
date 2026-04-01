@@ -147,14 +147,14 @@ void spawnHospital()
 {
     if (CurrentTileMasked == Hospital)
     {
-        HospPop++;
+        HospitalCount++;
 
         if (!(CityTime % 16))/*post*/
         {
             RepairZone(Hospital, 3);
         }
 
-        if (NeedHosp == -1)
+        if (HospitalNeeded == -1)
         {
             if (!RandomRange(0, 20))
             {
@@ -169,14 +169,14 @@ void spawnChurch()
 {
     if (CurrentTileMasked == Church)
     {
-        ChurchPop++;
+        ChurchCount++;
 
         if (!(CityTime & 16))/*post*/
         {
             RepairZone(Church, 3);
         }
 
-        if (NeedChurch == -1)
+        if (ChurchNeeded == -1)
         {
             if (!RandomRange(0, 20))
             {
@@ -239,10 +239,10 @@ void setSmoke(bool ZonePower)
 
 void makeHospital()
 {
-    if (NeedHosp > 0)
+    if (HospitalNeeded > 0)
     {
         zonePlop(Hospital - 4);
-        NeedHosp = false;
+        HospitalNeeded = false;
         return;
     }
 }
@@ -250,10 +250,10 @@ void makeHospital()
 
 void makeChurch()
 {
-    if (NeedChurch > 0)
+    if (ChurchNeeded > 0)
     {
         zonePlop(Church - 4);
-        NeedChurch = false;
+        ChurchNeeded = false;
         return;
     }
 }
@@ -607,8 +607,8 @@ void updateIndustry(bool zonePowered)
     setSmoke(zonePowered);
 
     int zonePopulation{ industrialZonePopulation(CurrentTileMasked) };
-    IndPop += zonePopulation;
-    IndZPop++;
+    IndustrialPopulationCount += zonePopulation;
+    IndustrialZoneCount++;
 
     TrafficResult trafficResult{ TrafficResult::RouteFound };
 
@@ -650,11 +650,11 @@ void updateCommercial(bool zonePowered)
 {
     int zscore, locvalve, value;
 
-    ComZPop++;
+    CommercialZoneCount++;
 
     int tpop = commercialZonePopulation(CurrentTileMasked);
 
-    ComPop += tpop;
+    CommercialPopulationCount += tpop;
 
     TrafficResult trafficResult{TrafficResult::RouteFound};
 
@@ -711,8 +711,8 @@ void updateResidential(const Point<int>& location, bool zonePowered)
         residentialPopulation = residentialZonePopulation(tileValue);
     }
 
-    ResZPop++;
-    ResPop += residentialPopulation;
+    ResidentialZoneCount++;
+    ResidentialPopulationCount += residentialPopulation;
 
     TrafficResult trafficResult{ TrafficResult::RouteFound };
     if (residentialPopulation > RandomRange(0, 35))

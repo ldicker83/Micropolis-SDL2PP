@@ -129,7 +129,7 @@ void powerScan()
 {
     resetPowerMap();
 
-    int powerAvailable = (CoalPop * CoalPowerProvided) + (NuclearPop * NuclearPowerProvided);
+    int powerAvailable = (CoalPowerPlantCount * CoalPowerProvided) + (NuclearPowerPlantCount * NuclearPowerProvided);
     int powerConsumed = 0;
 
     int conductiveTileCount{};

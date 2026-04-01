@@ -56,7 +56,7 @@ namespace
 
     void copyBufIntoArray(const int (&buf)[HistoryLength], GraphHistory& graph)
     {
-        for (size_t i = 0; i < ResHis.size(); ++i)
+        for (size_t i = 0; i < ResidentialPopulationHistory.size(); ++i)
         {
             graph[i] = buf[i];
         }
@@ -74,25 +74,25 @@ namespace
         int buff[HistoryLength]{};
 
         infile.read(reinterpret_cast<char*>(&buff[0]), sizeof(GraphHistory));
-        copyBufIntoArray(buff, ResHis);
+        copyBufIntoArray(buff, ResidentialPopulationHistory);
 
         infile.read(reinterpret_cast<char*>(&buff[0]), sizeof(GraphHistory));
-        copyBufIntoArray(buff, ComHis);
+        copyBufIntoArray(buff, CommercialPopulationHistory);
 
         infile.read(reinterpret_cast<char*>(&buff[0]), sizeof(GraphHistory));
-        copyBufIntoArray(buff, IndHis);
+        copyBufIntoArray(buff, IndustrialPopulationHistory);
 
         infile.read(reinterpret_cast<char*>(&buff[0]), sizeof(GraphHistory));
-        copyBufIntoArray(buff, CrimeHis);
+        copyBufIntoArray(buff, CrimeHistory);
 
         infile.read(reinterpret_cast<char*>(&buff[0]), sizeof(GraphHistory));
-        copyBufIntoArray(buff, PollutionHis);
+        copyBufIntoArray(buff, PollutionHistory);
 
         infile.read(reinterpret_cast<char*>(&buff[0]), sizeof(GraphHistory));
         copyBufIntoArray(buff, MoneyHis);
 
         infile.read(reinterpret_cast<char*>(&buff[0]), sizeof(GraphHistory));
-        copyBufIntoArray(buff, MiscHis);
+        copyBufIntoArray(buff, MiscHistory);
 
         int mapRow[SimHeight]{};
         for (size_t row = 0; row < SimWidth; ++row)
@@ -119,20 +119,20 @@ bool loadFile(const std::string& filename, CityProperties& properties, Budget& b
         return false;
     }
 
-    CityTime = std::clamp(MiscHis[8], 0, std::numeric_limits<int>::max());
-    budget.CurrentFunds(MiscHis[50]);
-    budget.PreviousFunds(MiscHis[51]);
-    autoBulldoze(MiscHis[52]);
-    autoBudget(MiscHis[53]);
-    autoGoto(MiscHis[54]);
+    CityTime = std::clamp(MiscHistory[8], 0, std::numeric_limits<int>::max());
+    budget.CurrentFunds(MiscHistory[50]);
+    budget.PreviousFunds(MiscHistory[51]);
+    autoBulldoze(MiscHistory[52]);
+    autoBudget(MiscHistory[53]);
+    autoGoto(MiscHistory[54]);
 
-    userSoundOn(MiscHis[55]);
-    budget.TaxRate(std::clamp(MiscHis[56], 0, 20));
-    SimSpeed(static_cast<SimulationSpeed>(MiscHis[57]));
+    userSoundOn(MiscHistory[55]);
+    budget.TaxRate(std::clamp(MiscHistory[56], 0, 20));
+    SimSpeed(static_cast<SimulationSpeed>(MiscHistory[57]));
 
-    budget.PolicePercent(static_cast<float>(MiscHis[58] / 100.0f));
-    budget.FirePercent(static_cast<float>(MiscHis[60] / 100.0f));
-    budget.RoadPercent(static_cast<float>(MiscHis[62] / 100.0f));
+    budget.PolicePercent(static_cast<float>(MiscHistory[58] / 100.0f));
+    budget.FirePercent(static_cast<float>(MiscHistory[60] / 100.0f));
+    budget.RoadPercent(static_cast<float>(MiscHistory[62] / 100.0f));
 
     initWillStuff();
     ScenarioID = 0;
@@ -151,28 +151,28 @@ bool saveFile(const std::string& filename, const CityProperties&, const Budget& 
         return false;
     }
 
-    MiscHis[8] = CityTime;
-    MiscHis[50] = budget.CurrentFunds();
-    MiscHis[51] = budget.PreviousFunds();
+    MiscHistory[8] = CityTime;
+    MiscHistory[50] = budget.CurrentFunds();
+    MiscHistory[51] = budget.PreviousFunds();
 
-    MiscHis[52] = autoBulldoze();
-    MiscHis[53] = autoBudget(); 
-    MiscHis[54] = autoGoto();
-    MiscHis[55] = userSoundOn();
-    MiscHis[57] = static_cast<int>(SimSpeed());
-    MiscHis[56] = budget.TaxRate();
+    MiscHistory[52] = autoBulldoze();
+    MiscHistory[53] = autoBudget(); 
+    MiscHistory[54] = autoGoto();
+    MiscHistory[55] = userSoundOn();
+    MiscHistory[57] = static_cast<int>(SimSpeed());
+    MiscHistory[56] = budget.TaxRate();
 
-    MiscHis[58] = static_cast<int>(budget.PolicePercent() * 100.0f);
-    MiscHis[60] = static_cast<int>(budget.FirePercent() * 100.0f);
-    MiscHis[62] = static_cast<int>(budget.RoadPercent() * 100.0f);
+    MiscHistory[58] = static_cast<int>(budget.PolicePercent() * 100.0f);
+    MiscHistory[60] = static_cast<int>(budget.FirePercent() * 100.0f);
+    MiscHistory[62] = static_cast<int>(budget.RoadPercent() * 100.0f);
 
-    outfile.write(reinterpret_cast<char*>(ResHis.data()), sizeof(GraphHistory));
-    outfile.write(reinterpret_cast<char*>(ComHis.data()), sizeof(GraphHistory));
-    outfile.write(reinterpret_cast<char*>(IndHis.data()), sizeof(GraphHistory));
-    outfile.write(reinterpret_cast<char*>(CrimeHis.data()), sizeof(GraphHistory));
-    outfile.write(reinterpret_cast<char*>(PollutionHis.data()), sizeof(GraphHistory));
+    outfile.write(reinterpret_cast<char*>(ResidentialPopulationHistory.data()), sizeof(GraphHistory));
+    outfile.write(reinterpret_cast<char*>(CommercialPopulationHistory.data()), sizeof(GraphHistory));
+    outfile.write(reinterpret_cast<char*>(IndustrialPopulationHistory.data()), sizeof(GraphHistory));
+    outfile.write(reinterpret_cast<char*>(CrimeHistory.data()), sizeof(GraphHistory));
+    outfile.write(reinterpret_cast<char*>(PollutionHistory.data()), sizeof(GraphHistory));
     outfile.write(reinterpret_cast<char*>(MoneyHis.data()), sizeof(GraphHistory));
-    outfile.write(reinterpret_cast<char*>(MiscHis.data()), sizeof(GraphHistory));
+    outfile.write(reinterpret_cast<char*>(MiscHistory.data()), sizeof(GraphHistory));
     outfile.write(reinterpret_cast<char*>(Map.data()), sizeof(Map));
 
     outfile.close();
