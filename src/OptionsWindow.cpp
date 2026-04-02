@@ -67,9 +67,9 @@ namespace
 
 
 OptionsWindow::OptionsWindow(SDL_Renderer* renderer):
-	mRenderer{ renderer },
 	mTexture(loadTexture(renderer, "images/OptionsWindow.png")),
-	mCheckTexture(newTexture(renderer, mTexture.dimensions))
+	mCheckTexture(newTexture(renderer, mTexture.dimensions)),
+	mRenderer{ renderer }
 {
     size({ BgRect.w, BgRect.h });
     closeButtonActive(false);
