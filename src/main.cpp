@@ -1197,6 +1197,8 @@ void cleanUp()
 {
     deinitTimers();
 
+    toolPalette.reset(nullptr);
+
     SDL_DestroyTexture(BigTileset.texture);
     SDL_DestroyTexture(RCI_Indicator.texture);
 
