@@ -80,7 +80,7 @@ namespace
             if (CoordinatesValid(SimulationTarget))
             {
                 int tile = maskedTileValue(SimulationTarget);
-                if ((tile >= RoadBase) && (tile < PowerBase))
+                if ((tile >= BridgeBase) && (tile < PowerBase))
                 {
                     /* check for rail */
                     const Point<int> trafficDensityMapCoordinates = SimulationTarget.skewInverseBy({ 2, 2 });

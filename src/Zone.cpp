@@ -76,7 +76,7 @@ void zonePlop(const int base)
         if (CoordinatesValid(coordinates))
         {
             int tile = maskedTileValue(coordinates);
-            if ((tile >= Flood) && (tile < RoadBase))
+            if ((tile >= Flood) && (tile < BridgeBase))
             {
                 return;
             }

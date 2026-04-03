@@ -105,12 +105,12 @@ bool tileIsRoad(const Point<int> coordinates)
 
 	const auto tile = maskedTileValue(coordinates);
 
-	if (tile < RoadBase || tile > RailLast)
+	if (tile < BridgeBase || tile > RailLast)
 	{
 		return false;
 	}
 
-	if ((tile >= PowerBase) && (tile < RAILHPOWERV))
+	if ((tile >= PowerBase) && (tile < RailHorizontalPowerVertical))
 	{
 		return false;
 	}

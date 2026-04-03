@@ -506,7 +506,7 @@ static int idArray[28] =
     Flood,
     RadiationTile,
     FireBase,
-    RoadBase,
+    BridgeBase,
     PowerBase,
     RailBase,
     ResidentialBase,

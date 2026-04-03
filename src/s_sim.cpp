@@ -326,7 +326,7 @@ void DoRoad()
 {
     static int DensityTable[3] =
     {
-        RoadBase,   // No Traffic
+        BridgeBase,   // No Traffic
         TrafficLightBase,   // Light Traffic
         TrafficHeavyBase    // Heavy Traffic
     };
@@ -389,7 +389,7 @@ void DoRoad()
 
     if (trafficDensity != Density) /* tden 0..2   */
     {
-        int z = ((CurrentTileMasked - RoadBase) & 15) + DensityTable[Density];
+        int z = ((CurrentTileMasked - BridgeBase) & 15) + DensityTable[Density];
         
         z += CurrentTile & (UpperMask - AnimatedBit);
         
@@ -421,7 +421,7 @@ void RepairZone(int ZCent, int zsize)
 	if (ThCh & ZonedBit) continue;
 	if (ThCh & AnimatedBit) continue;
 	ThCh = ThCh & LowerMask;
-	if ((ThCh < Rubble) || (ThCh >= RoadBase)) {
+	if ((ThCh < Rubble) || (ThCh >= BridgeBase)) {
 	  Map[xx][yy] = ZCent - 3 - zsize + cnt + ConductiveBit + BurnableBit;
 	}
       }
@@ -634,7 +634,7 @@ void MapScan(int x1, int x2, const CityProperties& properties)
                 {
                     SimulationTarget = { x, y };
 
-                    if (CurrentTileMasked < RoadBase)
+                    if (CurrentTileMasked < BridgeBase)
                     {
                         if (CurrentTileMasked >= FireBase)
                         {
@@ -661,7 +661,7 @@ void MapScan(int x1, int x2, const CityProperties& properties)
                         setZonePower({ x, y });
                     }
 
-                    if ((CurrentTileMasked >= RoadBase) && (CurrentTileMasked < PowerBase))
+                    if ((CurrentTileMasked >= BridgeBase) && (CurrentTileMasked < PowerBase))
                     {
                         DoRoad();
                         continue;
@@ -1455,7 +1455,7 @@ void FireZone(int Xloc, int Yloc, int ch)
                 continue;
             }
 
-            if ((int)(Map[Xtem][Ytem] & LowerMask) >= RoadBase) // post release
+            if ((int)(Map[Xtem][Ytem] & LowerMask) >= BridgeBase) // post release
             {
                 Map[Xtem][Ytem] |= BulldozableBit;
             }

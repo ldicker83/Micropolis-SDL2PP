@@ -54,7 +54,7 @@ namespace
                 return (/* 10 */ 50);
             }
 
-            if (tileValue < RoadBase)
+            if (tileValue < BridgeBase)
             {
                 if (tileValue > FireBase)
                 {
@@ -200,7 +200,7 @@ namespace
 
             const Point<int> coord{ x % SimWidth, x / SimWidth };
             const auto tile = maskedTileValue(coord.x, coord.y);
-            if (tile < RoadBase)
+            if (tile < BridgeBase)
             {
                 LandValueMap.value(coord.skewInverseBy({ 2, 2 })) = 0;
                 continue;

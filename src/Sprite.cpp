@@ -489,7 +489,7 @@ void oFireZone(int Xloc, int Yloc, int ch)
         {
             const int Xtem = Xloc + x;
             const int Ytem = Yloc + y;
-            if ((Map[Xtem][Ytem] & LowerMask) >= RoadBase)
+            if ((Map[Xtem][Ytem] & LowerMask) >= BridgeBase)
             {
                 Map[Xtem][Ytem] |= BulldozableBit;
             }
@@ -541,7 +541,7 @@ void destroyTile(const Point<int>& location)
         /* TILE_IS_BRIDGE(t) */
         if (!(unmaskedTile & BurnableBit))
         {
-            if ((tile >= RoadBase) && (tile <= RoadLast))
+            if ((tile >= BridgeBase) && (tile <= RoadLast))
             {
                 Map[mapCoords.x][mapCoords.y] = River;
                 return;
@@ -638,8 +638,8 @@ void updateTrain(SimSprite& sprite)
         int c = getTile(sprite.position + CheckVector[checkDirection] + Vector<int>{ 48, 0});
 
         if (((c >= RailBase) && (c <= RailLast)) || /* track? */
-            (c == RAILVPOWERH) ||
-            (c == RAILHPOWERV))
+            (c == RailVerticalPowerHorizontal) ||
+            (c == RailHorizontalPowerVertical))
         {
             if ((sprite.dir != checkDirection) && (sprite.dir != 4))
             {
