@@ -1197,7 +1197,17 @@ void cleanUp()
 {
     deinitTimers();
 
+    budgetWindow.reset(nullptr);
+    graphWindow.reset(nullptr);
+    evaluationWindow.reset(nullptr);
+    miniMapWindow.reset(nullptr);
+    optionsWindow.reset(nullptr);
+    queryWindow.reset(nullptr);
+    stringRenderer.reset(nullptr);
     toolPalette.reset(nullptr);
+
+    MainFont.reset(nullptr);
+    MainBigFont.reset(nullptr);
 
     SDL_DestroyTexture(BigTileset.texture);
     SDL_DestroyTexture(RCI_Indicator.texture);
