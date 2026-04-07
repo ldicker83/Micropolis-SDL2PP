@@ -182,17 +182,6 @@ void DoGeneratedCityImage(char *name, int time, int pop, char* _class, int score
 }
 
 
-void DoPopUpMessage(char *msg)
-{
-  /*
-  char buf[1024];
-
-  sprintf(buf, "UIPopUpMessage {%s}", msg);
-  Eval(buf);
-  */
-}
-
-
 static std::random_device RandomDevice;
 static std::mt19937 PseudoRandomNumberGenerator(RandomDevice());
 
