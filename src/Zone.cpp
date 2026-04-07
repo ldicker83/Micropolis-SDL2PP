@@ -73,7 +73,7 @@ void zonePlop(const int base)
     {
         const Point<int> coordinates = SimulationTarget + AdjacentVector8[i];
 
-        if (CoordinatesValid(coordinates))
+        if (coordinatesValid(coordinates))
         {
             int tile = maskedTileValue(coordinates);
             if ((tile >= Flood) && (tile < BridgeBase))
@@ -88,7 +88,7 @@ void zonePlop(const int base)
     {
         const Point<int> coordinates = SimulationTarget + AdjacentVector8[i];
 
-        if (CoordinatesValid(coordinates))
+        if (coordinatesValid(coordinates))
         {
             tileValue(coordinates) = tileBase + BNCNBIT;
         }
@@ -156,7 +156,7 @@ void spawnHospital()
 
         if (HospitalBuildCount == -1)
         {
-            if (!RandomRange(0, 20))
+            if (!randomRange(0, 20))
             {
                 zonePlop(ResidentialBase);
             }
@@ -178,7 +178,7 @@ void spawnChurch()
 
         if (ChurchBuildCount == -1)
         {
-            if (!RandomRange(0, 20))
+            if (!randomRange(0, 20))
             {
                 zonePlop(ResidentialBase);
             }
@@ -214,7 +214,7 @@ void setSmoke(bool ZonePower)
     if (animateTile[z])
     {
         const Point<int> location{ SimulationTarget + AdjacentVector8[z] };
-        if (CoordinatesValid(location))
+        if (coordinatesValid(location))
         {
             if (ZonePower)
             {
@@ -299,7 +299,7 @@ int evaluateHouseLot(int x, int y)
         const Point<int> coordinates{ Point<int>{x, y} + AdjacentVector[i] };
 
         // look for road
-        if (CoordinatesValid(coordinates) && tile && (tile <= RoadLast))
+        if (coordinatesValid(coordinates) && tile && (tile <= RoadLast))
         {
             score++;
         }
@@ -367,7 +367,7 @@ void buildHouse(int value)
     for (int i{ 1 }; i < 9; ++i)
     {
         const Point<int> location = SimulationTarget + searchVector[i];
-        if (CoordinatesValid(location))
+        if (coordinatesValid(location))
         {
             const auto score = evaluateHouseLot(location.x, location.y);
             if (score != 0)
@@ -378,7 +378,7 @@ void buildHouse(int value)
                     bestLocationOffset = i;
                 }
 
-                if ((score == highestScore) && !(RandomRange(0, 8)))
+                if ((score == highestScore) && !(randomRange(0, 8)))
                 {
                     bestLocationOffset = i;
                 }
@@ -390,9 +390,9 @@ void buildHouse(int value)
     {
         const Point<int> location = SimulationTarget + searchVector[bestLocationOffset];
 
-        if (CoordinatesValid(location))
+        if (coordinatesValid(location))
         {
-            tileValue(location) = House + BLBNCNBIT + RandomRange(0, 2) + (value * 3);
+            tileValue(location) = House + BLBNCNBIT + randomRange(0, 2) + (value * 3);
         }
     }
 }
@@ -478,12 +478,12 @@ void convertResidentialToHomes(int value)
         for (int y{ SimulationTarget.y - 1 }; y <= SimulationTarget.y + 1; ++y)
         {
             const Point<int> coordinates{ x, y };
-            if (CoordinatesValid(coordinates))
+            if (coordinatesValid(coordinates))
             {
                 const auto tile = maskedTileValue(coordinates);
                 if (tile != ResidentialEmpty)
                 {
-                    tileValue(coordinates) = LHTHR + value + RandomRange(0, 2) + BLBNCNBIT;
+                    tileValue(coordinates) = LHTHR + value + randomRange(0, 2) + BLBNCNBIT;
                 }
             }
         }
@@ -501,7 +501,7 @@ void clearResidentialZone()
         for (int y{ SimulationTarget.y - 1 }; y <= SimulationTarget.y + 1; ++y)
         {
             const Point<int> coordinates{ x, y };
-            if (CoordinatesValid(coordinates))
+            if (coordinatesValid(coordinates))
             {
                 const auto tile = maskedTileValue(coordinates);
                 if ((tile >= LHTHR) && (tile <= HHTHR))
@@ -585,7 +585,7 @@ int housePopulation()
     {
         for (int y{ SimulationTarget.y - 1 }; y <= SimulationTarget.y + 1; ++y)
         {
-            if (CoordinatesValid({x, y}))
+            if (coordinatesValid({x, y}))
             {
                 const auto tile = maskedTileValue({x, y});
                 if ((tile >= LHTHR) && (tile <= HHTHR))
@@ -612,18 +612,18 @@ void updateIndustry(bool zonePowered)
 
     TrafficResult trafficResult{ TrafficResult::RouteFound };
 
-    if (zonePopulation > RandomRange(0, 5))
+    if (zonePopulation > randomRange(0, 5))
     {
         trafficResult = makeTraffic(2);
     }
 
     if (trafficResult == TrafficResult::NoTransportNearby)
     {
-        decreaseIndustry(zonePopulation, RandomRange(0, 2));
+        decreaseIndustry(zonePopulation, randomRange(0, 2));
         return;
     }
 
-    if (!(RandomRange(0, 8)))
+    if (!(randomRange(0, 8)))
     {
         zscore = IValve + evaluateIndustrial(trafficResult);
 
@@ -632,15 +632,15 @@ void updateIndustry(bool zonePowered)
             zscore = -500;
         }
 
-        if ((zscore > -350) && (zscore - 26380) > Rand16())
+        if ((zscore > -350) && (zscore - 26380) > rand16())
         {
-            increaseIndustry(zonePopulation, Rand16() & 1);
+            increaseIndustry(zonePopulation, rand16() & 1);
             return;
         }
 
-        if ((zscore < 350) && (zscore + 26380) < Rand16())
+        if ((zscore < 350) && (zscore + 26380) < rand16())
         {
-            decreaseIndustry(zonePopulation, Rand16() & 1);
+            decreaseIndustry(zonePopulation, rand16() & 1);
         }
     }
 }
@@ -658,7 +658,7 @@ void updateCommercial(bool zonePowered)
 
     TrafficResult trafficResult{TrafficResult::RouteFound};
 
-    if (tpop > RandomRange(0, 5))
+    if (tpop > randomRange(0, 5))
     {
         trafficResult = makeTraffic(1);
     }
@@ -670,7 +670,7 @@ void updateCommercial(bool zonePowered)
         return;
     }
 
-    if (!(Rand16() & 7))
+    if (!(rand16() & 7))
     {
         locvalve = evaluateCommercial(trafficResult);
         zscore = CValve + locvalve;
@@ -680,14 +680,14 @@ void updateCommercial(bool zonePowered)
             zscore = -500;
         }
 
-        if (trafficResult == TrafficResult::RouteFound && (zscore > -350) && zscore - 26380 > Rand16())
+        if (trafficResult == TrafficResult::RouteFound && (zscore > -350) && zscore - 26380 > rand16())
         {
             value = getLandValue();
             increaseCommercial(tpop, value);
             return;
         }
 
-        if (zscore < 350 && zscore + 26380 < Rand16())
+        if (zscore < 350 && zscore + 26380 < rand16())
         {
             value = getLandValue();
             decreaseCommercial(tpop, value);
@@ -715,7 +715,7 @@ void updateResidential(const Point<int>& location, bool zonePowered)
     ResidentialPopulationCount += residentialPopulation;
 
     TrafficResult trafficResult{ TrafficResult::RouteFound };
-    if (residentialPopulation > RandomRange(0, 35))
+    if (residentialPopulation > randomRange(0, 35))
     {
         trafficResult = makeTraffic(0);
     }
@@ -727,7 +727,7 @@ void updateResidential(const Point<int>& location, bool zonePowered)
         return;
     }
 
-    if ((tileValue == ResidentialEmpty) || (RandomRange(0, 8) == 0))
+    if ((tileValue == ResidentialEmpty) || (randomRange(0, 8) == 0))
     {
         int locationValue = evaluateResidential(trafficResult);
         int zoneScore = RValve + locationValue;
@@ -736,9 +736,9 @@ void updateResidential(const Point<int>& location, bool zonePowered)
             zoneScore = -500;
         }
 
-        if (zoneScore > -350 && zoneScore - 26380 > -Rand16())
+        if (zoneScore > -350 && zoneScore - 26380 > -rand16())
         {
-            if ((!residentialPopulation) && (!(RandomRange(0, 4))))
+            if ((!residentialPopulation) && (!(randomRange(0, 4))))
             {
                 makeHospital();
                 makeChurch();
@@ -751,7 +751,7 @@ void updateResidential(const Point<int>& location, bool zonePowered)
             return;
         }
 
-        if ((zoneScore < 350) && zoneScore + 26380 < Rand16())
+        if ((zoneScore < 350) && zoneScore + 26380 < rand16())
         {
             value = getLandValue();
             decreaseResidential(residentialPopulation, value);

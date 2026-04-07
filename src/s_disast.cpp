@@ -94,7 +94,7 @@ void MakeMeltdown()
 
 void FireBomb()
 {
-    crashPosition({ RandomRange(0, SimWidth - 1), RandomRange(0, SimHeight - 1) });
+    crashPosition({ randomRange(0, SimWidth - 1), randomRange(0, SimHeight - 1) });
     generateExplosion(crashPosition());
     ClearMes();
     SendMesAt(NotificationId::FirebombingReported, crashPosition().x, crashPosition().y);
@@ -106,12 +106,12 @@ void MakeEarthquake()
     DoEarthQuake();
     SendMesAt(NotificationId::EarthquakeReported, cityCenterOfMass().x, cityCenterOfMass().y);
 
-    int time = RandomRange(0, 700) + 300;
+    int time = randomRange(0, 700) + 300;
 
     for (int z = 0; z < time; z++)
     {
-        int x = RandomRange(0, SimWidth - 1);
-        int y = RandomRange(0, SimHeight - 1);
+        int x = randomRange(0, SimWidth - 1);
+        int y = randomRange(0, SimHeight - 1);
 
         if ((x < 0) || (x > (SimWidth - 1)) || (y < 0) || (y > (SimHeight - 1)))
         {
@@ -122,11 +122,11 @@ void MakeEarthquake()
         {
             if (z & 0x3)
             {
-                Map[x][y] = (Rubble + BulldozableBit) + (Rand16() & 3);
+                Map[x][y] = (Rubble + BulldozableBit) + (rand16() & 3);
             }
             else
             {
-                Map[x][y] = (FireBase + AnimatedBit) + (Rand16() & 7);
+                Map[x][y] = (FireBase + AnimatedBit) + (rand16() & 7);
             }
         }
     }
@@ -137,8 +137,8 @@ void MakeFire()
 {
     for (int t = 0; t < 40; t++)
     {
-        const int x = RandomRange(0, SimWidth - 1);
-        const int y = RandomRange(0, SimHeight - 1);
+        const int x = randomRange(0, SimWidth - 1);
+        const int y = randomRange(0, SimHeight - 1);
         const int cell = Map[x][y];
 
         if(tileIsArsonable(cell))
@@ -146,7 +146,7 @@ void MakeFire()
             const int tile = maskedTileValue(x, y);
             if ((tile > RiverEdgeLast) && (tile < ZoneLast))
             {
-                Map[x][y] = FireBase + RandomRange(0, 7) | AnimatedBit;
+                Map[x][y] = FireBase + randomRange(0, 7) | AnimatedBit;
                 SendMesAt(NotificationId::FireReported, x, y);
                 return;
             }
@@ -162,8 +162,8 @@ void MakeFlood()
 
     for (int iteration = 0; iteration < 300; ++iteration)
     {
-        const int cellX = RandomRange(0, SimWidth - 1);
-        const int cellY = RandomRange(0, SimHeight - 1);
+        const int cellX = randomRange(0, SimWidth - 1);
+        const int cellY = randomRange(0, SimHeight - 1);
         const int cell = tileValue(cellX, cellY);
 
         if (tileIsRiverEdge(cell))
@@ -172,7 +172,7 @@ void MakeFlood()
             {
                 const int floodX = cellX + Dx[t];
                 const int floodY = cellY + Dy[t];
-                if (CoordinatesValid({ floodX, floodY }))
+                if (coordinatesValid({ floodX, floodY }))
                 {
                     if(tileIsFloodable(cell))
                     {
@@ -199,11 +199,11 @@ void DoFlood()
     {
         for (int i = 0; i < 4; ++i)
         {
-            if (RandomRange(0, 7) == 0)
+            if (randomRange(0, 7) == 0)
             {
                 int x = SimulationTarget.x + Dx[i];
                 int y = SimulationTarget.y + Dy[i];
-                if (CoordinatesValid({ x, y }))
+                if (coordinatesValid({ x, y }))
                 {
                     int cell = Map[x][y];
 
@@ -213,7 +213,7 @@ void DoFlood()
                         {
                             FireZone(x, y, cell);
                         }
-                        Map[x][y] = Flood + RandomRange(0, 2);
+                        Map[x][y] = Flood + randomRange(0, 2);
                     }
                 }
             }
@@ -221,7 +221,7 @@ void DoFlood()
     }
     else
     {
-        if (RandomRange(0, 15) == 0)
+        if (randomRange(0, 15) == 0)
         {
             Map[SimulationTarget.x][SimulationTarget.y] = 0;
         }
@@ -327,10 +327,10 @@ void DoDisasters(CityProperties& properties)
         return;
     }
     
-    int disasterChance = RandomRange(0, DisChance[properties.GameLevel()]);
+    int disasterChance = randomRange(0, DisChance[properties.GameLevel()]);
     if (disasterChance == 0)
     {
-        int disasterType = RandomRange(0, 8);
+        int disasterType = randomRange(0, 8);
         switch (disasterType)
         {
         case 0:

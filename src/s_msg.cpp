@@ -502,15 +502,15 @@ void doMessage()
         switch (MessageId())
         {
         case NotificationId::TrafficJamsReported:
-            if (RandomRange(0, 5) == 1)
+            if (randomRange(0, 5) == 1)
             {
                 MakeSound("city", "HonkHonk-Med");
             }
-            else if (RandomRange(0, 5) == 1)
+            else if (randomRange(0, 5) == 1)
             {
                 MakeSound("city", "HonkHonk-Low");
             }
-            else if (RandomRange(0, 5) == 1)
+            else if (randomRange(0, 5) == 1)
             {
                 MakeSound("city", "HonkHonk-High");
             }

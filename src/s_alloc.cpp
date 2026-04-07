@@ -147,7 +147,7 @@ bool moveSimulationTarget(SearchDirection direction)
 {
     const Point<int> newTargetCoordinates{ SimulationTarget + AdjacentVector.at(direction) };
 
-    if (!CoordinatesValid(newTargetCoordinates))
+    if (!coordinatesValid(newTargetCoordinates))
     {
         return false;
     }

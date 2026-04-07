@@ -48,7 +48,7 @@ bool pointInRect(const Point<int>& point, const SDL_Rect& rect)
 }
 
 
-Point<int> PositionToCell(const Point<int>& position, const Point<int>& offset)
+Point<int> positionToCell(const Point<int>& position, const Point<int>& offset)
 {
     return
     {
@@ -58,13 +58,13 @@ Point<int> PositionToCell(const Point<int>& position, const Point<int>& offset)
 }
 
 
-bool CoordinatesValid(const Point<int>& position)
+bool coordinatesValid(const Point<int>& position)
 {
     return pointInRect(position, ValidMapCoordinates);
 }
 
 
-std::string NumberToDollarDecimal(int value)
+std::string numberToDollarDecimal(int value)
 {
     auto outString = std::to_string(value);
 
@@ -83,13 +83,13 @@ std::string NumberToDollarDecimal(int value)
 }
 
 
-const std::string& SpeedString(SimulationSpeed speed)
+const std::string& speedString(SimulationSpeed speed)
 {
     return speedStringTable[static_cast<int>(speed)];
 }
 
 
-void SimSpeed(SimulationSpeed speed)
+void simSpeed(SimulationSpeed speed)
 {
     if (speed == SimulationSpeed::Paused)
     {
@@ -102,32 +102,32 @@ void SimSpeed(SimulationSpeed speed)
 }
 
 
-SimulationSpeed SimSpeed()
+SimulationSpeed simSpeed()
 {
     return simulationSpeed;
 }
 
 
-void Pause()
+void pause()
 {
     previousSimulationSpeed = simulationSpeed;
-    SimSpeed(SimulationSpeed::Paused);
+    simSpeed(SimulationSpeed::Paused);
 }
 
 
-void Resume()
+void resume()
 {
-    SimSpeed(previousSimulationSpeed);
+    simSpeed(previousSimulationSpeed);
 }
 
 
-bool Paused()
+bool paused()
 {
     return simulationSpeed == SimulationSpeed::Paused;
 }
 
 
-void SetGameLevelFunds(int level, CityProperties& properties, Budget& budget)
+void setGameLevelFunds(int level, CityProperties& properties, Budget& budget)
 {
     switch (level)
     {
@@ -150,7 +150,7 @@ void SetGameLevelFunds(int level, CityProperties& properties, Budget& budget)
 }
 
 
-void SetYear(int year)
+void setYear(int year)
 {
     // Must prevent year from going negative, since it screws up the non-floored modulo arithmetic.
     if (year < StartingYear)
@@ -164,13 +164,13 @@ void SetYear(int year)
 }
 
 
-int CurrentYear()
+int currentYear()
 {
     return (CityTime / 48 + StartingYear);
 }
 
 
-void DoNewGame()
+void doNewGame()
 {
   //Eval("UINewGame");
 }
@@ -203,20 +203,20 @@ static std::random_device RandomDevice;
 static std::mt19937 PseudoRandomNumberGenerator(RandomDevice());
 
 
-int RandomRange(int min, int max)
+int randomRange(int min, int max)
 {
     std::uniform_int_distribution<std::mt19937::result_type> prngDistribution(min, max);
     return prngDistribution(PseudoRandomNumberGenerator);
 }
 
 
-int Random()
+int random()
 {
-    return RandomRange(0, std::mt19937::max());
+    return randomRange(0, std::mt19937::max());
 }
 
 
-int Rand16()
+int rand16()
 {
-    return RandomRange(0, 32767) * (RandomRange(0, 1) ? -1 : 1);
+    return randomRange(0, 32767) * (randomRange(0, 1) ? -1 : 1);
 }

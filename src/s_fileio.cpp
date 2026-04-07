@@ -128,7 +128,7 @@ bool loadFile(const std::string& filename, CityProperties& properties, Budget& b
 
     userSoundOn(MiscHistory[55]);
     budget.TaxRate(std::clamp(MiscHistory[56], 0, 20));
-    SimSpeed(static_cast<SimulationSpeed>(MiscHistory[57]));
+    simSpeed(static_cast<SimulationSpeed>(MiscHistory[57]));
 
     budget.PolicePercent(static_cast<float>(MiscHistory[58] / 100.0f));
     budget.FirePercent(static_cast<float>(MiscHistory[60] / 100.0f));
@@ -159,7 +159,7 @@ bool saveFile(const std::string& filename, const CityProperties&, const Budget& 
     MiscHistory[53] = autoBudget(); 
     MiscHistory[54] = autoGoto();
     MiscHistory[55] = userSoundOn();
-    MiscHistory[57] = static_cast<int>(SimSpeed());
+    MiscHistory[57] = static_cast<int>(simSpeed());
     MiscHistory[56] = budget.TaxRate();
 
     MiscHistory[58] = static_cast<int>(budget.PolicePercent() * 100.0f);
@@ -218,10 +218,10 @@ void LoadScenario(Scenario scenario, CityProperties& properties, Budget& budget)
 
     _load_file("scenarios/" + scenarioProperties.FileName);
 
-    SimSpeed(SimulationSpeed::Normal);
+    simSpeed(SimulationSpeed::Normal);
 
     initWillStuff();
-    UpdateFunds(budget);
+    updateFunds(budget);
     InitSimLoad = 1;
     DoInitialEval = 0;
     DoSimInit(properties, budget);

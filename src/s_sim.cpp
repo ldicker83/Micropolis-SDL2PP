@@ -66,11 +66,11 @@ void DoFire()
 
     for (int z = 0; z < 4; z++)
     {
-        if (!(Rand16() & 7))
+        if (!(rand16() & 7))
         {
             int Xtem = SimulationTarget.x + DX[z];
             int Ytem = SimulationTarget.y + DY[z];
-            if (CoordinatesValid({ Xtem, Ytem }))
+            if (coordinatesValid({ Xtem, Ytem }))
             {
                 int c = Map[Xtem][Ytem];
                 if (c & BurnableBit)
@@ -83,7 +83,7 @@ void DoFire()
                             makeExplosionAt({ (Xtem * 16) + 8, (Ytem * 16) + 8 });
                         }
                     }
-                    Map[Xtem][Ytem] = FireBase + RandomRange(0, 3) + AnimatedBit;
+                    Map[Xtem][Ytem] = FireBase + randomRange(0, 3) + AnimatedBit;
                 }
             }
         }
@@ -104,21 +104,21 @@ void DoFire()
             Rate = 1;
         }
     }
-    if (!RandomRange(0, Rate))
+    if (!randomRange(0, Rate))
     {
-        Map[SimulationTarget.x][SimulationTarget.y] = Rubble + RandomRange(0, 3) + BulldozableBit;
+        Map[SimulationTarget.x][SimulationTarget.y] = Rubble + randomRange(0, 3) + BulldozableBit;
     }
 }
 
 
 void DoAirport()
 {
-    if (!(RandomRange(0, 5)))
+    if (!(randomRange(0, 5)))
     {
         generateAirplane(SimulationTarget);
         return;
     }
-    if (!(RandomRange(0, 12)))
+    if (!(randomRange(0, 12)))
     {
         generateHelicopter(SimulationTarget);
     }
@@ -133,16 +133,16 @@ void DoMeltdown(const int x, const int y)
     {
         for (int col = (y - 1); col < (y + 3); ++col)
         {
-            Map[row][col] = FireBase + RandomRange(0, 3) | AnimatedBit;
+            Map[row][col] = FireBase + randomRange(0, 3) | AnimatedBit;
         }
     }
 
     for (int i = 0; i < 200; ++i)
     {
-        const int radiationX = x - 20 + RandomRange(0, 40);
-        const int radiationY = y - 15 + RandomRange(0, 30);
+        const int radiationX = x - 20 + randomRange(0, 40);
+        const int radiationY = y - 15 + randomRange(0, 30);
 
-        if (!CoordinatesValid({ radiationX, radiationY }))
+        if (!coordinatesValid({ radiationX, radiationY }))
         {
             continue;
         }
@@ -172,12 +172,12 @@ void DoRail(const Point<int>& position)
    
     if (RoadEffect < 30) // Deteriorating  Rail
     {
-        if (RandomRange(0, 511) == 0)
+        if (randomRange(0, 511) == 0)
         {
             const unsigned int tile = tileValue(position.x, position.y);
             if (!(tile & ConductiveBit))
             {
-                if (RoadEffect < RandomRange(0, 31))
+                if (RoadEffect < randomRange(0, 31))
                 {
                     if (maskedTileValue(tile) < (RailBase + 2))
                     {
@@ -185,7 +185,7 @@ void DoRail(const Point<int>& position)
                     }
                     else
                     {
-                        Map[position.x][position.y] = Rubble + RandomRange(0, 3) + BulldozableBit;
+                        Map[position.x][position.y] = Rubble + randomRange(0, 3) + BulldozableBit;
                     }
                     return;
                 }
@@ -197,7 +197,7 @@ void DoRail(const Point<int>& position)
 
 void DoRadTile()
 {
-    if (RandomRange(0, 4095) == 0) // Radioactive decay
+    if (randomRange(0, 4095) == 0) // Radioactive decay
     {
         Map[SimulationTarget.x][SimulationTarget.y] = Dirt;
     }
@@ -259,38 +259,38 @@ bool DoBridge()
   int z, x, y, MPtem;
 
   if (CurrentTileMasked == BRWV) { /*  Vertical bridge close */
-    if ((!(Rand16() & 3)) &&
+    if ((!(rand16() & 3)) &&
 	(GetBoatDis() > 340))
       for (z = 0; z < 7; z++) { /* Close  */
 	x = SimulationTarget.x + VDx[z];
 	y = SimulationTarget.y + VDy[z];
-	if (CoordinatesValid({ x, y }))
+	if (coordinatesValid({ x, y }))
 	  if ((Map[x][y] & LowerMask) == (VBRTAB[z] & LowerMask))
 	    Map[x][y] = VBRTAB2[z];
       }
     return true;
   }
   if (CurrentTileMasked == BRWH) { /*  Horizontal bridge close  */
-    if ((!(Rand16() & 3)) &&
+    if ((!(rand16() & 3)) &&
 	(GetBoatDis() > 340))
       for (z = 0; z < 7; z++) { /* Close  */
 	x = SimulationTarget.x + HDx[z];
 	y = SimulationTarget.y + HDy[z];
-	if (CoordinatesValid({ x, y }))
+	if (coordinatesValid({ x, y }))
 	  if ((Map[x][y] & LowerMask) == (HBRTAB[z] & LowerMask))
 	    Map[x][y] = HBRTAB2[z];
       }
     return true;
   }
 
-  if ((GetBoatDis() < 300) || (!(Rand16() & 7))) {
+  if ((GetBoatDis() < 300) || (!(rand16() & 7))) {
     if (CurrentTileMasked & 1) {
       if (SimulationTarget.x < (SimWidth - 1))
 	if (Map[SimulationTarget.x + 1][SimulationTarget.y] == RiverChannel) { /* Vertical open */
 	  for (z = 0; z < 7; z++) {
 	    x = SimulationTarget.x + VDx[z];
 	    y = SimulationTarget.y + VDy[z];
-	    if (CoordinatesValid({ x, y }))  {
+	    if (coordinatesValid({ x, y }))  {
 	      MPtem = Map[x][y];
 	      if ((MPtem == RiverChannel) ||
 		  ((MPtem & 15) == (VBRTAB2[z] & 15)))
@@ -306,7 +306,7 @@ bool DoBridge()
 	  for (z = 0; z < 7; z++) {
 	    x = SimulationTarget.x + HDx[z];
 	    y = SimulationTarget.y + HDy[z];
-	    if (CoordinatesValid({ x, y })) {
+	    if (coordinatesValid({ x, y })) {
 	      MPtem = Map[x][y];
 	      if (((MPtem & 15) == (HBRTAB2[z] & 15)) ||
 		  (MPtem == RiverChannel))
@@ -335,11 +335,11 @@ void DoRoad()
 
     if (RoadEffect < 30) // Deteriorating Roads
     {
-        if (!(Rand16() & 511))
+        if (!(rand16() & 511))
         {
             if (!(CurrentTile & ConductiveBit))
             {
-                if (RoadEffect < (Rand16() & 31))
+                if (RoadEffect < (rand16() & 31))
                 {
                     if (((CurrentTileMasked & 15) < 2) || ((CurrentTileMasked & 15) == 15))
                     {
@@ -347,7 +347,7 @@ void DoRoad()
                     }
                     else
                     {
-                        Map[SimulationTarget.x][SimulationTarget.y] = Rubble + (Rand16() & 3) + BulldozableBit;
+                        Map[SimulationTarget.x][SimulationTarget.y] = Rubble + (rand16() & 3) + BulldozableBit;
                     }
                     return;
                 }
@@ -416,7 +416,7 @@ void RepairZone(int ZCent, int zsize)
       int xx = SimulationTarget.x + x;
       int yy = SimulationTarget.y + y;
       cnt++;
-      if (CoordinatesValid({ xx, yy })) {
+      if (coordinatesValid({ xx, yy })) {
 	ThCh = Map[xx][yy];
 	if (ThCh & ZonedBit) continue;
 	if (ThCh & AnimatedBit) continue;
@@ -480,7 +480,7 @@ void DoSPZone(bool powered, const CityProperties& properties)
         return;
 
     case NuclearPower:
-        if (disastersEnabled() && !RandomRange(0, MltdwnTab[properties.GameLevel()]))
+        if (disastersEnabled() && !randomRange(0, MltdwnTab[properties.GameLevel()]))
         {
             DoMeltdown(SimulationTarget.x, SimulationTarget.y);
             return;
@@ -639,7 +639,7 @@ void MapScan(int x1, int x2, const CityProperties& properties)
                         if (CurrentTileMasked >= FireBase)
                         {
                             BurningTileCount++;
-                            if (!(Rand16() & 3)) // 1 in 4 times
+                            if (!(rand16() & 3)) // 1 in 4 times
                             {
                                 DoFire();
                             }
@@ -680,7 +680,7 @@ void MapScan(int x1, int x2, const CityProperties& properties)
                     }
                     if ((CurrentTileMasked >= ExplosionTinySome) && (CurrentTileMasked <= ExplosionTinyLast)) // clear AniRubble
                     {
-                        Map[x][y] = Rubble + (Rand16() & 3) + BulldozableBit;
+                        Map[x][y] = Rubble + (rand16() & 3) + BulldozableBit;
                     }
                 }
             }
@@ -1222,7 +1222,7 @@ namespace
 
 void Simulate(int mod16, CityProperties& properties, Budget& budget)
 {
-    int speed = static_cast<int>(SimSpeed()); // ew, find a better way to do this
+    int speed = static_cast<int>(simSpeed()); // ew, find a better way to do this
 
     switch (mod16)
     {
@@ -1345,7 +1345,7 @@ void Simulate(int mod16, CityProperties& properties, Budget& budget)
 
 void SimFrame(CityProperties& properties, Budget& budget)
 {
-    if (SimSpeed() == SimulationSpeed::Paused)
+    if (simSpeed() == SimulationSpeed::Paused)
     {
         return;
     }

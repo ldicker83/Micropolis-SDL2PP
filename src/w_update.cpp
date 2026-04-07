@@ -30,9 +30,9 @@
 
 namespace
 {
-    int lastCityTime{};
-    int lastCityYear{};
-    int lastCityMonth{};
+    int LastCityTime{};
+    int LastCityYear{};
+    int LastCityMonth{};
 
     bool NewMonth{ false };
 
@@ -60,45 +60,45 @@ bool newMonth()
 }
 
 
-const std::string& MonthString(Month month)
+const std::string& monthString(Month month)
 {
     return MonthTable[static_cast<int>(month)];
 }
 
 
-int LastCityTime()
+int lastCityTime()
 {
-    return lastCityTime;
+    return LastCityTime;
 }
 
 
-void LastCityTime(int tick)
+void lastCityTime(int tick)
 {
-    lastCityTime = tick;
+    LastCityTime = tick;
 }
 
 
-int LastCityMonth()
+int lastCityMonth()
 {
-    return lastCityMonth;
+    return LastCityMonth;
 }
 
 
-void LastCityMonth(int month)
+void lastCityMonth(int month)
 {
-    lastCityMonth = month;
+    LastCityMonth = month;
 }
 
 
-int LastCityYear()
+int lastCityYear()
 {
-    return lastCityYear;
+    return LastCityYear;
 }
 
 
-void LastCityYear(int year)
+void lastCityYear(int year)
 {
-    lastCityYear = year;
+    LastCityYear = year;
 }
 
 
@@ -106,14 +106,14 @@ void updateDate()
 {
     constexpr auto megaannum = 1000000; // wierd place for this
 
-    lastCityTime = CityTime / 4;
+    LastCityTime = CityTime / 4;
 
     int year = (CityTime / 48) + StartingYear;
     int month = (CityTime % 48) / 4;
 
     if (year >= megaannum)
     {
-        SetYear(StartingYear);
+        setYear(StartingYear);
         year = StartingYear;
         SendMes(NotificationId::BrownoutsReported);
     }
@@ -121,10 +121,10 @@ void updateDate()
     doMessage();
 
     NewMonth = false;
-    if ((LastCityYear() != year) || (LastCityMonth() != month))
+    if ((lastCityYear() != year) || (lastCityMonth() != month))
     {
-        lastCityYear = year;
-        lastCityMonth = month;
+        LastCityYear = year;
+        LastCityMonth = month;
 
         NewMonth = true;
 
@@ -150,7 +150,7 @@ void UpdateOptionsMenu(int options)
 }
 
 
-void UpdateFunds(Budget& budget)
+void updateFunds(Budget& budget)
 {
     budget.PreviousFunds(budget.CurrentFunds());
     budget.CurrentFunds(std::clamp(budget.CurrentFunds(), 0, std::numeric_limits<int>::max()));

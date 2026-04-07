@@ -261,7 +261,7 @@ void VoteProblems()
     int problemIndex{}, voteCount{}, count{};
     while ((voteCount < 100) && (count < 600))
     {
-        if (RandomRange(0, 300) < Problems[problemIndex].value)
+        if (randomRange(0, 300) < Problems[problemIndex].value)
         {
             ++Problems[problemIndex].votes;
             ++voteCount;
@@ -410,7 +410,7 @@ void DoVotes()
     CityNo = 0;
     for (int z{}; z < 100; z++)
     {
-        if (RandomRange(0, 1000) < CityScore)
+        if (randomRange(0, 1000) < CityScore)
         {
             CityYes++;
         }
@@ -482,12 +482,12 @@ void doScoreCard(const CityProperties& properties)
         },
         std::to_string(cityPopulation()),
         std::to_string(deltaCityPopulation()),
-        NumberToDollarDecimal(cityAssessedValue()),
+        numberToDollarDecimal(cityAssessedValue()),
         CityClassString[static_cast<int>(cityClass())],
         CityLevelString[properties.GameLevel()],
         std::to_string(cityYes()) + "%",
         std::to_string(cityNo()) + "%",
-        std::to_string(CurrentYear())
+        std::to_string(currentYear())
     };
 }
 

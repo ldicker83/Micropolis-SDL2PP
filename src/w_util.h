@@ -27,27 +27,27 @@ enum class SimulationSpeed
 	AfricanSwallow
 };
 
-const std::string& SpeedString(SimulationSpeed speed);
+const std::string& speedString(SimulationSpeed speed);
 
-void DoNewGame();
-std::string NumberToDollarDecimal(int value);
+void doNewGame();
+std::string numberToDollarDecimal(int value);
 
-void SimSpeed(SimulationSpeed speed);
-SimulationSpeed SimSpeed();
+void simSpeed(SimulationSpeed speed);
+SimulationSpeed simSpeed();
 
-void Pause();
-void Resume();
+void pause();
+void resume();
 
-bool Paused();
+bool paused();
 
-int CurrentYear();
-void SetYear(int year);
-void SetGameLevelFunds(int level, CityProperties& properties, Budget&);
-bool CoordinatesValid(const Point<int>& position);
-Point<int> PositionToCell(const Point<int>& position, const Point<int>& offset);
+int currentYear();
+void setYear(int year);
+void setGameLevelFunds(int level, CityProperties& properties, Budget&);
+bool coordinatesValid(const Point<int>& position);
+Point<int> positionToCell(const Point<int>& position, const Point<int>& offset);
 const Vector<int> vectorFromPoints(const Point<int>& start, const Point<int>& end);
 bool pointInRect(const Point<int>& point, const SDL_Rect& rect);
 
-int RandomRange(int min, int max);
-int Random();
-int Rand16();
+int randomRange(int min, int max);
+int random();
+int rand16();

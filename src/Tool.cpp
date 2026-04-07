@@ -139,7 +139,7 @@ ToolResult putDownPark(int mapH, int mapV, Budget& budget)
 
     if (budget.CanAfford(Tools.at(Tool::Park).cost))
     {
-        int value = RandomRange(0, 4);
+        int value = randomRange(0, 4);
 
         if (value == 4)
         {
@@ -153,7 +153,7 @@ ToolResult putDownPark(int mapH, int mapV, Budget& budget)
         if (Map[mapH][mapV] == 0)
         {
             budget.Spend(Tools.at(Tool::Park).cost);
-            UpdateFunds(budget);
+            updateFunds(budget);
             Map[mapH][mapV] = tile;
             return ToolResult::Success;
         }
@@ -356,7 +356,7 @@ int checkSize(int temp)
 
 void doConnectTile(const int x, const int y, const int w, const int h, Budget& budget)
 {
-    if (CoordinatesValid({ x, y }))
+    if (coordinatesValid({ x, y }))
     {
         ConnectTile(x, y, Tool::None, budget);
     }
@@ -461,7 +461,7 @@ ToolResult checkArea(const int mapH, const int mapV, const int base, const int s
     }
 
     budget.Spend(totalCost);
-    UpdateFunds(budget);
+    updateFunds(budget);
 
     int tileBase = base;
     mapY = mapV - 1;
@@ -633,12 +633,12 @@ void putRubble(const int mapX, const int mapY, const int size)
     {
         for (int y = mapY - 1; y < mapY + size - 1; y++)
         {
-            if (CoordinatesValid({ x, y }))
+            if (coordinatesValid({ x, y }))
             {
                 int cellValue = maskedTileValue(x, y);
                 if ((cellValue != RadiationTile) && (cellValue != 0))
                 {
-                    Map[x][y] = (animationEnabled() ? (ExplosionTiny + RandomRange(0, 2)) : ExplosionTinySome) | AnimatedBit | BulldozableBit;
+                    Map[x][y] = (animationEnabled() ? (ExplosionTiny + randomRange(0, 2)) : ExplosionTinySome) | AnimatedBit | BulldozableBit;
                 }
             }
         }
@@ -652,7 +652,7 @@ void putRubble(const int mapX, const int mapY, const int size)
 
 ToolResult query_tool(int x, int y, Budget&)
 {
-    if (!CoordinatesValid({ x, y }))
+    if (!coordinatesValid({ x, y }))
     {
         return ToolResult::OutOfBounds;
     }
@@ -667,7 +667,7 @@ ToolResult bulldozer_tool(int x, int y, Budget& budget)
     unsigned int currTile, temp;
     int zoneSize, deltaH, deltaV;
 
-    if (!CoordinatesValid({ x, y }))
+    if (!coordinatesValid({ x, y }))
     {
         return ToolResult::OutOfBounds;
     }
@@ -751,53 +751,53 @@ ToolResult bulldozer_tool(int x, int y, Budget& budget)
             result = ConnectTile(x, y, Tool::Bulldoze, budget);
         }
     }
-    UpdateFunds(budget);
+    updateFunds(budget);
     return result;
 }
 
 
 ToolResult road_tool(int x, int y, Budget& budget)
 {
-    if (!CoordinatesValid({ x, y }))
+    if (!coordinatesValid({ x, y }))
     {
         return ToolResult::OutOfBounds;
     }
 
     ToolResult result = ConnectTile(x, y, Tool::Road, budget);
-    UpdateFunds(budget);
+    updateFunds(budget);
     return result;
 }
 
 
 ToolResult rail_tool(int x, int y, Budget& budget)
 {
-    if (!CoordinatesValid({ x, y }))
+    if (!coordinatesValid({ x, y }))
     {
         return ToolResult::OutOfBounds;
     }
 
     ToolResult result = ConnectTile(x, y, Tool::Rail, budget);
-    UpdateFunds(budget);
+    updateFunds(budget);
     return result;
 }
 
 
 ToolResult wire_tool(int x, int y, Budget& budget)
 {
-    if (!CoordinatesValid({ x, y }))
+    if (!coordinatesValid({ x, y }))
     {
         return ToolResult::OutOfBounds;
     }
 
     ToolResult result = ConnectTile(x, y, Tool::Wire, budget);
-    UpdateFunds(budget);
+    updateFunds(budget);
     return result;
 }
 
 
 ToolResult park_tool(int x, int y, Budget& budget)
 {
-    if (!CoordinatesValid({ x, y }))
+    if (!coordinatesValid({ x, y }))
     {
         return ToolResult::OutOfBounds;
     }
@@ -808,7 +808,7 @@ ToolResult park_tool(int x, int y, Budget& budget)
 
 ToolResult residential_tool(int x, int y, Budget& budget)
 {
-    if (!CoordinatesValid({ x, y }))
+    if (!coordinatesValid({ x, y }))
     {
         return ToolResult::OutOfBounds;
     }
@@ -819,7 +819,7 @@ ToolResult residential_tool(int x, int y, Budget& budget)
 
 ToolResult commercial_tool(int x, int y, Budget& budget)
 {
-    if (!CoordinatesValid({ x, y }))
+    if (!coordinatesValid({ x, y }))
     {
         return ToolResult::OutOfBounds;
     }
@@ -830,7 +830,7 @@ ToolResult commercial_tool(int x, int y, Budget& budget)
 
 ToolResult industrial_tool(int x, int y, Budget& budget)
 {
-    if (!CoordinatesValid({ x, y }))
+    if (!coordinatesValid({ x, y }))
     {
         return ToolResult::OutOfBounds;
     }
@@ -841,7 +841,7 @@ ToolResult industrial_tool(int x, int y, Budget& budget)
 
 ToolResult police_dept_tool(int x, int y, Budget& budget)
 {
-    if (!CoordinatesValid({ x, y }))
+    if (!coordinatesValid({ x, y }))
     {
         return ToolResult::OutOfBounds;
     }
@@ -852,7 +852,7 @@ ToolResult police_dept_tool(int x, int y, Budget& budget)
 
 ToolResult fire_dept_tool(int x, int y, Budget& budget)
 {
-    if (!CoordinatesValid({ x, y }))
+    if (!coordinatesValid({ x, y }))
     {
         return ToolResult::OutOfBounds;
     }
@@ -863,7 +863,7 @@ ToolResult fire_dept_tool(int x, int y, Budget& budget)
 
 ToolResult stadium_tool(int x, int y, Budget& budget)
 {
-    if (!CoordinatesValid({ x, y }))
+    if (!coordinatesValid({ x, y }))
     {
         return ToolResult::OutOfBounds;
     }
@@ -874,7 +874,7 @@ ToolResult stadium_tool(int x, int y, Budget& budget)
 
 ToolResult coal_power_plant_tool(int x, int y, Budget& budget)
 {
-    if (!CoordinatesValid({ x, y }))
+    if (!coordinatesValid({ x, y }))
     {
         return ToolResult::OutOfBounds;
     }
@@ -885,7 +885,7 @@ ToolResult coal_power_plant_tool(int x, int y, Budget& budget)
 
 ToolResult nuclear_power_plant_tool(int x, int y, Budget& budget)
 {
-    if (!CoordinatesValid({ x, y }))
+    if (!coordinatesValid({ x, y }))
     {
         return ToolResult::OutOfBounds;
     }
@@ -896,7 +896,7 @@ ToolResult nuclear_power_plant_tool(int x, int y, Budget& budget)
 
 ToolResult seaport_tool(int x, int y, Budget& budget)
 {
-    if (!CoordinatesValid({ x, y }))
+    if (!coordinatesValid({ x, y }))
     {
         return ToolResult::OutOfBounds;
     }
@@ -907,7 +907,7 @@ ToolResult seaport_tool(int x, int y, Budget& budget)
 
 ToolResult airport_tool(int x, int y, Budget& budget)
 {
-    if (!CoordinatesValid({ x, y }))
+    if (!coordinatesValid({ x, y }))
     {
         return ToolResult::OutOfBounds;
     }
@@ -918,7 +918,7 @@ ToolResult airport_tool(int x, int y, Budget& budget)
 
 ToolResult network_tool(int x, int y, Budget& budget)
 {
-    if (!CoordinatesValid({ x, y }))
+    if (!coordinatesValid({ x, y }))
     {
         return ToolResult::OutOfBounds;
     }

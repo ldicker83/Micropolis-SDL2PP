@@ -157,7 +157,7 @@ namespace
             sprite.size = { 32, 32 };
             sprite.offset = { 32, -16 };
             sprite.hot = { 40, -8 };
-            sprite.destination = { RandomRange(0, SimWidth - 1), RandomRange(0, SimHeight - 1) };
+            sprite.destination = { randomRange(0, SimWidth - 1), randomRange(0, SimHeight - 1) };
             sprite.origin = position + Vector<int>{ -30, 0 };
             sprite.frame = 5;
             sprite.count = 1500;
@@ -171,8 +171,8 @@ namespace
 
             sprite.destination =
             {
-                RandomRange(0, (SimWidth * 16) + 100) - 50,
-                RandomRange(0, (SimHeight * 16) + 100) - 50
+                randomRange(0, (SimWidth * 16) + 100) - 50,
+                randomRange(0, (SimHeight * 16) + 100) - 50
             };
 
             loadSpriteImages(SimSprite::Type::Airplane, 12, sprite.frames);
@@ -289,7 +289,7 @@ int getTile(const Point<int>& location)
 {
     const Point<int> coordinate{ location.skewInverseBy({ 16, 16 }) };
  
-    if (!CoordinatesValid(coordinate))
+    if (!coordinatesValid(coordinate))
     {
         return(-1);
     }
@@ -502,7 +502,7 @@ void startFire(const Point<int>& location)
 {
     const Point<int> mapCoords = { location.skewInverseBy({16, 16}) };
 
-    if (!CoordinatesValid(mapCoords))
+    if (!coordinatesValid(mapCoords))
     {
         return;
     }
@@ -520,7 +520,7 @@ void startFire(const Point<int>& location)
         return;
     }
 
-    Map[mapCoords.x][mapCoords.y] = FireBase + RandomRange(0, 3) + AnimatedBit;
+    Map[mapCoords.x][mapCoords.y] = FireBase + randomRange(0, 3) + AnimatedBit;
 }
 
 
@@ -528,7 +528,7 @@ void destroyTile(const Point<int>& location)
 {
     const Point<int> mapCoords = { location.skewInverseBy({16, 16}) };
 
-    if (!CoordinatesValid(mapCoords))
+    if (!coordinatesValid(mapCoords))
     {
         return;
     }
@@ -622,7 +622,7 @@ void updateTrain(SimSprite& sprite)
 
     sprite.position += MovementVector[sprite.dir];
 
-    int dir = RandomRange(0, 4);
+    int dir = randomRange(0, 4);
     for (int z = dir; z < (dir + 4); z++)
     {
         int checkDirection = z % 4;
@@ -734,7 +734,7 @@ void updateHelicopter(SimSprite& sprite)
         if ((location.x >= 0) && (location.x < (SimWidth >> 1)) && (location.y >= 0) && (location.y < (SimHeight >> 1)))
         {
             // Don changed from 160 to 170 to shut the #$%#$% thing up!
-            if ((TrafficDensityMap.value(location) > 170) && (RandomRange(0, 7) == 0))
+            if ((TrafficDensityMap.value(location) > 170) && (randomRange(0, 7) == 0))
             {
                 SendMesAt(NotificationId::HeavyTrafficReported, (location.x << 1) + 1, (location.y << 1) + 1);
                 MakeSound("city", "HeavyTraffic"); // chopper
@@ -785,8 +785,8 @@ void updateAirplane(SimSprite& sprite)
     {
         sprite.destination =
         {
-            RandomRange(0, (SimWidth * 16) + 100) - 50,
-            RandomRange(0, (SimHeight * 16) + 100) - 50
+            randomRange(0, (SimWidth * 16) + 100) - 50,
+            randomRange(0, (SimHeight * 16) + 100) - 50
         };
     }
 
@@ -836,10 +836,10 @@ void updateShip(SimSprite& sprite)
 
     if (!sprite.sound_count)
     {
-        if (RandomRange(0, 3) == 1)
+        if (randomRange(0, 3) == 1)
         {
             if ((ScenarioID == 2) && /* San Francisco */
-                (RandomRange(0, 10) < 5))
+                (randomRange(0, 10) < 5))
             {
                 MakeSound("city", "HonkHonk-Low -speed 80");
             }
@@ -865,7 +865,7 @@ void updateShip(SimSprite& sprite)
             return;
         }
 
-        tem = RandomRange(0, 7);
+        tem = randomRange(0, 7);
         for (pem = tem; pem < (tem + 8); pem++)
         {
             const int z = (pem & 7) + 1;
@@ -881,7 +881,7 @@ void updateShip(SimSprite& sprite)
                 ((sprite.position.y + sprite.hot.y) / 16) + CheckDirection[z].y
             };
             
-            if (CoordinatesValid(position))
+            if (coordinatesValid(position))
             {
                 t = maskedTileValue(position.x, position.y);
                 if ((t == RiverChannel) || (t == BRWH) || (t == BRWV) || tryOther(t, sprite.dir, z))
@@ -903,7 +903,7 @@ void updateShip(SimSprite& sprite)
         if (pem == (tem + 8))
         {
             sprite.dir = 10;
-            sprite.new_dir = RandomRange(0, 7) + 1;
+            sprite.new_dir = randomRange(0, 7) + 1;
         }
     }
     else
@@ -995,9 +995,9 @@ void updateMonster(SimSprite& sprite)
         c = getDirection(sprite.position.x, sprite.position.y, sprite.destination.x, sprite.destination.y);
         c = (c - 1) / 2;
 
-        if ((c != d) && (!RandomRange(0, 10)))
+        if ((c != d) && (!randomRange(0, 10)))
         {
-            if (Rand16() & 1)
+            if (rand16() & 1)
             {
                 z = ND1[d];
             }
@@ -1010,7 +1010,7 @@ void updateMonster(SimSprite& sprite)
             if (!sprite.sound_count)
             {
                 MakeSound("city", "Monster -speed [MonsterSpeed]");
-                sprite.sound_count = 50 + RandomRange(0, 100);
+                sprite.sound_count = 50 + randomRange(0, 100);
             }
         }
     }
@@ -1019,9 +1019,9 @@ void updateMonster(SimSprite& sprite)
         d = 4;
         c = sprite.frame;
         z = (c - 13) & 3;
-        if (!(Rand16() & 3))
+        if (!(rand16() & 3))
         {
-            if (Rand16() & 1)
+            if (rand16() & 1)
             {
                 z = nn1[z];
             }
@@ -1095,12 +1095,12 @@ void updateTornado(SimSprite& sprite)
         }
     }
 
-    const int newDirection = RandomRange(0, 5);
+    const int newDirection = randomRange(0, 5);
     sprite.position += Vector<int>{ CDx[newDirection], CDy[newDirection] };
 
     sprite.active = spritePositionValid(sprite);
 
-    if ((sprite.count != 0) && RandomRange(0, 500) == 0)
+    if ((sprite.count != 0) && randomRange(0, 500) == 0)
     {
         sprite.active = false;
     }
@@ -1140,7 +1140,7 @@ void updateExplosion(SimSprite& sprite)
 
 void updateSprites()
 {
-    if (Paused())
+    if (paused())
     {
         return;
     }
@@ -1191,7 +1191,7 @@ void generateTrain(const Point<int>& position)
     // What exactly does 'train groove' mean?
     constexpr Vector<int> TrainGroove{-39, 6};
 
-    if (PopulationTotal > 20 && getSprite(SimSprite::Type::Train) == nullptr && RandomRange(0, 25) == 0)
+    if (PopulationTotal > 20 && getSprite(SimSprite::Type::Train) == nullptr && randomRange(0, 25) == 0)
     {
         makeSprite(SimSprite::Type::Train, position.skewBy({ 16, 16 }) + TrainGroove);
     }
@@ -1206,7 +1206,7 @@ void makeShipAt(const Point<int>& position)
 
 void generateShip()
 {
-    switch (RandomRange(0, 3))
+    switch (randomRange(0, 3))
     {
     case 0:
         for (int x = 4; x < SimWidth - 2; x++)
@@ -1267,8 +1267,8 @@ bool findSpawnPosition()
 {
     for (int z = 0; z < 300; z++)
     {
-        const int x = RandomRange(0, SimWidth - 20) + 10;
-        const int y = RandomRange(0, SimHeight - 10) + 5;
+        const int x = randomRange(0, SimWidth - 20) + 10;
+        const int y = randomRange(0, SimHeight - 10) + 5;
         if ((Map[x][y] == River) || (Map[x][y] == River + BulldozableBit))
         {
             makeMonsterAt({ x, y });
@@ -1332,7 +1332,7 @@ void generateTornado()
         //return;
     }
 
-    const Point<int> location{ RandomRange(1, SimWidth - 2), RandomRange(1, SimHeight - 2) };
+    const Point<int> location{ randomRange(1, SimWidth - 2), randomRange(1, SimHeight - 2) };
 
     makeSprite(SimSprite::Type::Tornado, location.skewBy({ 16, 16 }));
     ClearMes();

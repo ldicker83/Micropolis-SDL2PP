@@ -33,18 +33,18 @@ enum class Month
 
 bool newMonth();
 
-void UpdateFunds(Budget&);
+void updateFunds(Budget&);
 void updateDate();
 
 extern const std::string dateStr[12];
 
-int LastCityTime();
-void LastCityTime(int time);
+int lastCityTime();
+void lastCityTime(int time);
 
-int LastCityMonth();
-void LastCityMonth(int month);
+int lastCityMonth();
+void lastCityMonth(int month);
 
-int LastCityYear();
-void LastCityYear(int year);
+int lastCityYear();
+void lastCityYear(int year);
 
-const std::string& MonthString(Month month);
+const std::string& monthString(Month month);

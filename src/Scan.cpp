@@ -168,7 +168,7 @@ namespace
                     pollutionTotal += pollutionValue;
 
                     /* find max pol for monster  */
-                    if ((pollutionValue > highestPollution) || ((pollutionValue == highestPollution) && (!(Rand16() & 3))))
+                    if ((pollutionValue > highestPollution) || ((pollutionValue == highestPollution) && (!(rand16() & 3))))
                     {
                         highestPollution = pollutionValue;
                         PollutionMax = { x * 2, y * 2 };
@@ -491,7 +491,7 @@ void crimeScan()
             CrimeMap.value({ x, y }) = landValue;
             totz += landValue;
 
-            if ((landValue > cmax) || ((landValue == cmax) && (!(Rand16() & 3))))
+            if ((landValue > cmax) || ((landValue == cmax) && (!(rand16() & 3))))
             {
                 cmax = landValue;
                 CrimeMax = { x * 2, y * 2 };

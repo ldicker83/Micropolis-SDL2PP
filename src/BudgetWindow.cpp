@@ -283,23 +283,23 @@ void BudgetWindow::draw()
 
 void BudgetWindow::update()
 {
-	TextPanelText[TextPanelId::CashFlow] = NumberToDollarDecimal(mBudget.CashFlow());
-	TextPanelText[TextPanelId::CurrentFunds] = NumberToDollarDecimal(mBudget.CurrentFunds());
+	TextPanelText[TextPanelId::CashFlow] = numberToDollarDecimal(mBudget.CashFlow());
+	TextPanelText[TextPanelId::CurrentFunds] = numberToDollarDecimal(mBudget.CurrentFunds());
 
-	TextPanelText[TextPanelId::PreviousFunds] = NumberToDollarDecimal(mBudget.PreviousFunds());
-	TextPanelText[TextPanelId::TaxesCollected] = NumberToDollarDecimal(mBudget.TaxIncome());
+	TextPanelText[TextPanelId::PreviousFunds] = numberToDollarDecimal(mBudget.PreviousFunds());
+	TextPanelText[TextPanelId::TaxesCollected] = numberToDollarDecimal(mBudget.TaxIncome());
 	TextPanelText[TextPanelId::TaxRate] = std::to_string(mBudget.TaxRate()) + "%";
 
-	TextPanelText[TextPanelId::FireAllocated] = NumberToDollarDecimal(mBudget.FireFundsGranted());
-	TextPanelText[TextPanelId::FireNeeded] = NumberToDollarDecimal(mBudget.FireFundsNeeded());
+	TextPanelText[TextPanelId::FireAllocated] = numberToDollarDecimal(mBudget.FireFundsGranted());
+	TextPanelText[TextPanelId::FireNeeded] = numberToDollarDecimal(mBudget.FireFundsNeeded());
 	TextPanelText[TextPanelId::FireRate] = std::to_string(static_cast<int>(mBudget.FirePercent() * 100.0f)) + "%";
 
-	TextPanelText[TextPanelId::PoliceAllocated] = NumberToDollarDecimal(mBudget.PoliceFundsGranted());
-	TextPanelText[TextPanelId::PoliceNeeded] = NumberToDollarDecimal(mBudget.PoliceFundsNeeded());
+	TextPanelText[TextPanelId::PoliceAllocated] = numberToDollarDecimal(mBudget.PoliceFundsGranted());
+	TextPanelText[TextPanelId::PoliceNeeded] = numberToDollarDecimal(mBudget.PoliceFundsNeeded());
 	TextPanelText[TextPanelId::PoliceRate] = std::to_string(static_cast<int>(mBudget.PolicePercent() * 100.0f)) + "%";
 
-	TextPanelText[TextPanelId::TransportAllocated] = NumberToDollarDecimal(mBudget.RoadFundsGranted());
-	TextPanelText[TextPanelId::TransportNeeded] = NumberToDollarDecimal(mBudget.RoadFundsNeeded());
+	TextPanelText[TextPanelId::TransportAllocated] = numberToDollarDecimal(mBudget.RoadFundsGranted());
+	TextPanelText[TextPanelId::TransportNeeded] = numberToDollarDecimal(mBudget.RoadFundsNeeded());
 	TextPanelText[TextPanelId::TransportRate] = std::to_string(static_cast<int>(mBudget.RoadPercent() * 100.0f)) + "%";
 
 	for (auto id : panels)

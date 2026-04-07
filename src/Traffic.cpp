@@ -77,7 +77,7 @@ namespace
         while (!CoordinatesStack.empty())
         {
             popCoordinates();
-            if (CoordinatesValid(SimulationTarget))
+            if (coordinatesValid(SimulationTarget))
             {
                 int tile = maskedTileValue(SimulationTarget);
                 if ((tile >= BridgeBase) && (tile < PowerBase))
@@ -87,7 +87,7 @@ namespace
                     tile = TrafficDensityMap.value(trafficDensityMapCoordinates);
                     tile += 50;
 
-                    if ((tile > ResidentialBase) && (RandomRange(0, 5) == 0))
+                    if ((tile > ResidentialBase) && (randomRange(0, 5) == 0))
                     {
                         tile = ResidentialBase;
 
@@ -107,13 +107,13 @@ namespace
     int adjacentTile(size_t i)
     {
         const Point<int> coordinates{ SimulationTarget + AdjacentVector[i] };
-        return CoordinatesValid(coordinates) ? maskedTileValue(coordinates) : 0;
+        return coordinatesValid(coordinates) ? maskedTileValue(coordinates) : 0;
     }
 
     bool tryGo(int distance)
     {
         size_t lastDirection = 5;
-        const int startDirection = RandomRange(0, 3);
+        const int startDirection = randomRange(0, 3);
 
         for (size_t count = startDirection; count < (startDirection + AdjacentVector.size()); count++)
         {
@@ -200,7 +200,7 @@ bool roadOnZonePerimeter()
     for (int i{}; i < ZonePerimeterOffset.size(); ++i)
     {
         const Point<int> coordinates = SimulationTarget + ZonePerimeterOffset[i];
-        if (CoordinatesValid(coordinates))
+        if (coordinatesValid(coordinates))
         {
             if (tileIsRoad(coordinates))
             {

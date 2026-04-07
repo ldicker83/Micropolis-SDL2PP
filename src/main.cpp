@@ -164,7 +164,7 @@ namespace
 
     unsigned int speedModifier()
     {
-        return SpeedModifierTable[static_cast<unsigned int>(SimSpeed())];
+        return SpeedModifierTable[static_cast<unsigned int>(simSpeed())];
     }
 
     unsigned int zonePowerBlinkTick(unsigned int interval, void*)
@@ -333,7 +333,7 @@ void simLoop(bool doSim)
     {
         AnimationStep = false;
 
-        if (!Paused())
+        if (!paused())
         {
             animateTiles();
             updateSprites();
@@ -366,15 +366,15 @@ void initWillStuff()
     FireEffect = 1000;
     cityScore(500);
     cityPopulation(-1);
-    LastCityTime(-1);
-    LastCityYear(1);
-    LastCityMonth(0);
+    lastCityTime(-1);
+    lastCityYear(1);
+    lastCityMonth(0);
     pendingTool(Tool::None);
     MessageId(NotificationId::None);
     destroyAllSprites();
     DisasterEvent = 0;
     initMapArrays();
-    DoNewGame();
+    doNewGame();
 }
 
 
@@ -391,7 +391,7 @@ void simInit()
     autoBudget(true);
     MessageId(NotificationId::None);
     ClearMes();
-    SimSpeed(SimulationSpeed::Normal);
+    simSpeed(SimulationSpeed::Normal);
     ChangeEval();
     MessageLocation({ 0, 0 });
     
@@ -403,16 +403,16 @@ void simInit()
     ClearMap();
     initWillStuff();
     budget.CurrentFunds(5000);
-    SetGameLevelFunds(0, cityProperties, budget);
-    SimSpeed(SimulationSpeed::Paused);
+    setGameLevelFunds(0, cityProperties, budget);
+    simSpeed(SimulationSpeed::Paused);
 }
 
 
 void doPlayNewCity(CityProperties& properties, Budget& budget)
 {
     GenerateNewCity(properties, budget);
-    Resume();
-    SimSpeed(SimulationSpeed::Normal);
+    resume();
+    simSpeed(SimulationSpeed::Normal);
 }
 
 
@@ -609,7 +609,7 @@ void windowResized(const Vector<int>& size)
 
 void calculateMouseToWorld()
 {
-    const auto screenCell = PositionToCell(EventHandling::MousePosition, MapViewOffset);
+    const auto screenCell = positionToCell(EventHandling::MousePosition, MapViewOffset);
     
     TilePointedAt =
     {
@@ -663,18 +663,18 @@ void ShowWindowAndBringToFront(WindowBase& window)
 
 void SetSpeed(SimulationSpeed speed)
 {
-    if (Paused())
+    if (paused())
     {
-        Resume();
+        resume();
     }
 
-    SimSpeed(speed);
+    simSpeed(speed);
 }
 
 
 void TogglePause()
 {
-    Paused() ? Resume() : Pause();
+    paused() ? resume() : pause();
 }
 
 
@@ -1031,8 +1031,8 @@ void drawTopUi()
     SDL_RenderCopy(MainWindowRenderer, RCI_Indicator.texture, nullptr, &RciDestination);
     drawValve();
 
-    stringRenderer->drawString(*MainBigFont, MonthString(static_cast<Month>(LastCityMonth())), {UiHeaderRect.x + 5, UiHeaderRect.y + 5});
-    stringRenderer->drawString(*MainBigFont, std::to_string(CurrentYear()), { UiHeaderRect.x + 35, UiHeaderRect.y + 5});
+    stringRenderer->drawString(*MainBigFont, monthString(static_cast<Month>(lastCityMonth())), {UiHeaderRect.x + 5, UiHeaderRect.y + 5});
+    stringRenderer->drawString(*MainBigFont, std::to_string(currentYear()), { UiHeaderRect.x + 35, UiHeaderRect.y + 5});
 
     stringRenderer->drawString(*MainBigFont, LastMessage(), {100, UiHeaderRect.y + 5});
 
@@ -1229,7 +1229,7 @@ void GameLoop()
         SDL_RenderClear(MainWindowRenderer);
         SDL_RenderCopy(MainWindowRenderer, MainMapTexture.texture, &FullMapViewRect, nullptr);
 
-        currentBudget = NumberToDollarDecimal(budget.CurrentFunds());
+        currentBudget = numberToDollarDecimal(budget.CurrentFunds());
 
         pendingTool(toolPalette->tool());
         drawSprites();

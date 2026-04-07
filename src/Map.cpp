@@ -100,7 +100,7 @@ bool tileIsZoned(const unsigned int tile)
 
 bool tileIsRoad(const Point<int> coordinates)
 {
-	if (!CoordinatesValid(coordinates))
+	if (!coordinatesValid(coordinates))
 	{
 		return false;
 	}
