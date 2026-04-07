@@ -226,7 +226,7 @@ void setSmoke(bool ZonePower)
             }
             else
             {
-                if ((maskedTileValue(location)) > AniTabC[z])
+                if ((maskedTileValue(location)) > static_cast<unsigned int>(AniTabC[z]))
                 {
                     tileValue(location) = REGBIT | AniTabC[z];
                     //tileValue(location) = REGBIT | AniTabD[z];
