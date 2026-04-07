@@ -83,8 +83,8 @@ ToolResult _LayDoze(int x, int y, Budget& budget)
     case VBRDG1:
     case VBRDG2:
     case VBRDG3:
-    case HPOWER:
-    case VPOWER:
+    case PowerHorizontalWater:
+    case PowerVerticalWater:
     case RailWaterHorizontal:
     case RailWaterVertical: // Dozing over water, replace with water.
         tileValue(x, y) = River;
@@ -113,7 +113,7 @@ ToolResult _LayRoad(int x, int y, Budget& budget)
     switch(maskedTileValue(x, y))
     {
     case Dirt:
-        tileValue(x, y) = ROADS | BulldozableBit | BurnableBit;
+        tileValue(x, y) = RoadHorizontal | BulldozableBit | BurnableBit;
         break;
 
     case River: // Road on Water
@@ -129,7 +129,7 @@ ToolResult _LayRoad(int x, int y, Budget& budget)
         if (x < (SimWidth - 1))
         {
             const int adjTile = NeutralizeRoad(tileValue(x + 1, y));
-            if ((adjTile == RailVerticalRoadHorizontal) || (adjTile == BridgeHorizontal) || ((adjTile >= ROADS) && (adjTile <= RoadPowerHorizontal)))
+            if ((adjTile == RailVerticalRoadHorizontal) || (adjTile == BridgeHorizontal) || ((adjTile >= RoadHorizontal) && (adjTile <= RoadPowerHorizontal)))
             {
                 tileValue(x, y) = BridgeHorizontal | BulldozableBit;
                 break;
@@ -139,7 +139,7 @@ ToolResult _LayRoad(int x, int y, Budget& budget)
         if (x > 0)
         {
             const int adjTile = NeutralizeRoad(tileValue(x - 1, y));
-            if ((adjTile == RailVerticalRoadHorizontal) || (adjTile == BridgeHorizontal) || ((adjTile >= ROADS) && (adjTile <= RoadIntersection)))
+            if ((adjTile == RailVerticalRoadHorizontal) || (adjTile == BridgeHorizontal) || ((adjTile >= RoadHorizontal) && (adjTile <= RoadIntersection)))
             {
                 tileValue(x, y) = BridgeHorizontal | BulldozableBit;
                 break;
@@ -169,11 +169,11 @@ ToolResult _LayRoad(int x, int y, Budget& budget)
         // Can't do road...
         return ToolResult::InvalidOperation;
 
-    case LHPOWER: // Road on power
+    case PowerHorizontal: // Road on power
         tileValue(x, y) = RoadPowerVertical | ConductiveBit | BurnableBit | BulldozableBit;
         break;
 
-    case LVPOWER: // Road on power #2
+    case PowerVertical: // Road on power #2
         tileValue(x, y) = RoadPowerHorizontal | ConductiveBit | BurnableBit | BulldozableBit;
         break;
 
@@ -261,19 +261,19 @@ ToolResult _LayRail(int x, int y, Budget& budget)
         // Can't do rail...
         return ToolResult::InvalidOperation;
 
-    case LHPOWER: // Rail on power
+    case PowerHorizontal: // Rail on power
         tileValue(x, y) = RailVerticalPowerHorizontal | ConductiveBit | BurnableBit | BulldozableBit;
         break;
 
-    case LVPOWER: // Rail on power #2 
+    case PowerVertical: // Rail on power #2 
         tileValue(x, y) = RailHorizontalPowerVertical | ConductiveBit | BurnableBit | BulldozableBit;
         break;
 
-    case ROADS: // Rail on road
+    case RoadHorizontal: // Rail on road
         tileValue(x, y) = RailVerticalRoadHorizontal | BurnableBit | BulldozableBit;
         break;
 
-    case ROADSV: // Rail on road #2
+    case RoadVertical: // Rail on road #2
         tileValue(x, y) = RailHorizontalRoadVertical | BurnableBit | BulldozableBit;
         break;
 
@@ -298,7 +298,7 @@ ToolResult _LayWire(int x, int y, Budget& budget)
     switch (NeutralizeRoad(maskedTileValue(x, y)))
     {
     case Dirt: // Wire on Dirt
-        tileValue(x, y) = LHPOWER | ConductiveBit | BurnableBit | BulldozableBit;
+        tileValue(x, y) = PowerHorizontal | ConductiveBit | BurnableBit | BulldozableBit;
         break;
 
     case River: // Wire on Water
@@ -319,7 +319,7 @@ ToolResult _LayWire(int x, int y, Budget& budget)
                 adjTile = NeutralizeRoad(adjTile);
                 if ((adjTile != 77) && (adjTile != 221) && (adjTile != 208))
                 {
-                    tileValue(x, y) = VPOWER | ConductiveBit | BulldozableBit;
+                    tileValue(x, y) = PowerVerticalWater | ConductiveBit | BulldozableBit;
                     break;
                 }
             }
@@ -333,7 +333,7 @@ ToolResult _LayWire(int x, int y, Budget& budget)
                 adjTile = NeutralizeRoad(adjTile);
                 if ((adjTile != 77) && (adjTile != 221) && (adjTile != 208))
                 {
-                    tileValue(x, y) = VPOWER | ConductiveBit | BulldozableBit;
+                    tileValue(x, y) = PowerVerticalWater | ConductiveBit | BulldozableBit;
                     break;
                 }
             }
@@ -347,7 +347,7 @@ ToolResult _LayWire(int x, int y, Budget& budget)
                 adjTile = NeutralizeRoad(adjTile);
                 if ((adjTile != 78) && (adjTile != 222) && (adjTile != 209))
                 {
-                    tileValue(x, y) = HPOWER | ConductiveBit | BulldozableBit;
+                    tileValue(x, y) = PowerHorizontalWater | ConductiveBit | BulldozableBit;
                     break;
                 }
             }
@@ -361,7 +361,7 @@ ToolResult _LayWire(int x, int y, Budget& budget)
                 adjTile = NeutralizeRoad(adjTile);
                 if ((adjTile != 78) && (adjTile != 222) && (adjTile != 209))
                 {
-                    tileValue(x, y) = HPOWER | ConductiveBit | BulldozableBit;
+                    tileValue(x, y) = PowerHorizontalWater | ConductiveBit | BulldozableBit;
                     break;
                 }
             }
@@ -370,11 +370,11 @@ ToolResult _LayWire(int x, int y, Budget& budget)
         // Can't do wire...
         return ToolResult::InvalidOperation;
 
-    case ROADS: // Wire on Road
+    case RoadHorizontal: // Wire on Road
         tileValue(x, y) = RoadPowerHorizontal | ConductiveBit | BurnableBit | BulldozableBit;
         break;
 
-    case ROADSV: // Wire on Road #2
+    case RoadVertical: // Wire on Road #2
         tileValue(x, y) = RoadPowerVertical | ConductiveBit | BurnableBit | BulldozableBit;
         break;
 
@@ -604,10 +604,10 @@ ToolResult CanConnectTile(int x, int y, Tool tool, Budget& budget)
     case RiverChannel: // Check how to build bridges, if possible.
         return ToolResult::InvalidOperation;
 
-    case ROADS:
-    case ROADSV:
-    case LHPOWER:
-    case LVPOWER:
+    case RoadHorizontal:
+    case RoadVertical:
+    case PowerHorizontal:
+    case PowerVertical:
     case RailHorizontal:
     case RailVertical:
         break;
