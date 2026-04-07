@@ -41,6 +41,7 @@
     <ClCompile Include="src\Tool.cpp" />
     <ClCompile Include="src\ToolPalette.cpp" />
     <ClCompile Include="src\Traffic.cpp" />
+    <ClCompile Include="src\Util.cpp" />
     <ClCompile Include="src\WindowBase.cpp" />
     <ClCompile Include="src\WindowGroup.cpp" />
     <ClCompile Include="src\WindowStack.cpp" />
@@ -48,7 +49,6 @@
     <ClCompile Include="src\w_sound.cpp" />
     <ClCompile Include="src\w_tk.cpp" />
     <ClCompile Include="src\w_update.cpp" />
-    <ClCompile Include="src\w_util.cpp" />
     <ClCompile Include="src\Zone.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -90,6 +90,7 @@
     <ClInclude Include="src\Tool.h" />
     <ClInclude Include="src\ToolPalette.h" />
     <ClInclude Include="src\Traffic.h" />
+    <ClInclude Include="src\Util.h" />
     <ClInclude Include="src\Vector.h" />
     <ClInclude Include="src\VectorSizeRange.h" />
     <ClInclude Include="src\animtab.h" />
@@ -102,7 +103,6 @@
     <ClInclude Include="src\w_sound.h" />
     <ClInclude Include="src\w_tk.h" />
     <ClInclude Include="src\w_update.h" />
-    <ClInclude Include="src\w_util.h" />
     <ClInclude Include="src\Zone.h" />
   </ItemGroup>
   <ItemGroup>

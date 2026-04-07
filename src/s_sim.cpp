@@ -24,7 +24,7 @@
 #include "s_disast.h"
 #include "s_msg.h"
 
-#include "w_util.h"
+#include "Util.h"
 
 #include "Scan.h"
 #include "Sprite.h"

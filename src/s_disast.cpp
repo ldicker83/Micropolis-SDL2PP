@@ -19,7 +19,7 @@
 #include "Scan.h"
 #include "Sprite.h"
 
-#include "w_util.h"
+#include "Util.h"
 
 #include <algorithm>
 

@@ -14,7 +14,7 @@
 #include "Sprite.h"
 
 #include "s_alloc.h"
-#include "w_util.h"
+#include "Util.h"
 
 #include <algorithm>
 #include <array>

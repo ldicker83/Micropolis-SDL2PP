@@ -21,7 +21,7 @@
 #include "w_sound.h"
 #include "w_tk.h"
 #include "w_update.h"
-#include "w_util.h"
+#include "Util.h"
 
 #include <algorithm>
 #include <fstream>

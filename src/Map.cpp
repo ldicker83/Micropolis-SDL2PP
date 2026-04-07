@@ -17,7 +17,7 @@
 #include "Texture.h"
 #include "Sprite.h"
 
-#include "w_util.h"
+#include "Util.h"
 
 #include <array>
 #include <SDL2/SDL.h>
