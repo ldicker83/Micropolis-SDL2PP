@@ -182,12 +182,6 @@ void DoGeneratedCityImage(char *name, int time, int pop, char* _class, int score
 }
 
 
-void DoStartElmd()
-{
-  /* XXX: TODO: start elm daemon */
-}
-
-
 void DoPopUpMessage(char *msg)
 {
   /*
