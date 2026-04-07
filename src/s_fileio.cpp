@@ -101,7 +101,7 @@ namespace
 
             for (size_t i = 0; i < SimHeight; ++i)
             {
-                Map[row][i] = mapRow[i];
+                tileValue(static_cast<int>(row), static_cast<int>(i)) = mapRow[i];
             }
         }
            
@@ -173,7 +173,9 @@ bool saveFile(const std::string& filename, const CityProperties&, const Budget& 
     outfile.write(reinterpret_cast<char*>(PollutionHistory.data()), sizeof(GraphHistory));
     outfile.write(reinterpret_cast<char*>(MoneyHis.data()), sizeof(GraphHistory));
     outfile.write(reinterpret_cast<char*>(MiscHistory.data()), sizeof(GraphHistory));
-    outfile.write(reinterpret_cast<char*>(Map.data()), sizeof(Map));
+
+    const auto mapData = getMapData();
+    outfile.write(mapData.data, mapData.size);
 
     outfile.close();
     return true;

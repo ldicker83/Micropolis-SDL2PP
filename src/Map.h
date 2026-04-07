@@ -160,7 +160,16 @@ constexpr auto VBRDG3 = 951;
 constexpr auto TILE_COUNT = 960;
 
 
-extern std::array<std::array<int, SimHeight>, SimWidth> Map; // Main Map 120 x 100
+/**
+ * Struct used for file i/o
+ */
+struct MapData
+{
+	const char* data;
+	const unsigned int size;
+};
+
+MapData getMapData();
 
 void DrawBigMapSegment(const Point<int>& begin, const Point<int>& end);
 void DrawBigMap();
@@ -176,6 +185,7 @@ bool tilePowered(const unsigned int tile);
 bool tileIsZoned(const unsigned int tile);
 
 bool tileIsRoad(const Point<int> coordinates);
+bool tileCanBeBulldozed(const Point<int> coordinates);
 
 bool blink();
 void ResetMap();

@@ -121,11 +121,26 @@ bool tileIsRoad(const Point<int> coordinates)
 }
 
 
+bool tileCanBeBulldozed(const Point<int> coordinates)
+{
+	return tileValue(coordinates) & BulldozableBit;
+}
+
+
 bool blink()
 {
 	return flagBlink;
 }
 
+
+MapData getMapData()
+{
+	return MapData
+	{
+		reinterpret_cast<const char*>(Map.data()),
+		sizeof(Map)
+	};
+}
 
 /**
  * Assumes \c begin and \c end are in a valid range

@@ -150,11 +150,11 @@ ToolResult putDownPark(int mapH, int mapV, Budget& budget)
             tile = (value + Woods2) | BurnableBit | BulldozableBit;
         }
 
-        if (Map[mapH][mapV] == 0)
+        if (tileValue(mapH, mapV) == 0)
         {
             budget.Spend(Tools.at(Tool::Park).cost);
             updateFunds(budget);
-            Map[mapH][mapV] = tile;
+            tileValue(mapH, mapV) = tile;
             return ToolResult::Success;
         }
 
@@ -168,11 +168,11 @@ ToolResult putDownPark(int mapH, int mapV, Budget& budget)
 // Radar?
 ToolResult putDownNetwork(int mapH, int mapV, Budget& budget)
 {
-    int tile = Map[mapH][mapV] & LowerMask;
+    int tile = tileValue(mapH, mapV) & LowerMask;
 
     if ((budget.CurrentFunds() > 0) && tally(tile))
     {
-        Map[mapH][mapV] = tile = 0;
+        tileValue(mapH, mapV) = tile = 0;
         budget.Spend(1);
     }
 
@@ -183,7 +183,7 @@ ToolResult putDownNetwork(int mapH, int mapV, Budget& budget)
 
     if (budget.CanAfford(Tools.at(Tool::Network).cost))
     {
-        Map[mapH][mapV] = TELEBASE | ConductiveBit | BurnableBit | BurnableBit | AnimatedBit;
+        tileValue(mapH, mapV) = TELEBASE | ConductiveBit | BurnableBit | BurnableBit | AnimatedBit;
         budget.Spend(Tools.at(Tool::Network).cost);
         return ToolResult::Success;
     }
@@ -473,16 +473,16 @@ ToolResult checkArea(const int mapH, const int mapV, const int base, const int s
         {
             if (col == 1 && row == 1)
             {
-                Map[mapX][mapY] = tileBase + BNCNBIT + ZonedBit;
+                tileValue(mapX, mapY) = tileBase + BNCNBIT + ZonedBit;
             }
             // special case to get nuclear plant animation working
             else if (animate && col == 1 && row == 2)
             {
-                Map[mapX][mapY] = tileBase + BNCNBIT + AnimatedBit;
+                tileValue(mapX, mapY) = tileBase + BNCNBIT + AnimatedBit;
             }
             else
             {
-                Map[mapX][mapY] = tileBase + BNCNBIT;
+                tileValue(mapX, mapY) = tileBase + BNCNBIT;
             }
             ++mapX;
             ++tileBase;
@@ -638,7 +638,7 @@ void putRubble(const int mapX, const int mapY, const int size)
                 int cellValue = maskedTileValue(x, y);
                 if ((cellValue != RadiationTile) && (cellValue != 0))
                 {
-                    Map[x][y] = (animationEnabled() ? (ExplosionTiny + randomRange(0, 2)) : ExplosionTinySome) | AnimatedBit | BulldozableBit;
+                    tileValue(x, y) = (animationEnabled() ? (ExplosionTiny + randomRange(0, 2)) : ExplosionTinySome) | AnimatedBit | BulldozableBit;
                 }
             }
         }
@@ -672,7 +672,7 @@ ToolResult bulldozer_tool(int x, int y, Budget& budget)
         return ToolResult::OutOfBounds;
     }
 
-    currTile = Map[x][y];
+    currTile = tileValue(x, y);
     temp = currTile & LowerMask;
 
     ToolResult result = ToolResult::Success;
@@ -736,7 +736,7 @@ ToolResult bulldozer_tool(int x, int y, Budget& budget)
             if (budget.CanAfford(5)) /// \fixme Magic Number
             {
                 result = ConnectTile(x, y, Tool::Bulldoze, budget);
-                if (temp != (Map[x][y] & LowerMask))
+                if (temp != (tileValue(x, y) & LowerMask))
                 {
                     budget.Spend(5);
                 }

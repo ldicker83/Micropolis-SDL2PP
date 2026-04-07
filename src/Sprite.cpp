@@ -489,9 +489,9 @@ void oFireZone(int Xloc, int Yloc, int ch)
         {
             const int Xtem = Xloc + x;
             const int Ytem = Yloc + y;
-            if ((Map[Xtem][Ytem] & LowerMask) >= BridgeBase)
+            if (maskedTileValue(Xtem, Ytem) >= BridgeBase)
             {
-                Map[Xtem][Ytem] |= BulldozableBit;
+                tileValue(Xtem, Ytem) |= BulldozableBit;
             }
         }
     }
@@ -520,7 +520,7 @@ void startFire(const Point<int>& location)
         return;
     }
 
-    Map[mapCoords.x][mapCoords.y] = FireBase + randomRange(0, 3) + AnimatedBit;
+    tileValue(mapCoords.x, mapCoords.y) = FireBase + randomRange(0, 3) + AnimatedBit;
 }
 
 
@@ -543,7 +543,7 @@ void destroyTile(const Point<int>& location)
         {
             if ((tile >= BridgeBase) && (tile <= RoadLast))
             {
-                Map[mapCoords.x][mapCoords.y] = River;
+                tileValue(mapCoords.x, mapCoords.y) = River;
                 return;
             }
         }
@@ -557,11 +557,11 @@ void destroyTile(const Point<int>& location)
         }
         if (tileIsWet(tile))
         {
-            Map[mapCoords.x][mapCoords.y] = River;
+            tileValue(mapCoords.x, mapCoords.y) = River;
         }
         else
         {
-            Map[mapCoords.x][mapCoords.y] = (animationEnabled() ? ExplosionTiny : (ExplosionTinyLast - 3)) | BulldozableBit | AnimatedBit;
+            tileValue(mapCoords.x, mapCoords.y) = (animationEnabled() ? ExplosionTiny : (ExplosionTinyLast - 3)) | BulldozableBit | AnimatedBit;
         }
     }
 }
@@ -1211,7 +1211,7 @@ void generateShip()
     case 0:
         for (int x = 4; x < SimWidth - 2; x++)
         {
-            if (Map[x][0] == RiverChannel)
+            if (tileValue(x, 0) == RiverChannel)
             {
                 makeShipAt({ x, 0 });
                 return;
@@ -1222,7 +1222,7 @@ void generateShip()
     case 1:
         for (int y = 1; y < SimHeight - 2; y++)
         {
-            if (Map[0][y] == RiverChannel)
+            if (tileValue(0, y) == RiverChannel)
             {
                 makeShipAt({ 0, y });
                 return;
@@ -1233,7 +1233,7 @@ void generateShip()
     case 2:
         for (int x = 4; x < SimWidth - 2; x++)
         {
-            if (Map[x][SimHeight - 2] == RiverChannel)
+            if (tileValue(x, SimHeight - 2) == RiverChannel)
             {
                 makeShipAt({ x, SimHeight - 2 });
                 return;
@@ -1244,7 +1244,7 @@ void generateShip()
     case 3:
         for (int y = 1; y < SimHeight - 2; y++)
         {
-            if (Map[SimWidth - 2][y] == RiverChannel)
+            if (tileValue(SimWidth - 2, y) == RiverChannel)
             {
                 makeShipAt({ SimWidth - 2, y });
                 return;
@@ -1257,7 +1257,7 @@ void generateShip()
 
 void makeMonsterAt(const Point<int>& position)
 {
-    makeSprite(SimSprite::Type::Monster, position.skewBy({ 16,16 }) + Vector<int>{ 48, 0 });
+    makeSprite(SimSprite::Type::Monster, position.skewBy({ 16, 16 }) + Vector<int>{ 48, 0 });
     ClearMes();
     SendMesAt(NotificationId::MonsterReported, position.x + 5, position.y);
 }
@@ -1269,7 +1269,7 @@ bool findSpawnPosition()
     {
         const int x = randomRange(0, SimWidth - 20) + 10;
         const int y = randomRange(0, SimHeight - 10) + 5;
-        if ((Map[x][y] == River) || (Map[x][y] == River + BulldozableBit))
+        if ((tileValue(x, y) == River) || (tileValue(x, y) == River + BulldozableBit))
         {
             makeMonsterAt({ x, y });
             return true;

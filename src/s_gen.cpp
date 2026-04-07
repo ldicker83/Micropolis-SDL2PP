@@ -67,7 +67,7 @@ void ClearMap()
     {
         for (int y = 0; y < SimHeight; y++)
         {
-            Map[x][y] = Dirt;
+            tileValue(x, y) = Dirt;
         }
     }
 }
@@ -79,9 +79,9 @@ void ClearUnnatural()
     {
         for (int y = 0; y < SimHeight; y++)
         {
-            if (Map[x][y] > Woods)
+            if (tileValue(x, y) > Woods)
             {
-                Map[x][y] = Dirt;
+                tileValue(x, y) = Dirt;
             }
         }
     }
@@ -116,7 +116,7 @@ void PutOnMap(int Mchar, int Xoff, int Yoff)
         return;
     }
 
-    int temp = Map[Xloc][Yloc];
+    int temp = tileValue(Xloc, Yloc);
     if (temp != 0)
     {
         temp = temp & LowerMask;
@@ -133,7 +133,7 @@ void PutOnMap(int Mchar, int Xoff, int Yoff)
         }
     }
 
-    Map[Xloc][Yloc] = Mchar;
+    tileValue(Xloc, Yloc) = Mchar;
 }
 
 
@@ -154,7 +154,7 @@ void SmoothTrees()
     {
         for (int MapY = 0; MapY < SimHeight; MapY++)
         {
-            if (IsTree(Map[MapX][MapY]))
+            if (IsTree(tileValue(MapX, MapY)))
             {
                 int bitindex = 0;
                 for (int z = 0; z < 4; z++)
@@ -164,7 +164,7 @@ void SmoothTrees()
                     int Xtem = MapX + DX[z];
                     int Ytem = MapY + DY[z];
 
-                    if (coordinatesValid({ Xtem, Ytem }) && IsTree(Map[Xtem][Ytem]))
+                    if (coordinatesValid({ Xtem, Ytem }) && IsTree(tileValue(Xtem, Ytem)))
                     {
                         bitindex++;
                     }
@@ -181,11 +181,11 @@ void SmoothTrees()
                             temp = temp - 8;
                         }
                     }
-                    Map[MapX][MapY] = temp + BLBNBIT;
+                    tileValue(MapX, MapY) = temp + BLBNBIT;
                 }
                 else
                 {
-                    Map[MapX][MapY] = temp;
+                    tileValue(MapX, MapY) = temp;
                 }
             }
         }
@@ -210,7 +210,7 @@ void SmoothRiver()
     {
         for (int MapY = 0; MapY < SimHeight; MapY++)
         {
-            if (Map[MapX][MapY] == RiverEdge)
+            if (tileValue(MapX, MapY) == RiverEdge)
             {
                 int bitindex = 0;
 
@@ -220,9 +220,9 @@ void SmoothRiver()
                     int Xtem = MapX + DX[z];
                     int Ytem = MapY + DY[z];
                     if (coordinatesValid({ Xtem, Ytem }) &&
-                        ((Map[Xtem][Ytem] & LowerMask) != Dirt) &&
-                        (((Map[Xtem][Ytem] & LowerMask) < WOODS_LOW) ||
-                            ((Map[Xtem][Ytem] & LowerMask) > WOODS_HIGH)))
+                        ((maskedTileValue(Xtem, Ytem)) != Dirt) &&
+                        (((maskedTileValue(Xtem, Ytem)) < WOODS_LOW) ||
+                            ((maskedTileValue(Xtem, Ytem)) > WOODS_HIGH)))
                     {
                         bitindex++;
                     }
@@ -236,7 +236,7 @@ void SmoothRiver()
                     temp++;
                 }
 
-                Map[MapX][MapY] = temp;
+                tileValue(MapX, MapY) = temp;
             }
         }
     }
@@ -262,9 +262,9 @@ void TreeSplash(int xloc, int yloc)
             return;
         }
 
-        if ((Map[MapX][MapY] & LowerMask) == Dirt)
+        if ((maskedTileValue(MapX, MapY)) == Dirt)
         {
-            Map[MapX][MapY] = Woods + BLBNBIT;
+            tileValue(MapX, MapY) = Woods + BLBNBIT;
         }
     }
 }
@@ -431,7 +431,7 @@ void MakeNakedIsland()
     {
         for (int y = 0; y < SimHeight; y++)
         {
-            Map[x][y] = River;
+            tileValue(x, y) = River;
         }
     }
     
@@ -439,7 +439,7 @@ void MakeNakedIsland()
     {
         for (int y = 5; y < SimHeight - 5; y++)
         {
-            Map[x][y] = Dirt;
+            tileValue(x, y) = Dirt;
         }
     }
    

@@ -129,7 +129,7 @@ namespace
         {
             for (int yy = (point.y * 2); yy <= (point.y * 2) + 1; ++yy)
             {
-                const int tile = (Map[xx][yy] & LowerMask);
+                const int tile = (maskedTileValue(xx, yy));
                 if (tile)
                 {
                     if (tile < Rubble)

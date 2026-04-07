@@ -17,7 +17,7 @@
 
 void animateTiles()
 {
-    int* tMapPtr = &(Map[0][0]);
+    int* tMapPtr = &(tileValue(0, 0));
     for (int i = SimWidth * SimHeight; i > 0; i--)
     {
         int tilevalue = (*tMapPtr);

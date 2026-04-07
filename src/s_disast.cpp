@@ -118,15 +118,15 @@ void MakeEarthquake()
             continue;
         }
 
-        if (tileIsVulnerable(Map[x][y]))
+        if (tileIsVulnerable(tileValue(x, y)))
         {
             if (z & 0x3)
             {
-                Map[x][y] = (Rubble + BulldozableBit) + (rand16() & 3);
+                tileValue(x, y) = (Rubble + BulldozableBit) + (rand16() & 3);
             }
             else
             {
-                Map[x][y] = (FireBase + AnimatedBit) + (rand16() & 7);
+                tileValue(x, y) = (FireBase + AnimatedBit) + (rand16() & 7);
             }
         }
     }
@@ -139,14 +139,14 @@ void MakeFire()
     {
         const int x = randomRange(0, SimWidth - 1);
         const int y = randomRange(0, SimHeight - 1);
-        const int cell = Map[x][y];
+        const int cell = tileValue(x, y);
 
         if(tileIsArsonable(cell))
         {
             const int tile = maskedTileValue(x, y);
             if ((tile > RiverEdgeLast) && (tile < ZoneLast))
             {
-                Map[x][y] = FireBase + randomRange(0, 7) | AnimatedBit;
+                tileValue(x, y) = FireBase + randomRange(0, 7) | AnimatedBit;
                 SendMesAt(NotificationId::FireReported, x, y);
                 return;
             }
@@ -176,7 +176,7 @@ void MakeFlood()
                 {
                     if(tileIsFloodable(cell))
                     {
-                        Map[floodX][floodY] = Flood;
+                        tileValue(floodX, floodY) = Flood;
                         FloodCount = 30;
                         SendMesAt(NotificationId::FloodingReported, floodX, floodY);
                         FloodX = floodX;
@@ -205,7 +205,7 @@ void DoFlood()
                 int y = SimulationTarget.y + Dy[i];
                 if (coordinatesValid({ x, y }))
                 {
-                    int cell = Map[x][y];
+                    int cell = tileValue(x, y);
 
                     if(canSpreadFloodTo(cell))
                     {
@@ -213,7 +213,7 @@ void DoFlood()
                         {
                             FireZone(x, y, cell);
                         }
-                        Map[x][y] = Flood + randomRange(0, 2);
+                        tileValue(x, y) = Flood + randomRange(0, 2);
                     }
                 }
             }
@@ -223,7 +223,7 @@ void DoFlood()
     {
         if (randomRange(0, 15) == 0)
         {
-            Map[SimulationTarget.x][SimulationTarget.y] = 0;
+            tileValue(SimulationTarget.x, SimulationTarget.y) = Dirt;
         }
     }
 }
