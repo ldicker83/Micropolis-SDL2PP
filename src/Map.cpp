@@ -91,10 +91,12 @@ bool tilePowered(const unsigned int tile)
 	return tile & PowerBit;
 }
 
+
 bool tileIsZoned(const unsigned int tile)
 {
 	return tile & ZonedBit;
 }
+
 
 bool tileIsRoad(const Point<int> coordinates)
 {
@@ -117,6 +119,7 @@ bool tileIsRoad(const Point<int> coordinates)
 
 	return true;
 }
+
 
 bool blink()
 {

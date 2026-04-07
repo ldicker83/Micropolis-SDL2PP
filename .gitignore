@@ -13,3 +13,5 @@
 /xcode/.DS_Store
 /icons/src
 /x64
+/*.dll
+/*.exe
