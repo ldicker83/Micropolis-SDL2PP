@@ -94,17 +94,9 @@ namespace
         infile.read(reinterpret_cast<char*>(&buff[0]), sizeof(GraphHistory));
         copyBufIntoArray(buff, MiscHistory);
 
-        int mapRow[SimHeight]{};
-        for (size_t row = 0; row < SimWidth; ++row)
-        {
-            infile.read(reinterpret_cast<char*>(&mapRow[0]), sizeof(mapRow));
+        const auto mapData = getMapData();
+        infile.read(const_cast<char*>(mapData.data), mapData.size);
 
-            for (size_t i = 0; i < SimHeight; ++i)
-            {
-                tileValue(static_cast<int>(row), static_cast<int>(i)) = mapRow[i];
-            }
-        }
-           
         infile.close();
 
         return true;

@@ -19,7 +19,8 @@
 
 #include "Util.h"
 
-#include <array>
+#include <vector>
+
 #include <SDL2/SDL.h>
 
 extern SDL_Renderer* MainWindowRenderer;
@@ -28,7 +29,7 @@ extern Texture BigTileset;
 extern Texture MainMapTexture;
 
 
-std::array<std::array<int, SimHeight>, SimWidth> Map;
+std::vector<int> MapBuffer;
 
 
 namespace
@@ -46,13 +47,8 @@ void toggleBlinkFlag()
 
 void ResetMap()
 {
-	for (int row = 0; row < SimWidth; ++row)
-	{
-		for (int col = 0; col < SimHeight; ++col)
-		{
-			Map[row][col] = 0;
-		}
-	}
+	MapBuffer.resize(SimWidth * SimHeight);
+	std::fill(MapBuffer.begin(), MapBuffer.end(), Dirt);
 }
 
 
@@ -64,7 +60,7 @@ int& tileValue(const Point<int>& location)
 
 int& tileValue(const int x, const int y)
 {
-	return Map[x][y];
+	return MapBuffer[static_cast<size_t>(x) * SimHeight + static_cast<size_t>(y)];
 }
 
 
@@ -137,8 +133,8 @@ MapData getMapData()
 {
 	return MapData
 	{
-		reinterpret_cast<const char*>(Map.data()),
-		sizeof(Map)
+		reinterpret_cast<const char*>(MapBuffer.data()),
+		static_cast<unsigned int>(MapBuffer.size() * sizeof(int))
 	};
 }
 
