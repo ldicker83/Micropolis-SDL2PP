@@ -399,7 +399,7 @@ void simInit()
 
     InitializeSound();
     StopEarthquake();
-    ClearMap();
+    ResetMap();
     initWillStuff();
     budget.CurrentFunds(5000);
     setGameLevelFunds(0, cityProperties, budget);

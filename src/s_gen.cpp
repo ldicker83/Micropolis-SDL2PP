@@ -61,18 +61,6 @@ bool IsTree(int cell)
 }
 
 
-void ClearMap()
-{
-    for (int x = 0; x < SimWidth; x++)
-    {
-        for (int y = 0; y < SimHeight; y++)
-        {
-            tileValue(x, y) = Dirt;
-        }
-    }
-}
-
-
 void ClearUnnatural()
 {
     for (int x = 0; x < SimWidth; x++)

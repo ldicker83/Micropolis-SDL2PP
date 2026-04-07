@@ -13,5 +13,4 @@
 class Budget;
 class CityProperties;
 
-void ClearMap();
 void GenerateNewCity(CityProperties&, Budget&);
