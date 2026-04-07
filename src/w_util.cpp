@@ -176,12 +176,6 @@ void doNewGame()
 }
 
 
-void DoGeneratedCityImage(char *name, int time, int pop, char* _class, int score)
-{
-  /* XXX: TODO: print city */
-}
-
-
 static std::random_device RandomDevice;
 static std::mt19937 PseudoRandomNumberGenerator(RandomDevice());
 
