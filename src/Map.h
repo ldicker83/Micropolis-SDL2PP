@@ -166,7 +166,7 @@ constexpr auto TILE_COUNT = 960;
 struct MapData
 {
 	const char* data;
-	const unsigned int size;
+	const size_t size;
 };
 
 MapData getMapData();
