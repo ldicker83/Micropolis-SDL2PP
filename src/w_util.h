@@ -29,7 +29,6 @@ enum class SimulationSpeed
 
 const std::string& speedString(SimulationSpeed speed);
 
-void doNewGame();
 std::string numberToDollarDecimal(int value);
 
 void simSpeed(SimulationSpeed speed);

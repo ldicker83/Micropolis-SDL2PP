@@ -374,7 +374,6 @@ void initWillStuff()
     destroyAllSprites();
     DisasterEvent = 0;
     initMapArrays();
-    doNewGame();
 }
 
 

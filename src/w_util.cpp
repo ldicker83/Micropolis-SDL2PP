@@ -170,12 +170,6 @@ int currentYear()
 }
 
 
-void doNewGame()
-{
-  //Eval("UINewGame");
-}
-
-
 static std::random_device RandomDevice;
 static std::mt19937 PseudoRandomNumberGenerator(RandomDevice());
 
