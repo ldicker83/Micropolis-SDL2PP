@@ -145,7 +145,7 @@ MapData getMapData()
 /**
  * Assumes \c begin and \c end are in a valid range
  */
-void DrawBigMapSegment(const Point<int>& begin, const Point<int>& end)
+void drawBigMapSegment(const Point<int>& begin, const Point<int>& end)
 {
 	SDL_SetRenderTarget(MainWindowRenderer, MainMapTexture.texture);
 
@@ -182,7 +182,7 @@ void DrawBigMapSegment(const Point<int>& begin, const Point<int>& end)
 }
 
 
-void DrawBigMap()
+void drawBigMap()
 {
-	DrawBigMapSegment(Point<int>{0, 0}, Point<int>{SimWidth, SimHeight});
+	drawBigMapSegment(Point<int>{0, 0}, Point<int>{SimWidth, SimHeight});
 }

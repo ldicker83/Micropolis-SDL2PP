@@ -171,8 +171,8 @@ struct MapData
 
 MapData getMapData();
 
-void DrawBigMapSegment(const Point<int>& begin, const Point<int>& end);
-void DrawBigMap();
+void drawBigMapSegment(const Point<int>& begin, const Point<int>& end);
+void drawBigMap();
 
 int& tileValue(const Point<int>& location);
 int& tileValue(const int x, const int y);

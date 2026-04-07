@@ -346,7 +346,7 @@ void simLoop(bool doSim)
             std::clamp((MapViewOffset.y + WindowSize.y) / TileSize + 1, 0, SimHeight)
         };
 
-        DrawBigMapSegment(begin, end);
+        drawBigMapSegment(begin, end);
     }
 
     if (RedrawMinimap)
@@ -461,7 +461,7 @@ void newGame()
 {
     fileIo->clearSaveFilename();
     resetGame();
-    DrawBigMap();
+    drawBigMap();
 }
 
 
@@ -471,7 +471,7 @@ void openGame()
     {
         resetGame();
         LoadCity(fileIo->fullPath(), cityProperties, budget);
-        DrawBigMap();
+        drawBigMap();
     }
 }
 
@@ -1219,7 +1219,7 @@ void cleanUp()
 void GameLoop()
 {
     miniMapWindow->draw();
-    DrawBigMap();
+    drawBigMap();
 
     while (!Exit)
     {
