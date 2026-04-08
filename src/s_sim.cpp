@@ -1473,7 +1473,7 @@ void FireZone(int Xloc, int Yloc, int ch)
         {
             Xtem = Xloc + x;
             Ytem = Yloc + y;
-            if ((Xtem < 0) || (Xtem > (SimWidth - 1)) || (Ytem < 0) || (Ytem > (SimHeight - 1)))
+			if (!coordinatesValid({ Xtem, Ytem }))
             {
                 continue;
             }
