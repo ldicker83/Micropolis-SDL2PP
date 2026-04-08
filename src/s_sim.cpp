@@ -625,9 +625,6 @@ void MapScan(int x1, int x2, const CityProperties& properties)
             CurrentTile = tileValue(x, y);
             if (CurrentTile != 0)
             {
-                //CurrentTileMasked = CurrentTile & LOMASK;	// Mask off status bits
-
-                //const int tile = maskedTileValue(x, y);
                 CurrentTileMasked = maskedTileValue(CurrentTile);
 
                 if (CurrentTileMasked >= Flood)
