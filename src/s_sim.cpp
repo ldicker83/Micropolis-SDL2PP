@@ -403,7 +403,7 @@ void DoRoad()
 }
 
 
-/* comefrom: DoSPZone spawnHospital */
+/* comefrom: updateSpecialZones spawnHospital */
 void RepairZone(int ZCent, int zsize)
 {
   int cnt;
@@ -429,7 +429,7 @@ void RepairZone(int ZCent, int zsize)
 }
 
 
-/* comefrom: DoSPZone */
+/* comefrom: updateSpecialZones */
 void DrawStadium(int z)
 {
     z = z - 5;
@@ -462,7 +462,7 @@ void CoalSmoke(int mx, int my)
 /*
  * fixme: Break this into smaller chunks
  */
-void DoSPZone(bool powered, const CityProperties& properties)
+void updateSpecialZones(bool powered, const CityProperties& properties)
 {
     static int MltdwnTab[3] = { 30000, 20000, 10000 };  /* simadj */
     int z;

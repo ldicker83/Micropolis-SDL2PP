@@ -768,7 +768,7 @@ void updateZone(const Point<int>& location, const CityProperties& properties)
 
     if (CurrentTileMasked > PortBase) 
     {
-        DoSPZone(zonePowered, properties);
+        updateSpecialZones(zonePowered, properties);
         return;
     }
 

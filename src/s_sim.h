@@ -16,5 +16,5 @@ class CityProperties;
 void SimFrame(CityProperties&, Budget&);
 void FireZone(int Xloc, int Yloc, int ch);
 void DoSimInit(CityProperties&, Budget&);
-void DoSPZone(bool powered, const CityProperties&);
+void updateSpecialZones(bool powered, const CityProperties&);
 void RepairZone(int ZCent, int zsize);
