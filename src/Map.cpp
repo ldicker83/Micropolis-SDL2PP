@@ -34,7 +34,7 @@ std::vector<int> MapBuffer;
 
 namespace
 {
-	SDL_Rect tileRect{ 0, 0, 16, 16 };
+	SDL_Rect TileDrawRect{ 0, 0, 16, 16 };
 	bool Blink{ false };
 };
 
@@ -157,14 +157,14 @@ void drawBigMapSegment(const Point<int>& begin, const Point<int>& end)
 			drawRect = { row * drawRect.w, col * drawRect.h, drawRect.w, drawRect.h };
 
 			const unsigned int masked = maskedTileValue(tile);
-			tileRect =
+			TileDrawRect =
 			{
 				(static_cast<int>(masked) % 32) * 16,
 				(static_cast<int>(masked) / 32) * 16,
 				16, 16
 			};
 
-			SDL_RenderCopy(MainWindowRenderer, BigTileset.texture, &tileRect, &drawRect);
+			SDL_RenderCopy(MainWindowRenderer, BigTileset.texture, &TileDrawRect, &drawRect);
 		}
 	}
 
