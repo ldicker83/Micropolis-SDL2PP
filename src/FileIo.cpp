@@ -62,7 +62,7 @@ namespace
         }
     }
 
-    bool _load_file(const std::string filename)
+    bool loadFile(const std::string filename)
     {
         std::ifstream infile(filename, std::ofstream::binary);
         if (infile.fail())
@@ -104,9 +104,9 @@ namespace
 }
 
 
-bool loadFile(const std::string& filename, CityProperties& properties, Budget& budget)
+bool loadGame(const std::string& filename, CityProperties& properties, Budget& budget)
 {
-    if (!_load_file(filename))
+    if (!loadFile(filename))
     {
         return false;
     }
@@ -134,7 +134,7 @@ bool loadFile(const std::string& filename, CityProperties& properties, Budget& b
 }
 
 
-bool saveFile(const std::string& filename, const CityProperties&, const Budget& budget)
+bool saveGame(const std::string& filename, const CityProperties&, const Budget& budget)
 {
     std::ofstream outfile(filename, std::ofstream::binary);
     if (outfile.fail())
@@ -176,7 +176,7 @@ bool saveFile(const std::string& filename, const CityProperties&, const Budget& 
 
 bool LoadCity(const std::string& filename, CityProperties& properties, Budget& budget)
 {
-    if(!loadFile(filename, properties, budget))
+    if(!loadGame(filename, properties, budget))
     {
         std::cout << "Unable to load a city from the file named '" << filename << "'" << std::endl;
         return false;
@@ -188,7 +188,7 @@ bool LoadCity(const std::string& filename, CityProperties& properties, Budget& b
 
 void SaveCity(const std::string& filename, const CityProperties& properties, const Budget& budget)
 {
-    if (saveFile(filename, properties, budget))
+    if (saveGame(filename, properties, budget))
     {
         std::cout << "City saved as '" << filename << "'" << std::endl;
     }
@@ -210,7 +210,7 @@ void LoadScenario(Scenario scenario, CityProperties& properties, Budget& budget)
     CityTime = scenarioProperties.Time;
     ScenarioID = scenarioProperties.Id;
 
-    _load_file("scenarios/" + scenarioProperties.FileName);
+    loadFile("scenarios/" + scenarioProperties.FileName);
 
     simSpeed(SimulationSpeed::Normal);
 
