@@ -82,9 +82,9 @@ unsigned int maskedTileValue(unsigned int tile)
 }
 
 
-bool tileIsPowered(const unsigned int tile)
+bool tileIsPowered(const Point<int> coordinates)
 {
-	return tile & PowerBit;
+	return tileValue(coordinates) & PowerBit;
 }
 
 
@@ -154,7 +154,7 @@ void drawBigMapSegment(const Point<int>& begin, const Point<int>& end)
 		{
 			tile = tileValue(row, col);
 			// Blink lightning bolt in unpowered zone center
-			if (blink() && tileIsZoned(tile) && !tileIsPowered(tile))
+			if (blink() && tileIsZoned(tile) && !tileIsPowered({ row, col }))
 			{
 				tile = LightningBolt;
 			}
