@@ -35,7 +35,7 @@ std::vector<int> MapBuffer;
 namespace
 {
 	SDL_Rect tileRect{ 0, 0, 16, 16 };
-	bool flagBlink{ false };
+	bool Blink{ false };
 };
 
 
@@ -120,15 +120,9 @@ bool tileCanBeBulldozed(const Point<int> coordinates)
 }
 
 
-bool blink()
-{
-	return flagBlink;
-}
-
-
 void toggleBlinkFlag()
 {
-	flagBlink = !flagBlink;
+	Blink = !Blink;
 }
 
 
@@ -155,7 +149,7 @@ void drawBigMapSegment(const Point<int>& begin, const Point<int>& end)
 		{
 			tile = tileValue(row, col);
 			// Blink lightning bolt in unpowered zone center
-			if (blink() && tileIsZoned({ row, col }) && !tileIsPowered({ row, col }))
+			if (Blink && tileIsZoned({ row, col }) && !tileIsPowered({ row, col }))
 			{
 				tile = LightningBolt;
 			}

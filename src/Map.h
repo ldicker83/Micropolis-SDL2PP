@@ -183,7 +183,6 @@ bool tileIsZoned(const Point<int> coordinates);
 bool tileIsRoad(const Point<int> coordinates);
 bool tileCanBeBulldozed(const Point<int> coordinates);
 
-bool blink();
 void toggleBlinkFlag();
 
 void ResetMap();
