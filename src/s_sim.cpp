@@ -64,12 +64,12 @@ void DoFire()
     static int DX[4] = { -1,  0,  1,  0 };
     static int DY[4] = { 0, -1,  0,  1 };
 
-    for (int z = 0; z < 4; z++)
+    for (int direction = 0; direction < 4; direction++)
     {
         if (!(rand16() & 7))
         {
-            int Xtem = SimulationTarget.x + DX[z];
-            int Ytem = SimulationTarget.y + DY[z];
+            int Xtem = SimulationTarget.x + DX[direction];
+            int Ytem = SimulationTarget.y + DY[direction];
             if (coordinatesValid({ Xtem, Ytem }))
             {
                 int c = tileValue(Xtem, Ytem);
@@ -89,21 +89,22 @@ void DoFire()
         }
     }
    
-    int z = FireProtectionMap.value(SimulationTarget.skewInverseBy({ 8, 8 }));
+    int fireProtection = FireProtectionMap.value(SimulationTarget.skewInverseBy({ 8, 8 }));
     
     int Rate = 10;
-    if (z)
+    if (fireProtection)
     {
         Rate = 3;
-        if (z > 20)
+        if (fireProtection > 20)
         {
             Rate = 2;
         }
-        if (z > 100)
+        if (fireProtection > 100)
         {
             Rate = 1;
         }
     }
+
     if (!randomRange(0, Rate))
     {
         tileValue(SimulationTarget.x, SimulationTarget.y) = Rubble + randomRange(0, 3) + BulldozableBit;
