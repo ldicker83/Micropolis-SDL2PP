@@ -555,7 +555,7 @@ void GenerateMap(int r)
 }
 
 
-void GenerateSomeCity(int seed, CityProperties& properties, Budget& budget)
+void GenerateCityFromSeed(int seed, CityProperties& properties, Budget& budget)
 {
     ScenarioID = 0;
     CityTime = 0;
@@ -573,5 +573,5 @@ void GenerateSomeCity(int seed, CityProperties& properties, Budget& budget)
 
 void GenerateNewCity(CityProperties& properties, Budget& budget)
 {
-    GenerateSomeCity(randomRange(0, std::numeric_limits<int>::max()), properties, budget);
+    GenerateCityFromSeed(randomRange(0, std::numeric_limits<int>::max()), properties, budget);
 }
