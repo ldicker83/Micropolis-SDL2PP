@@ -87,7 +87,7 @@ namespace
 	int getBurnoutRateIndex(int fireProtection)
 	{
 		auto thresholdIt = std::upper_bound(FireProtectionThresholds.begin(), FireProtectionThresholds.end(), fireProtection);
-		return std::distance(FireProtectionThresholds.begin(), thresholdIt) - 1;
+        return static_cast<int>(std::distance(FireProtectionThresholds.begin(), thresholdIt) - 1);
 	}
 
 
