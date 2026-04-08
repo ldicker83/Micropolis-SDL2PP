@@ -1473,6 +1473,11 @@ void FireZone(int Xloc, int Yloc, int ch)
         {
             Xtem = Xloc + x;
             Ytem = Yloc + y;
+
+            /*  Is this check actually necessary ? It was in the original code
+                but since this inspects tiles that are zoned and zones can only
+				be placed on valid tiles, my guess is this should never be false.
+             */
 			if (!coordinatesValid({ Xtem, Ytem }))
             {
                 continue;
