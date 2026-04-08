@@ -59,6 +59,45 @@ int DoInitialEval = 0;
 int MeltX, MeltY;
 
 
+namespace
+{
+
+	/**
+	 * Fire Protection Thresholds
+	 * 0 = No Fire Protection
+	 * 1 = Minimal fire protection (at least one fire station within range)
+	 * 21 = Good coverage (fire station within range of the tile)
+	 * 101 = Excellent coverage (fire station very close to the tile)
+	 */
+	static constexpr std::array<int, 4> FireProtectionThresholds = { 0, 1, 21, 101 };
+
+	/**
+	 * Fire Burnout Rates
+	 * 10 (no protection) = 10% chance of burning out each cycle
+	 * 3 (minimal protection) = ~33% chance of burning out each cycle
+	 * 2 (good coverage) = ~50% chance of burning out each cycle
+	 * 1 (excellent coverage) = 100% chance of burning out each cycle
+	 */
+	static constexpr std::array<int, 4> BurnoutRates = { 10, 3, 2, 1 };
+
+	/**
+	 * Convert fire protection level to burnout rate index
+	 * Uses binary search to find the appropriate threshold tier
+	 */
+	int getBurnoutRateIndex(int fireProtection)
+	{
+		auto thresholdIt = std::upper_bound(FireProtectionThresholds.begin(), FireProtectionThresholds.end(), fireProtection);
+		return std::distance(FireProtectionThresholds.begin(), thresholdIt) - 1;
+	}
+
+
+    int getBurnoutRate(int fireProtection)
+    {
+        return BurnoutRates[getBurnoutRateIndex(fireProtection)];
+	}
+}
+
+
 void DoFire()
 {
     static int DX[4] = { -1,  0,  1,  0 };
@@ -90,22 +129,8 @@ void DoFire()
     }
    
     int fireProtection = FireProtectionMap.value(SimulationTarget.skewInverseBy({ 8, 8 }));
-    
-    int Rate = 10;
-    if (fireProtection)
-    {
-        Rate = 3;
-        if (fireProtection > 20)
-        {
-            Rate = 2;
-        }
-        if (fireProtection > 100)
-        {
-            Rate = 1;
-        }
-    }
 
-    if (!randomRange(0, Rate))
+    if (!randomRange(0, getBurnoutRate(fireProtection)))
     {
         tileValue(SimulationTarget.x, SimulationTarget.y) = Rubble + randomRange(0, 3) + BulldozableBit;
     }
