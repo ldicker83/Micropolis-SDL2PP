@@ -969,13 +969,13 @@ void ToolDown(const Point<int> location, Budget& budget)
     {
         ClearMes();
         SendMes(NotificationId::MustBulldoze);
-        MakeSoundOn(nullptr, "edit", "UhUh");
+        MakeSoundOn("edit", "UhUh");
     }
     else if (result == ToolResult::InsufficientFunds)
     {
         ClearMes();
         SendMes(NotificationId::InsufficientFunds);
-        MakeSoundOn(nullptr, "edit", "Sorry");
+        MakeSoundOn("edit", "Sorry");
     }
 }
 

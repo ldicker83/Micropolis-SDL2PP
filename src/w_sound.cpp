@@ -66,7 +66,7 @@ void MakeSound(const std::string& channel, const std::string& id)
 }
 
 
-void MakeSoundOn(SimView* view, const char* channel, const char* id)
+void MakeSoundOn(const char* channel, const char* id)
 {
     char buf[256]{};
 

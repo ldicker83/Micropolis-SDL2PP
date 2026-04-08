@@ -12,12 +12,10 @@
 
 #include <string>
 
-struct SimView;
-
 void InitializeSound();
 void ShutDownSound();
 void MakeSound(const std::string& channel, const std::string& id);
-void MakeSoundOn(SimView* view, const char* channel, const char* id);
+void MakeSoundOn(const char* channel, const char* id);
 void StartBulldozer();
 void StopBulldozer();
 void SoundOff();

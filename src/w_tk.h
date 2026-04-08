@@ -12,7 +12,5 @@
 
 #include <string>
 
-struct SimView;
-
 bool Eval(const std::string&);
 void StopEarthquake();
