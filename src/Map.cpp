@@ -39,16 +39,13 @@ namespace
 };
 
 
-void toggleBlinkFlag()
+MapData getMapData()
 {
-	flagBlink = !flagBlink;
-}
-
-
-void ResetMap()
-{
-	MapBuffer.resize(SimWidth * SimHeight);
-	std::fill(MapBuffer.begin(), MapBuffer.end(), Dirt);
+	return MapData
+	{
+		reinterpret_cast<const char*>(MapBuffer.data()),
+		static_cast<unsigned int>(MapBuffer.size() * sizeof(int))
+	};
 }
 
 
@@ -129,14 +126,18 @@ bool blink()
 }
 
 
-MapData getMapData()
+void toggleBlinkFlag()
 {
-	return MapData
-	{
-		reinterpret_cast<const char*>(MapBuffer.data()),
-		static_cast<unsigned int>(MapBuffer.size() * sizeof(int))
-	};
+	flagBlink = !flagBlink;
 }
+
+
+void ResetMap()
+{
+	MapBuffer.resize(SimWidth * SimHeight);
+	std::fill(MapBuffer.begin(), MapBuffer.end(), Dirt);
+}
+
 
 /**
  * Assumes \c begin and \c end are in a valid range

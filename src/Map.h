@@ -171,9 +171,6 @@ struct MapData
 
 MapData getMapData();
 
-void drawBigMapSegment(const Point<int>& begin, const Point<int>& end);
-void drawBigMap();
-
 int& tileValue(const Point<int>& location);
 int& tileValue(const int x, const int y);
 
@@ -183,11 +180,13 @@ unsigned int maskedTileValue(unsigned int tile);
 
 bool tileIsPowered(const Point<int> coordinates);
 bool tileIsZoned(const Point<int> coordinates);
-
 bool tileIsRoad(const Point<int> coordinates);
 bool tileCanBeBulldozed(const Point<int> coordinates);
 
 bool blink();
+void toggleBlinkFlag();
+
 void ResetMap();
 
-void toggleBlinkFlag();
+void drawBigMapSegment(const Point<int>& begin, const Point<int>& end);
+void drawBigMap();
