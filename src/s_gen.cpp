@@ -554,8 +554,6 @@ void GenerateMap(int r)
     }
 }
 
-#include <iostream>
-#include "s_alloc.h"
 
 void GenerateSomeCity(int seed, CityProperties& properties, Budget& budget)
 {
