@@ -29,11 +29,10 @@ extern Texture BigTileset;
 extern Texture MainMapTexture;
 
 
-std::vector<int> MapBuffer;
-
-
 namespace
 {
+	std::vector<int> MapBuffer;
+
 	SDL_Rect TileDrawRect{ 0, 0, 16, 16 };
 	bool Blink{ false };
 };
