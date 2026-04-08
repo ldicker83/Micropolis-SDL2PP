@@ -182,7 +182,7 @@ unsigned int maskedTileValue(const int x, const int y);
 unsigned int maskedTileValue(unsigned int tile);
 
 bool tileIsPowered(const Point<int> coordinates);
-bool tileIsZoned(const unsigned int tile);
+bool tileIsZoned(const Point<int> coordinates);
 
 bool tileIsRoad(const Point<int> coordinates);
 bool tileCanBeBulldozed(const Point<int> coordinates);

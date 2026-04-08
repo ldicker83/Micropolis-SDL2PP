@@ -88,9 +88,9 @@ bool tileIsPowered(const Point<int> coordinates)
 }
 
 
-bool tileIsZoned(const unsigned int tile)
+bool tileIsZoned(const Point<int> coordinates)
 {
-	return tile & ZonedBit;
+	return tileValue(coordinates) & ZonedBit;
 }
 
 
@@ -154,7 +154,7 @@ void drawBigMapSegment(const Point<int>& begin, const Point<int>& end)
 		{
 			tile = tileValue(row, col);
 			// Blink lightning bolt in unpowered zone center
-			if (blink() && tileIsZoned(tile) && !tileIsPowered({ row, col }))
+			if (blink() && tileIsZoned({ row, col }) && !tileIsPowered({ row, col }))
 			{
 				tile = LightningBolt;
 			}
