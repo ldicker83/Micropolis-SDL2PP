@@ -15,6 +15,7 @@
 #include "BudgetWindow.h"
 #include "Evaluation.h"
 #include "EvaluationWindow.h"
+#include "FileIoDialog.h"
 #include "GraphWindow.h"
 #include "MiniMapWindow.h"
 #include "OptionsWindow.h"
@@ -33,7 +34,6 @@
 
 #include "s_alloc.h"
 #include "s_disast.h"
-#include "s_fileio.h"
 #include "s_gen.h"
 #include "s_msg.h"
 #include "s_sim.h"
@@ -152,7 +152,7 @@ namespace
     std::unique_ptr<QueryWindow> queryWindow;
     std::unique_ptr<StringRender> stringRenderer;
 
-    std::unique_ptr<FileIo> fileIo;
+    std::unique_ptr<FileIoDialog> fileIo;
 
     std::unique_ptr<Font> MainFont;
     std::unique_ptr<Font> MainBigFont;
@@ -1153,7 +1153,7 @@ void initUI()
     miniMapWindow->linkEffectMap(MiniMapWindow::ButtonId::PopulationGrowth, RateOfGrowthMap);
     miniMapWindow->linkEffectMap(MiniMapWindow::ButtonId::TrafficDensity, TrafficDensityMap);
 
-    fileIo = std::make_unique<FileIo>(*MainWindow);
+    fileIo = std::make_unique<FileIoDialog>(*MainWindow);
 
     stringRenderer = std::make_unique<StringRender>(MainWindowRenderer);
     toolPalette = std::make_unique<ToolPalette>(MainWindowRenderer);

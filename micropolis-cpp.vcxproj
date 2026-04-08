@@ -16,6 +16,7 @@
     <ClCompile Include="src\Connection.cpp" />
     <ClCompile Include="src\Evaluation.cpp" />
     <ClCompile Include="src\EvaluationWindow.cpp" />
+    <ClCompile Include="src\FileIo.cpp" />
     <ClCompile Include="src\FileIoDialog.cpp" />
     <ClCompile Include="src\Font.cpp" />
     <ClCompile Include="src\Graphics.cpp" />
@@ -31,7 +32,6 @@
     <ClCompile Include="src\StringRender.cpp" />
     <ClCompile Include="src\s_alloc.cpp" />
     <ClCompile Include="src\s_disast.cpp" />
-    <ClCompile Include="src\s_fileio.cpp" />
     <ClCompile Include="src\s_gen.cpp" />
     <ClCompile Include="src\s_msg.cpp" />
     <ClCompile Include="src\Power.cpp" />
@@ -62,6 +62,7 @@
     <ClInclude Include="src\EffectMap.h" />
     <ClInclude Include="src\Evaluation.h" />
     <ClInclude Include="src\EvaluationWindow.h" />
+    <ClInclude Include="src\FileIo.h" />
     <ClInclude Include="src\FileIoDiaolog.h" />
     <ClInclude Include="src\Font.h" />
     <ClInclude Include="src\Graph.h" />
@@ -78,7 +79,6 @@
     <ClInclude Include="src\Sprite.h" />
     <ClInclude Include="src\StringRender.h" />
     <ClInclude Include="src\s_disast.h" />
-    <ClInclude Include="src\s_fileio.h" />
     <ClInclude Include="src\s_gen.h" />
     <ClInclude Include="src\s_msg.h" />
     <ClInclude Include="src\Power.h" />

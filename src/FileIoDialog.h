@@ -15,15 +15,15 @@
 
 #include <string>
 
-class FileIo
+class FileIoDialog
 {
 public:
-	FileIo() = delete;
-	FileIo(const FileIo&) = delete;
-	const FileIo& operator=(const FileIo&) = delete;
+	FileIoDialog() = delete;
+	FileIoDialog(const FileIoDialog&) = delete;
+	const FileIoDialog& operator=(const FileIoDialog&) = delete;
 
-	FileIo(SDL_Window& window);
-	~FileIo();
+	FileIoDialog(SDL_Window& window);
+	~FileIoDialog();
 
 	const std::string& savePath() const { return mSavePath; }
 	const std::string& fileName() const { return mFileName; }

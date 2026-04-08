@@ -16,7 +16,7 @@
 #include "nfd.hpp"
 
 
-FileIo::FileIo(SDL_Window&)
+FileIoDialog::FileIoDialog(SDL_Window&)
 {
     if(NFD::Init() != NFD_OKAY)
     {
@@ -27,19 +27,19 @@ FileIo::FileIo(SDL_Window&)
 }
 
 
-FileIo::~FileIo()
+FileIoDialog::~FileIoDialog()
 {
     NFD::Quit();
 }
 
 
-void FileIo::clearSaveFilename()
+void FileIoDialog::clearSaveFilename()
 {
     mFileName.clear();
 }
 
 
-bool FileIo::filePicked() const
+bool FileIoDialog::filePicked() const
 {
     return !mFileName.empty();
 }
@@ -48,7 +48,7 @@ bool FileIo::filePicked() const
 /**
  * \return Returns true if a file name was selected, false otherwise.
  */
-bool FileIo::pickSaveFile()
+bool FileIoDialog::pickSaveFile()
 {
     const auto filePicked = showFileDialog(FileOperation::Save);
     
@@ -64,7 +64,7 @@ bool FileIo::pickSaveFile()
 /**
  * \return Returns true if a file name was selected, false otherwise.
  */
-bool FileIo::pickOpenFile()
+bool FileIoDialog::pickOpenFile()
 {
     const auto filePicked = showFileDialog(FileOperation::Open);
 
@@ -77,7 +77,7 @@ bool FileIo::pickOpenFile()
 }
 
 
-void FileIo::extractFileName()
+void FileIoDialog::extractFileName()
 {
     std::size_t location = mFileName.find_last_of(mSeparator);
     mFileName = mFileName.substr(location + 1);
@@ -87,7 +87,7 @@ void FileIo::extractFileName()
 /**
  * \return Returns true if a file name has been picked. False otherwise.
  */
-bool FileIo::showFileDialog(FileOperation operation)
+bool FileIoDialog::showFileDialog(FileOperation operation)
 {
     NFD::UniquePath outPath;
     nfdfilteritem_t filterItem[1] = {{"Micropolis City", "cty"}};

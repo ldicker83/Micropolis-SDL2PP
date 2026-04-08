@@ -15,7 +15,7 @@
 #include "Map.h"
 
 #include "s_alloc.h"
-#include "s_fileio.h"
+#include "FileIo.h"
 #include "s_sim.h"
 
 #include "w_sound.h"
