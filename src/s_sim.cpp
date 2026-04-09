@@ -107,6 +107,16 @@ namespace
 	}
 
 
+	void explodeIfIndustrial(const Point<int>& position, int tile)
+    {
+        const auto maskedValue = maskedTileValue(tile);
+        if (maskedValue > IndustrialZoneBase && maskedValue <= PortLast)
+        {
+            makeExplosionAt(position.skewBy({ 16, 16 }));
+        }
+    }
+
+
 	void propagateFireTo(const Point<int>& position)
     {
         const int tile = tileValue(position);
@@ -115,10 +125,7 @@ namespace
             if (tileIsZoned(tile))
             {
                 condemnZone(position.x, position.y, tile);
-                if (maskedTileValue(tile) > IndustrialZoneBase) //  Explode
-                {
-                    makeExplosionAt(position.skewBy({ 16, 16 }));
-                }
+				explodeIfIndustrial(position, tile);
             }
 
             tileValue(position) = FireBase + randomRange(0, 3) + AnimatedBit;
