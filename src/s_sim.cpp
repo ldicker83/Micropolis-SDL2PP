@@ -138,7 +138,7 @@ void DoFire()
 {
     for (const auto [direction, vector] : SearchDirectionVectors)
     {
-        // 12.5% chance to skip propagation in this direction
+        // 12.5% chance to continue propagation in this direction
 		if ((rand16() & 7))
         {
            continue;
