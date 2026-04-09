@@ -10,6 +10,8 @@
 // file, included in this distribution, for details.
 #pragma once
 
+#include "Point.h"
+
 class CityProperties;
 
 int housePopulation();

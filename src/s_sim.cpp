@@ -14,7 +14,6 @@
 #include "CityProperties.h"
 #include "Evaluation.h"
 
-#include "main.h"
 #include "Map.h"
 
 #include "Point.h"
