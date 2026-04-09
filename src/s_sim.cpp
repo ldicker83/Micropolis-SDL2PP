@@ -424,14 +424,11 @@ void DoRoad()
         trafficDensity = 2;
     }
 
-    int Density = TrafficDensityMap.value(SimulationTarget.skewInverseBy({ 2, 2 })) / 64;  // Set Traf Density
-   
-    if (Density > 2)
-    {
-        Density = 2;
-    }
+    // Set Traffic Density
+    int Density = std::clamp(TrafficDensityMap.value(SimulationTarget.skewInverseBy({ 2, 2 })) / 64, 0, 2);
 
-    if (trafficDensity != Density) /* tden 0..2   */
+    // tden 0..2
+    if (trafficDensity != Density)
     {
         int z = ((CurrentTileMasked - BridgeBase) & 15) + DensityTable[Density];
         
