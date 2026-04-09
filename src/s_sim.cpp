@@ -1462,8 +1462,7 @@ void condemnZone(int Xloc, int Yloc, int ch)
     int Xtem, Ytem;
     int XYmax;
 
-    const auto rogVal = RateOfGrowthMap.value({ Xloc / 8, Yloc / 8 });
-    RateOfGrowthMap.value({ Xloc / 8, Yloc / 8 }) = rogVal - 20;
+    RateOfGrowthMap.value({ Xloc / 8, Yloc / 8 }) -= 20;
 
     ch = ch & LowerMask;
     if (ch < PortBase)
