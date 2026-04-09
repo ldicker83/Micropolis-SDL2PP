@@ -13,7 +13,7 @@
 #include "Budget.h"
 #include "CityProperties.h"
 
-#include "main.h"
+#include "Map.h"
 
 #include "w_tk.h"
 #include "w_update.h"

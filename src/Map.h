@@ -175,6 +175,21 @@ constexpr int BLBNCNBIT = BulldozableBit + BurnableBit + ConductiveBit;
 constexpr int BNCNBIT = BurnableBit + ConductiveBit;
 
 
+/* Constants */
+constexpr auto SimWidth = 120;
+constexpr auto SimHeight = 100;
+constexpr SDL_Rect ValidMapCoordinates{ 0, 0, SimWidth - 1, SimHeight - 1 };
+
+constexpr auto HalfWorldWidth = SimWidth / 2;
+constexpr auto HalfWorldHeight = SimHeight / 2;
+
+constexpr auto QuarterWorldWidth = SimWidth / 4;
+constexpr auto QuarterWorldHeight = SimHeight / 4;
+
+constexpr auto EighthWorldWidth = SimWidth / 8;
+constexpr auto EighthWorldHeight = (SimHeight + 7) / 8;
+
+
 /**
  * Struct used for file i/o
  */

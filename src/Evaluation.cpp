@@ -12,6 +12,7 @@
 
 #include "Budget.h"
 #include "CityProperties.h"
+#include "Map.h"
 
 #include "s_alloc.h"
 #include "s_sim.h"
