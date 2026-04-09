@@ -18,8 +18,6 @@
 #include <SDL2/SDL.h>
 
  /* Constants */
-constexpr auto HistoryLength = 120;
-
 extern int CurrentTile; // unmasked tile value
 extern int CurrentTileMasked; // masked tile value
 

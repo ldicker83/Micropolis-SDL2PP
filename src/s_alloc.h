@@ -18,6 +18,9 @@
 #include <array>
 
 
+constexpr auto HistoryLength = 120;
+
+
 extern Point<int> SimulationTarget;
 
 
