@@ -211,7 +211,7 @@ void DoFlood()
                     {
                         if (cell & ZonedBit)
                         {
-                            FireZone(x, y, cell);
+                            condemnZone(x, y, cell);
                         }
                         tileValue(x, y) = Flood + randomRange(0, 2);
                     }

@@ -114,7 +114,7 @@ namespace
         {
             if (tileIsZoned(tile))
             {
-                FireZone(position.x, position.y, tile);
+                condemnZone(position.x, position.y, tile);
                 if (maskedTileValue(tile) > IndustrialZoneBase) //  Explode
                 {
                     makeExplosionAt(position.skewBy({ 16, 16 }));
@@ -1454,7 +1454,7 @@ void UpdateFundEffects(const Budget& budget)
 }
 
 
-void FireZone(int Xloc, int Yloc, int ch)
+void condemnZone(int Xloc, int Yloc, int ch)
 {
     int Xtem, Ytem;
     int XYmax;
