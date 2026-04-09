@@ -105,6 +105,25 @@ namespace
             tileValue(position.x, position.y) = Rubble + randomRange(0, 3) + BulldozableBit;
         }
 	}
+
+
+	void propagateFireTo(const Point<int>& position)
+    {
+        const int tile = tileValue(position);
+        if (tileCanBurn(tile))
+        {
+            if (tileIsZoned(tile))
+            {
+                FireZone(position.x, position.y, tile);
+                if (maskedTileValue(tile) > IndustrialZoneBase) //  Explode
+                {
+                    makeExplosionAt(position.skewBy({ 16, 16 }) - Vector<int>{ 8, 8 });
+                }
+            }
+
+            tileValue(position) = FireBase + randomRange(0, 3) + AnimatedBit;
+        }
+    }
 }
 
 
@@ -123,20 +142,7 @@ void DoFire()
             continue;
 		}
 
-        const int tile = tileValue(checkPosition);
-        if(tileCanBurn(tile))
-        {
-            if (tileIsZoned(tile))
-            {
-                FireZone(checkPosition.x, checkPosition.y, tile);
-                if (maskedTileValue(tile) > IndustrialZoneBase) //  Explode
-                {
-                    makeExplosionAt(checkPosition.skewBy({ 16, 16 }) + Vector<int>{ 8, 8 });
-                }
-            }
-
-            tileValue(checkPosition) = FireBase + randomRange(0, 3) + AnimatedBit;
-		}
+		propagateFireTo(checkPosition);
     }
 
     tryFireBurnout(SimulationTarget);
