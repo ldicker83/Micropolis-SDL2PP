@@ -138,18 +138,19 @@ void DoFire()
 {
     for (const auto [direction, vector] : SearchDirectionVectors)
     {
+        // 12.5% chance to skip propagation in this direction
 		if ((rand16() & 7))
         {
            continue;
         }
 
-		const auto checkPosition = SimulationTarget + vector;
-        if(!coordinatesValid(checkPosition))
+		const auto adjacentPosition = SimulationTarget + vector;
+        if(!coordinatesValid(adjacentPosition))
         {
             continue;
 		}
 
-		propagateFireTo(checkPosition);
+		propagateFireTo(adjacentPosition);
     }
 
     tryFireBurnout(SimulationTarget);
