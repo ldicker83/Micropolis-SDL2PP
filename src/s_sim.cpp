@@ -117,7 +117,7 @@ namespace
                 FireZone(position.x, position.y, tile);
                 if (maskedTileValue(tile) > IndustrialZoneBase) //  Explode
                 {
-                    makeExplosionAt(position.skewBy({ 16, 16 }) - Vector<int>{ 8, 8 });
+                    makeExplosionAt(position.skewBy({ 16, 16 }));
                 }
             }
 
