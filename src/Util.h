@@ -14,7 +14,9 @@
 #include "Vector.h"
 
 #include <SDL2/SDL.h>
+
 #include <string>
+#include <unordered_map>
 
 class Budget;
 class CityProperties;
@@ -32,6 +34,15 @@ enum class SimulationSpeed
 enum class SearchDirection
 {
 	Up, Right, Down, Left, Undefined
+};
+
+
+static const std::unordered_map<SearchDirection, Vector<int>> SearchDirectionVectors
+{
+	{ SearchDirection::Up, { 0, -1 } },
+	{ SearchDirection::Right, { 1, 0 } },
+	{ SearchDirection::Down, { 0, 1 } },
+	{ SearchDirection::Left, { -1, 0 } }
 };
 
 
