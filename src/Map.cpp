@@ -80,13 +80,13 @@ unsigned int maskedTileValue(unsigned int tile)
 
 bool tileIsPowered(const Point<int> coordinates)
 {
-	return tileValue(coordinates) & PowerBit;
+	return tileIsPowered(tileValue(coordinates));
 }
 
 
 bool tileIsZoned(const Point<int> coordinates)
 {
-	return tileValue(coordinates) & ZonedBit;
+	return tileIsZoned(tileValue(coordinates));
 }
 
 
@@ -97,14 +97,44 @@ bool tileIsRoad(const Point<int> coordinates)
 		return false;
 	}
 
-	const auto tile = maskedTileValue(coordinates);
+	return tileIsRoad(tileValue(coordinates));
+}
 
-	if (tile < BridgeBase || tile > RailLast)
+
+bool tileCanBeBulldozed(const Point<int> coordinates)
+{
+	return tileCanBeBulldozed(tileValue(coordinates));
+}
+
+
+bool tileCanBurn(const Point<int> coordinates)
+{
+	return tileCanBurn(tileValue(coordinates));
+}
+
+
+bool tileIsPowered(int tile)
+{
+	return tile & PowerBit;
+}
+
+
+bool tileIsZoned(int tile)
+{
+	return tile & ZonedBit;
+}
+
+
+bool tileIsRoad(int tile)
+{
+	const auto maskedTile = maskedTileValue(tile);
+
+	if (maskedTile < BridgeBase || maskedTile > RailLast)
 	{
 		return false;
 	}
 
-	if ((tile >= PowerBase) && (tile < RailHorizontalPowerVertical))
+	if ((maskedTile >= PowerBase) && (maskedTile < RailHorizontalPowerVertical))
 	{
 		return false;
 	}
@@ -113,9 +143,15 @@ bool tileIsRoad(const Point<int> coordinates)
 }
 
 
-bool tileCanBeBulldozed(const Point<int> coordinates)
+bool tileCanBeBulldozed(int tile)
 {
-	return tileValue(coordinates) & BulldozableBit;
+	return tile & BulldozableBit;
+}
+
+
+bool tileCanBurn(int tile)
+{
+	return tile & BurnableBit;
 }
 
 

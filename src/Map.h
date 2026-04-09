@@ -182,6 +182,13 @@ bool tileIsPowered(const Point<int> coordinates);
 bool tileIsZoned(const Point<int> coordinates);
 bool tileIsRoad(const Point<int> coordinates);
 bool tileCanBeBulldozed(const Point<int> coordinates);
+bool tileCanBurn(const Point<int> coordinates);
+
+bool tileIsPowered(int tile);
+bool tileIsZoned(int tile);
+bool tileIsRoad(int tile);
+bool tileCanBeBulldozed(int tile);
+bool tileCanBurn(int tile);
 
 void toggleBlinkFlag();
 
