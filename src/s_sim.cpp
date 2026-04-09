@@ -145,12 +145,10 @@ void DoFire()
         }
 
 		const auto adjacentPosition = SimulationTarget + vector;
-        if(!coordinatesValid(adjacentPosition))
+        if(coordinatesValid(adjacentPosition))
         {
-            continue;
+            propagateFireTo(adjacentPosition);
 		}
-
-		propagateFireTo(adjacentPosition);
     }
 
     tryFireBurnout(SimulationTarget);
