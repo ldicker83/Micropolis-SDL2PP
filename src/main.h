@@ -19,7 +19,6 @@
 
  /* Constants */
 constexpr auto HistoryLength = 120;
-constexpr auto MiscHistoryLength = 240;
 
 extern int CurrentTile; // unmasked tile value
 extern int CurrentTileMasked; // masked tile value
