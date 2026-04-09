@@ -10,10 +10,6 @@
 // file, included in this distribution, for details.
 #pragma once
 
-#include <array>
-
-#include "main.h"
-
 void resetPowerStack();
 void resetPowerMap();
 void pushPowerStack(const Point<int>& location);

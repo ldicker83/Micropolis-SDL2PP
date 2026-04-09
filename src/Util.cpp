@@ -18,6 +18,9 @@
 #include "w_tk.h"
 #include "w_update.h"
 
+
+#include "main.h"
+
 #include <algorithm>
 #include <array>
 #include <random>

@@ -18,6 +18,9 @@
 #include "Util.h"
 
 
+#include "main.h"
+
+
 namespace
 {
     int _RoadTable[16]

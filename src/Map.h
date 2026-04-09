@@ -10,12 +10,12 @@
 // file, included in this distribution, for details.
 #pragma once
 
-#include "main.h"
-
 #include "Point.h"
 #include "Vector.h"
 
 #include <array>
+
+#include <SDL2/SDL.h>
 
 
 /* Character Mapping */

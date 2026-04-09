@@ -10,7 +10,6 @@
 // file, included in this distribution, for details.
 #include "animtab.h"
 
-#include "main.h"
 #include "Map.h"
 
 #include <iostream>

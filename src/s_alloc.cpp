@@ -11,7 +11,6 @@
 #include "s_alloc.h"
 
 #include "EffectMap.h"
-//#include "main.h"
 #include "Map.h"
 #include "Power.h"
 
