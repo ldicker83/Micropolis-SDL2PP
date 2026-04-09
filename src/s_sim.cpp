@@ -95,45 +95,51 @@ namespace
     {
         return BurnoutRates[getBurnoutRateIndex(fireProtection)];
 	}
+
+
+    void tryFireBurnout(const Point<int>& position)
+    {
+        int fireProtection = FireProtectionMap.value(position.skewInverseBy({ 8, 8 }));
+        if (!randomRange(0, getBurnoutRate(fireProtection)))
+        {
+            tileValue(position.x, position.y) = Rubble + randomRange(0, 3) + BulldozableBit;
+        }
+	}
 }
 
 
 void DoFire()
 {
-    static int DX[4] = { -1,  0,  1,  0 };
-    static int DY[4] = { 0, -1,  0,  1 };
-
-    for (int direction = 0; direction < 4; direction++)
+    for (const auto [direction, vector] : SearchDirectionVectors)
     {
-        if (!(rand16() & 7))
+		if ((rand16() & 7))
         {
-            int Xtem = SimulationTarget.x + DX[direction];
-            int Ytem = SimulationTarget.y + DY[direction];
-            if (coordinatesValid({ Xtem, Ytem }))
+           continue;
+        }
+
+		const auto checkPosition = SimulationTarget + vector;
+        if(!coordinatesValid(checkPosition))
+        {
+            continue;
+		}
+
+        const int tile = tileValue(checkPosition);
+        if(tileCanBurn(tile))
+        {
+            if (tileIsZoned(tile))
             {
-                int c = tileValue(Xtem, Ytem);
-                if (c & BurnableBit)
+                FireZone(checkPosition.x, checkPosition.y, tile);
+                if (maskedTileValue(tile) > IndustrialZoneBase) //  Explode
                 {
-                    if (c & ZonedBit)
-                    {
-                        FireZone(Xtem, Ytem, c);
-                        if ((c & LowerMask) > IndustrialZoneBase) //  Explode
-                        {
-                            makeExplosionAt({ (Xtem * 16) + 8, (Ytem * 16) + 8 });
-                        }
-                    }
-                    tileValue(Xtem, Ytem) = FireBase + randomRange(0, 3) + AnimatedBit;
+                    makeExplosionAt({ (checkPosition.x * 16) + 8, (checkPosition.y * 16) + 8 });
                 }
             }
-        }
-    }
-   
-    int fireProtection = FireProtectionMap.value(SimulationTarget.skewInverseBy({ 8, 8 }));
 
-    if (!randomRange(0, getBurnoutRate(fireProtection)))
-    {
-        tileValue(SimulationTarget.x, SimulationTarget.y) = Rubble + randomRange(0, 3) + BulldozableBit;
+            tileValue(checkPosition) = FireBase + randomRange(0, 3) + AnimatedBit;
+		}
     }
+
+    tryFireBurnout(SimulationTarget);
 }
 
 
