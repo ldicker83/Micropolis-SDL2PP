@@ -131,7 +131,7 @@ void DoFire()
                 FireZone(checkPosition.x, checkPosition.y, tile);
                 if (maskedTileValue(tile) > IndustrialZoneBase) //  Explode
                 {
-                    makeExplosionAt({ (checkPosition.x * 16) + 8, (checkPosition.y * 16) + 8 });
+                    makeExplosionAt(checkPosition.skewBy({ 16, 16 }) + Vector<int>{ 8, 8 });
                 }
             }
 
