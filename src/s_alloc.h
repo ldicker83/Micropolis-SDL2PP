@@ -13,13 +13,9 @@
 #include "EffectMap.h"
 #include "main.h"
 #include "Point.h"
+#include "Util.h"
 
 #include <array>
-
-enum class SearchDirection
-{
-	Up, Right, Down, Left, Undefined
-};
 
 
 extern Point<int> SimulationTarget;

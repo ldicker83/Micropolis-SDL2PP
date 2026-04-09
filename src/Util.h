@@ -11,6 +11,7 @@
 #pragma once
 
 #include "Point.h"
+#include "Vector.h"
 
 #include <SDL2/SDL.h>
 #include <string>
@@ -26,6 +27,15 @@ enum class SimulationSpeed
 	Fast,
 	AfricanSwallow
 };
+
+
+enum class SearchDirection
+{
+	Up, Right, Down, Left, Undefined
+};
+
+
+Vector<int> adjacentVector(SearchDirection direction);
 
 const std::string& speedString(SimulationSpeed speed);
 

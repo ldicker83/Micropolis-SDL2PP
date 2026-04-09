@@ -33,6 +33,14 @@ namespace
     {
         "Paused", "Slow", "Normal", "Fast" , "African Swallow"
     };
+
+    std::array<Vector<int>, 4> AdjacentVectorTable
+    { {
+        {  0, -1 },
+        {  1,  0 },
+        {  0,  1 },
+        { -1,  0 },
+	} };
 };
 
 
@@ -80,6 +88,12 @@ std::string numberToDollarDecimal(int value)
     outString.insert(0, "$");
 
     return outString;
+}
+
+
+Vector<int> adjacentVector(SearchDirection direction)
+{
+	return AdjacentVectorTable.at(static_cast<int>(direction));
 }
 
 
