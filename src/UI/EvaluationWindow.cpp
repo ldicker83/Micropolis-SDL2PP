@@ -11,9 +11,6 @@
 #include "EvaluationWindow.h"
 
 
-#include "Evaluation.h"
-
-
 namespace
 {
     const SDL_Rect BgRect{ 0, 0, 503, 256 };

@@ -11,7 +11,7 @@
 
 #include "QueryWindow.h"
 
-#include "w_resrc.h"
+#include "../w_resrc.h"
 
 #include <array>
 

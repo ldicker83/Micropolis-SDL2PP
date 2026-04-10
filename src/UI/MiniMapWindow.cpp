@@ -10,13 +10,13 @@
 // file, included in this distribution, for details.
 #include "MiniMapWindow.h"
 
-#include "BindFunction.h"
-#include "Colors.h"
-#include "EffectMap.h"
-#include "Graphics.h"
-#include "Map.h"
+#include "../BindFunction.h"
+#include "../Colors.h"
+#include "../EffectMap.h"
+#include "../Graphics.h"
+#include "../Map.h"
 
-#include "Util.h"
+#include "../Util.h"
 
 #include <SDL2/SDL.h>
 

@@ -12,9 +12,10 @@
 
 #include <SDL2/SDL.h>
 
-#include "Graph.h"
-#include "Texture.h"
 #include "WindowBase.h"
+
+#include "../Graph.h"
+#include "../Texture.h"
 
 
 class GraphWindow : public WindowBase

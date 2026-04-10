@@ -12,18 +12,10 @@
 
 #include "Budget.h"
 
-#include "BudgetWindow.h"
-#include "Evaluation.h"
-#include "EvaluationWindow.h"
-#include "FileIoDialog.h"
-#include "GraphWindow.h"
-#include "MiniMapWindow.h"
-#include "OptionsWindow.h"
-#include "QueryWindow.h"
-
 #include "CityProperties.h"
 #include "Colors.h"
 #include "Connection.h"
+#include "Evaluation.h"
 #include "FileIo.h"
 #include "Font.h"
 #include "Graph.h"
@@ -48,10 +40,18 @@
 #include "Util.h"
 
 #include "Texture.h"
-#include "ToolPalette.h"
 
-#include "WindowGroup.h"
-#include "WindowStack.h"
+#include "UI\BudgetWindow.h"
+#include "UI\EvaluationWindow.h"
+#include "UI\FileIoDialog.h"
+#include "UI\GraphWindow.h"
+#include "UI\MiniMapWindow.h"
+#include "UI\OptionsWindow.h"
+#include "UI\QueryWindow.h"
+#include "UI/ToolPalette.h"
+#include "UI/WindowGroup.h"
+#include "UI/WindowStack.h"
+
 
 #include <algorithm>
 #include <cstdint>

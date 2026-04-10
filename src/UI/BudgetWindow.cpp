@@ -10,7 +10,7 @@
 // file, included in this distribution, for details.
 #include "BudgetWindow.h"
 
-#include "Util.h"
+#include "../Util.h"
 
 #include <algorithm>
 #include <map>

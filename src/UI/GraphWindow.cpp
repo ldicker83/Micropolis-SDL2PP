@@ -10,8 +10,8 @@
 // file, included in this distribution, for details.
 #include "GraphWindow.h"
 
-#include "Colors.h"
-#include "Graphics.h"
+#include "../Colors.h"
+#include "../Graphics.h"
 
 #include <array>
 #include <map>

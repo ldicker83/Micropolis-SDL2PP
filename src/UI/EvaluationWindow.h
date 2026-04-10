@@ -12,15 +12,13 @@
 
 #include "WindowBase.h"
 
-#include "Font.h"
-#include "StringRender.h"
-#include "Texture.h"
+#include "../Evaluation.h"
+#include "../Font.h"
+#include "../StringRender.h"
+#include "../Texture.h"
 
 #include <memory>
 #include <SDL2/SDL.h>
-
-
-#include "Evaluation.h"
 
 
 class EvaluationWindow : public WindowBase
