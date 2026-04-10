@@ -155,7 +155,6 @@ namespace
     std::unique_ptr<FileIoDialog> fileIo;
 
     std::unique_ptr<Font> MainFont;
-    std::unique_ptr<Font> MainBigFont;
 
 
     WindowStack GuiWindowStack;
@@ -540,8 +539,8 @@ void loadGraphics()
 
 void loadFonts()
 {
-    MainFont = std::make_unique<Font>("res/Raleway-Medium.ttf", 12);
-    MainBigFont = std::make_unique<Font>("res/Raleway-Medium.ttf", 14);
+    //MainFont = std::make_unique<Font>("res/Raleway-Medium.ttf", 12);
+    MainFont = std::make_unique<Font>("res/Raleway-Medium.ttf", 14);
 }
 
 
@@ -982,9 +981,9 @@ void initViewParamters()
     MainMapTexture.dimensions = { SimWidth * 16, SimHeight * 16 };
 
     UiHeaderRect.w = WindowSize.x - 20;
-    UiHeaderRect.h = RCI_Indicator.dimensions.y + 10 + MainBigFont->height() + 10;
+    UiHeaderRect.h = RCI_Indicator.dimensions.y + 10 + MainFont->height() + 10;
 
-    RciDestination = { UiHeaderRect.x + 5, UiHeaderRect.y + MainBigFont->height() + 10, RCI_Indicator.dimensions.x, RCI_Indicator.dimensions.y };
+    RciDestination = { UiHeaderRect.x + 5, UiHeaderRect.y + MainFont->height() + 10, RCI_Indicator.dimensions.x, RCI_Indicator.dimensions.y };
 
     ResidentialValveRect = { RciDestination.x + 9, RciDestination.y + 24, 4, 0 };
     CommercialValveRect = { RciDestination.x + 18, RciDestination.y + 24, 4, 0 };
@@ -1030,13 +1029,13 @@ void drawTopUi()
     SDL_RenderCopy(MainWindowRenderer, RCI_Indicator.texture, nullptr, &RciDestination);
     drawValve();
 
-    stringRenderer->drawString(*MainBigFont, monthString(static_cast<Month>(lastCityMonth())), {UiHeaderRect.x + 5, UiHeaderRect.y + 5});
-    stringRenderer->drawString(*MainBigFont, std::to_string(currentYear()), { UiHeaderRect.x + 35, UiHeaderRect.y + 5});
+    stringRenderer->drawString(*MainFont, monthString(static_cast<Month>(lastCityMonth())), {UiHeaderRect.x + 5, UiHeaderRect.y + 5});
+    stringRenderer->drawString(*MainFont, std::to_string(currentYear()), { UiHeaderRect.x + 35, UiHeaderRect.y + 5});
 
-    stringRenderer->drawString(*MainBigFont, LastMessage(), {100, UiHeaderRect.y + 5});
+    stringRenderer->drawString(*MainFont, LastMessage(), {100, UiHeaderRect.y + 5});
 
-    const Point<int> budgetPosition{ UiHeaderRect.x + UiHeaderRect.w - 5 - MainBigFont->width(currentBudget), UiHeaderRect.y + 5 };
-    stringRenderer->drawString(*MainBigFont, currentBudget, budgetPosition);
+    const Point<int> budgetPosition{ UiHeaderRect.x + UiHeaderRect.w - 5 - MainFont->width(currentBudget), UiHeaderRect.y + 5 };
+    stringRenderer->drawString(*MainFont, currentBudget, budgetPosition);
 }
 
 
@@ -1205,8 +1204,8 @@ void cleanUp()
     stringRenderer.reset(nullptr);
     toolPalette.reset(nullptr);
 
+    //MainFont.reset(nullptr);
     MainFont.reset(nullptr);
-    MainBigFont.reset(nullptr);
 
     SDL_DestroyTexture(BigTileset.texture);
     SDL_DestroyTexture(RCI_Indicator.texture);
