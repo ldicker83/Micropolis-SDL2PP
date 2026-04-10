@@ -53,6 +53,9 @@
 #include "UI/WindowStack.h"
 
 
+#include "UI/InterfaceManager.h"
+
+
 #include <algorithm>
 #include <cstdint>
 #include <iostream>
@@ -143,7 +146,7 @@ namespace
     Budget budget{};
     CityProperties cityProperties{};
 
-    std::unique_ptr<BudgetWindow> budgetWindow;
+    //std::unique_ptr<BudgetWindow> budgetWindow;
     std::unique_ptr<GraphWindow> graphWindow;
     std::unique_ptr<EvaluationWindow> evaluationWindow;
     std::unique_ptr<MiniMapWindow> miniMapWindow;
@@ -151,11 +154,11 @@ namespace
     std::unique_ptr<OptionsWindow> optionsWindow;
     std::unique_ptr<QueryWindow> queryWindow;
     std::unique_ptr<StringRender> stringRenderer;
-
     std::unique_ptr<FileIoDialog> fileIo;
 
     std::unique_ptr<Font> MainFont;
 
+	std::unique_ptr<InterfaceManager> interfaceManager;
 
     WindowStack GuiWindowStack;
     WindowGroup GuiModalWindows;
@@ -210,7 +213,7 @@ namespace
     {
         if (!AutoBudget && budget.NeedsAttention())
         {
-            budgetWindow->show();
+            interfaceManager->showBudgetWindow();
         }
     }
 };
@@ -234,8 +237,7 @@ const Point<int>& viewOffset()
 
 void showBudgetWindow()
 {
-    budgetWindow->show();
-    budgetWindow->update();
+    interfaceManager->showBudgetWindow();
 }
 
 
@@ -596,7 +598,10 @@ void windowResized(const Vector<int>& size)
     miniMapWindow->updateViewportSize(WindowSize);
 
     updateMapDrawParameters();
-    centerWindow(*budgetWindow);
+
+    interfaceManager->centerAllWindows();
+
+    //centerWindow(*budgetWindow);
     centerWindow(*graphWindow);
     centerWindow(*evaluationWindow);
     centerWindow(*optionsWindow);
@@ -636,13 +641,15 @@ bool IgnoreToolMouseUp(Point<int>& mousePosition)
         }
     }
 
-    if (GuiWindowStack.pointInWindow(EventHandling::MousePosition))
+    if (GuiWindowStack.pointInWindow(EventHandling::MousePosition) ||
+        interfaceManager->pointInWindow(EventHandling::MousePosition))
     {
         return true;
     }
 
     if (EventHandling::MouseDownPosition != EventHandling::MousePosition &&
-        GuiWindowStack.pointInWindow(EventHandling::MouseDownPosition))
+        (GuiWindowStack.pointInWindow(EventHandling::MouseDownPosition) ||
+        interfaceManager->pointInWindow(EventHandling::MouseDownPosition)))
     {
         return true;
     }
@@ -704,6 +711,8 @@ void handleKeyEvent(SDL_Event& event)
         GuiWindowStack.hide();
         GuiModalWindows.hide();
 
+        interfaceManager->hideAllWindows();
+
         optionsWindow->setOptions({ autoBudget(), autoBulldoze(), autoGoto(), disastersEnabled(), false, false });
         optionsWindow->show();
         break;
@@ -759,7 +768,8 @@ void handleKeyEvent(SDL_Event& event)
         break;
 
     case SDLK_F10:
-        ShowWindowAndBringToFront(*budgetWindow.get());
+        //ShowWindowAndBringToFront(*budgetWindow.get());
+		interfaceManager->showBudgetWindow();
         break;
 
     case SDLK_F11:
@@ -800,6 +810,7 @@ void handleMouseEvent(SDL_Event& event)
         calculateMouseToWorld();
 
         GuiWindowStack.injectMouseMotion(mouseMotionDelta);
+		interfaceManager->injectMouseMotion(mouseMotionDelta);
 
         if ((SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON_RMASK) != 0)
         {
@@ -824,6 +835,8 @@ void handleMouseEvent(SDL_Event& event)
                 }
             }
 
+			interfaceManager->injectMouseDown(EventHandling::MousePosition);
+
             if (GuiWindowStack.pointInWindow(EventHandling::MousePosition))
             {
                 GuiWindowStack.updateStack(EventHandling::MousePosition);
@@ -833,7 +846,7 @@ void handleMouseEvent(SDL_Event& event)
 
             toolStart(TilePointedAt);
             
-            if (!budgetWindow->visible() && !pendingToolProperties().draggable)
+            if (!interfaceManager->budgetWindowVisible() && !pendingToolProperties().draggable)
             {
                 ToolDown(TilePointedAt, budget);
             }
@@ -854,6 +867,7 @@ void handleMouseEvent(SDL_Event& event)
             EventHandling::MouseClickPosition = { event.button.x, event.button.y };
 
             GuiWindowStack.injectMouseUp();
+            interfaceManager->injectMouseUp();
 
             if (IgnoreToolMouseUp(mousePosition))
             {
@@ -1071,7 +1085,8 @@ void DrawPendingTool(const ToolPalette& palette)
 void drawDraggableToolVector()
 {
     if (!EventHandling::MouseLeftDown) { return; }
-    if (GuiWindowStack.pointInWindow(EventHandling::MouseDownPosition))
+    if (GuiWindowStack.pointInWindow(EventHandling::MouseDownPosition) ||
+        interfaceManager->pointInWindow(EventHandling::MouseDownPosition))
     {
         return;
     }
@@ -1158,8 +1173,10 @@ void initUI()
     toolPalette = std::make_unique<ToolPalette>(MainWindowRenderer);
     toolPalette->position({ UiHeaderRect.x, UiHeaderRect.y + UiHeaderRect.h + 5 });
 
-    budgetWindow = std::make_unique<BudgetWindow>(MainWindowRenderer, *stringRenderer, budget);
-    centerWindow(*budgetWindow);
+    interfaceManager = std::make_unique<InterfaceManager>(MainWindowRenderer, MainWindow, budget);
+
+    //budgetWindow = std::make_unique<BudgetWindow>(MainWindowRenderer, *stringRenderer, budget);
+    //centerWindow(*budgetWindow);
 
     graphWindow = std::make_unique<GraphWindow>(MainWindowRenderer);
     centerWindow(*graphWindow);
@@ -1177,7 +1194,7 @@ void initUI()
     queryWindow = std::make_unique<QueryWindow>(MainWindowRenderer);
     centerWindow(*queryWindow);
 
-    GuiWindowStack.addWindow(budgetWindow.get());
+    //GuiWindowStack.addWindow(budgetWindow.get());
     GuiWindowStack.addWindow(evaluationWindow.get());
     GuiWindowStack.addWindow(graphWindow.get());
     GuiWindowStack.addWindow(toolPalette.get());
@@ -1185,7 +1202,7 @@ void initUI()
     GuiWindowStack.addWindow(queryWindow.get());
 
     GuiModalWindows.addWindow(optionsWindow.get());
-    GuiModalWindows.addWindow(budgetWindow.get());
+    //GuiModalWindows.addWindow(budgetWindow.get());
 
     UiRects.push_back(&UiHeaderRect);
 }
@@ -1195,7 +1212,7 @@ void cleanUp()
 {
     deinitTimers();
 
-    budgetWindow.reset(nullptr);
+    //budgetWindow.reset(nullptr);
     graphWindow.reset(nullptr);
     evaluationWindow.reset(nullptr);
     miniMapWindow.reset(nullptr);
@@ -1232,16 +1249,19 @@ void GameLoop()
         pendingTool(toolPalette->tool());
         drawSprites();
 
+        interfaceManager->draw();
+
         if (GuiModalWindows.windowVisible())
         {
-            SDL_SetRenderDrawColor(MainWindowRenderer, 0, 0, 0, 175);
-            SDL_RenderFillRect(MainWindowRenderer, nullptr);
+            //SDL_SetRenderDrawColor(MainWindowRenderer, 0, 0, 0, 175);
+            //SDL_RenderFillRect(MainWindowRenderer, nullptr);
             
             GuiModalWindows.draw();
         }
         else
         {
-            if (!GuiWindowStack.pointInWindow(EventHandling::MousePosition))
+            if (!GuiWindowStack.pointInWindow(EventHandling::MousePosition) &&
+                !interfaceManager->pointInWindow(EventHandling::MousePosition))
             {
                 DrawPendingTool(*toolPalette);
                 drawDraggableToolVector();
@@ -1257,7 +1277,10 @@ void GameLoop()
 
             GuiWindowStack.draw();
 
-            simLoop(SimulationStep);
+            if(!interfaceManager->modalWindowVisible())
+            {
+                simLoop(SimulationStep);
+            }
         }
 
         SDL_RenderPresent(MainWindowRenderer);

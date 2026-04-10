@@ -19,6 +19,12 @@
     <Filter Include="Source Files\NativeFileDialog">
       <UniqueIdentifier>{f8c7d5c6-5ac2-4aa8-8f92-25afbeb57cac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\UI">
+      <UniqueIdentifier>{665e3b9b-f3c5-453e-9f14-551c9aafb32d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI">
+      <UniqueIdentifier>{3a5a5494-cf91-416f-843f-4c6eb84441cf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\g_ani.cpp">
@@ -31,9 +37,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\s_disast.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\s_fileio.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\s_gen.cpp">
@@ -60,9 +63,6 @@
     <ClCompile Include="src\w_update.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\w_util.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Sprite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -75,19 +75,10 @@
     <ClCompile Include="src\Font.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ToolPalette.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\BudgetWindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\StringRender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Budget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GraphWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\FileIo.cpp">
@@ -102,9 +93,6 @@
     <ClCompile Include="src\Evaluation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\MiniMapWindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Graphics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -117,25 +105,43 @@
     <ClCompile Include="src\Traffic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\EvaluationWindow.cpp">
+    <ClCompile Include="src\Util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\WindowStack.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\UI\BudgetWindow.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="src\WindowBase.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\UI\EvaluationWindow.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="src\QueryWindow.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\UI\FileIoDialog.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="nativefiledialog-extended\src\nfd_win.cpp">
-      <Filter>Source Files\NativeFileDialog</Filter>
+    <ClCompile Include="src\UI\GraphWindow.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="src\OptionsWindow.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\UI\MiniMapWindow.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="src\WindowGroup.cpp">
+    <ClCompile Include="src\UI\OptionsWindow.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\QueryWindow.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\ToolPalette.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\WindowBase.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\WindowGroup.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\WindowStack.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\InterfaceManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -167,9 +173,6 @@
     <ClInclude Include="src\w_resrc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\w_util.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\s_msg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -177,9 +180,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Power.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\s_fileio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\g_ani.h">
@@ -209,13 +209,7 @@
     <ClInclude Include="src\VectorSizeRange.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ToolPalette.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\BudgetWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\StringRender.h">
@@ -225,9 +219,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\CityProperties.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GraphWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Graph.h">
@@ -245,13 +236,7 @@
     <ClInclude Include="src\Evaluation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\MiniMapWindow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\BindFunction.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\WindowBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\EffectMap.h">
@@ -272,29 +257,50 @@
     <ClInclude Include="src\Traffic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\EvaluationWindow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\WindowStack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\QueryWindow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="nativefiledialog-extended\src\include\nfd.h">
-      <Filter>Header Files\NativeFileDialog</Filter>
-    </ClInclude>
-    <ClInclude Include="nativefiledialog-extended\src\include\nfd.hpp">
-      <Filter>Header Files\NativeFileDialog</Filter>
-    </ClInclude>
-    <ClInclude Include="src\OptionsWindow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\WindowGroup.h">
+    <ClInclude Include="src\Util.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\BudgetWindow.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\EvaluationWindow.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\FileIoDialog.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\GraphWindow.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\MiniMapWindow.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\OptionsWindow.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\QueryWindow.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\ToolPalette.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\WindowBase.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\WindowGroup.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\WindowStack.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\Button.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\InterfaceManager.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

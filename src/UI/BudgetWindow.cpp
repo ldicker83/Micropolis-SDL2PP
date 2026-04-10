@@ -135,10 +135,10 @@ namespace
 };
 
 
-BudgetWindow::BudgetWindow(SDL_Renderer* renderer, const StringRender& stringRenderer, Budget& budget) :
+BudgetWindow::BudgetWindow(SDL_Renderer* renderer, Budget& budget) :
 	mBudget(budget),
 	mRenderer(renderer),
-	mStringRenderer(stringRenderer),
+	mStringRenderer(renderer),
 	mFont(new Font("res/Raleway-Medium.ttf", 14)),
 	mTexture(loadTexture(renderer, "images/budget.png"))
 {
