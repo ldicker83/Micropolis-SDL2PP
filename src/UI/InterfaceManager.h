@@ -28,6 +28,18 @@
 class InterfaceManager
 {
 public:
+	enum class Window
+	{
+		Budget,
+		Graph,
+		Evaluation,
+		MiniMap,
+		ToolPalette,
+		Options,
+		Query
+	};
+
+public:
 	InterfaceManager() = delete;
 	InterfaceManager(const InterfaceManager&) = delete;
 	InterfaceManager& operator=(const InterfaceManager&) = delete;
@@ -42,9 +54,12 @@ public:
 	bool pointInWindow(const Point<int>& position) const;
 
 	void centerAllWindows();
+	void centerWindow(Window window);
 
 	void showBudgetWindow();
 	bool budgetWindowVisible() const;
+
+	OptionsWindow& optionsWindow() { return mOptionsWindow; }
 
 	bool modalWindowVisible() const;
 
@@ -61,7 +76,7 @@ private:
 	//EvaluationWindow mEvaluationWindow;
 	//MiniMapWindow mMiniMapWindow;
 	//ToolPalette mToolPalette;
-	//OptionsWindow mOptionsWindow;
+	OptionsWindow mOptionsWindow;
 	//QueryWindow mQueryWindow;
 	//StringRender mStringRenderer;
 	//FileIoDialog mFileIo;

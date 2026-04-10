@@ -1,9 +1,14 @@
 #include "InterfaceManager.h"
 
+#include <unordered_map>
 
 namespace
 {
-	void centerWindow(SDL_Window* sdlWindow, WindowBase& window)
+
+	std::unordered_map<InterfaceManager::Window, WindowBase*> WindowTable;
+
+
+	void CenterWindow(SDL_Window* sdlWindow, WindowBase& window)
 	{
 		int windowWidth = 0, windowHeight = 0;
 		SDL_GetWindowSize(sdlWindow, &windowWidth, &windowHeight);
@@ -11,7 +16,7 @@ namespace
 	}
 
 
-	void bringWindowToFront(WindowStack& stack, WindowBase& window)
+	void BringWindowToFront(WindowStack& stack, WindowBase& window)
 	{
 		stack.bringToFront(&window);
 		window.toggleVisible();
@@ -26,11 +31,17 @@ namespace
 InterfaceManager::InterfaceManager(SDL_Renderer* renderer, SDL_Window* window, Budget& budget) :
 	mRenderer{ renderer },
 	mWindow{ window },
-	mBudgetWindow{ renderer, budget }
+	mBudgetWindow{ renderer, budget },
+	mOptionsWindow{ renderer }
 {
 	mWindowStack.addWindow(&mBudgetWindow);
+	mWindowStack.addWindow(&mOptionsWindow);
 
 	mModalWindows.addWindow(&mBudgetWindow);
+	mModalWindows.addWindow(&mOptionsWindow);
+
+	WindowTable[InterfaceManager::Window::Budget] = &mBudgetWindow;
+	WindowTable[InterfaceManager::Window::Options] = &mOptionsWindow;
 }
 
 
@@ -65,13 +76,20 @@ bool InterfaceManager::pointInWindow(const Point<int>& position) const
 
 void InterfaceManager::centerAllWindows()
 {
-	centerWindow(mWindow, mBudgetWindow);
+	CenterWindow(mWindow, mBudgetWindow);
+	CenterWindow(mWindow, mOptionsWindow);
+}
+
+
+void InterfaceManager::centerWindow(Window window)
+{
+	CenterWindow(mWindow, *WindowTable.at(window));
 }
 
 
 void InterfaceManager::showBudgetWindow()
 {
-	bringWindowToFront(mWindowStack, mBudgetWindow);
+	BringWindowToFront(mWindowStack, mBudgetWindow);
 }
 
 

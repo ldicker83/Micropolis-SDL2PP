@@ -146,12 +146,10 @@ namespace
     Budget budget{};
     CityProperties cityProperties{};
 
-    //std::unique_ptr<BudgetWindow> budgetWindow;
     std::unique_ptr<GraphWindow> graphWindow;
     std::unique_ptr<EvaluationWindow> evaluationWindow;
     std::unique_ptr<MiniMapWindow> miniMapWindow;
     std::unique_ptr<ToolPalette> toolPalette;
-    std::unique_ptr<OptionsWindow> optionsWindow;
     std::unique_ptr<QueryWindow> queryWindow;
     std::unique_ptr<StringRender> stringRenderer;
     std::unique_ptr<FileIoDialog> fileIo;
@@ -161,8 +159,6 @@ namespace
 	std::unique_ptr<InterfaceManager> interfaceManager;
 
     WindowStack GuiWindowStack;
-    WindowGroup GuiModalWindows;
-
 
     unsigned int speedModifier()
     {
@@ -599,12 +595,11 @@ void windowResized(const Vector<int>& size)
 
     updateMapDrawParameters();
 
-    interfaceManager->centerAllWindows();
+    interfaceManager->centerWindow(InterfaceManager::Window::Budget);
+    interfaceManager->centerWindow(InterfaceManager::Window::Options);
 
-    //centerWindow(*budgetWindow);
     centerWindow(*graphWindow);
     centerWindow(*evaluationWindow);
-    centerWindow(*optionsWindow);
 
     UiHeaderRect.w = WindowSize.x - 20;
 }
@@ -699,22 +694,30 @@ void showEvaluationWindow()
 
 void handleKeyEvent(SDL_Event& event)
 {
-    if (optionsWindow->visible())
+    if (interfaceManager->optionsWindow().visible())
     {
-        optionsWindow->injectKeyDown(event.key.keysym.sym);
+        interfaceManager->optionsWindow().injectKeyDown(event.key.keysym.sym);
         return;
     }
+
+    const OptionsWindow::Options options
+    {
+        autoBudget(),
+        autoBulldoze(),
+        autoGoto(),
+        disastersEnabled(),
+        false, // playMusic() - not implemented
+        false  // playSound() - not implemented
+    };
 
     switch (event.key.keysym.sym)
     {
     case SDLK_ESCAPE:
         GuiWindowStack.hide();
-        GuiModalWindows.hide();
-
         interfaceManager->hideAllWindows();
 
-        optionsWindow->setOptions({ autoBudget(), autoBulldoze(), autoGoto(), disastersEnabled(), false, false });
-        optionsWindow->show();
+        interfaceManager->optionsWindow().setOptions(options);
+        interfaceManager->optionsWindow().show();
         break;
 
     case SDLK_0:
@@ -768,7 +771,6 @@ void handleKeyEvent(SDL_Event& event)
         break;
 
     case SDLK_F10:
-        //ShowWindowAndBringToFront(*budgetWindow.get());
 		interfaceManager->showBudgetWindow();
         break;
 
@@ -1175,36 +1177,28 @@ void initUI()
 
     interfaceManager = std::make_unique<InterfaceManager>(MainWindowRenderer, MainWindow, budget);
 
-    //budgetWindow = std::make_unique<BudgetWindow>(MainWindowRenderer, *stringRenderer, budget);
-    //centerWindow(*budgetWindow);
-
     graphWindow = std::make_unique<GraphWindow>(MainWindowRenderer);
     centerWindow(*graphWindow);
     
     evaluationWindow = std::make_unique<EvaluationWindow>(MainWindowRenderer);
     centerWindow(*evaluationWindow);
 
-    optionsWindow = std::make_unique<OptionsWindow>(MainWindowRenderer);
-    centerWindow(*optionsWindow);
-    optionsWindow->optionsChangedConnect(optionsChanged);
-    optionsWindow->newGameCallbackConnect(newGame);
-    optionsWindow->saveGameCallbackConnect(saveGame);
-    optionsWindow->openGameCallbackConnect(openGame);
+    interfaceManager->optionsWindow().optionsChangedConnect(optionsChanged);
+    interfaceManager->optionsWindow().newGameCallbackConnect(newGame);
+    interfaceManager->optionsWindow().saveGameCallbackConnect(saveGame);
+    interfaceManager->optionsWindow().openGameCallbackConnect(openGame);
 
     queryWindow = std::make_unique<QueryWindow>(MainWindowRenderer);
     centerWindow(*queryWindow);
 
-    //GuiWindowStack.addWindow(budgetWindow.get());
     GuiWindowStack.addWindow(evaluationWindow.get());
     GuiWindowStack.addWindow(graphWindow.get());
     GuiWindowStack.addWindow(toolPalette.get());
-    GuiWindowStack.addWindow(optionsWindow.get());
     GuiWindowStack.addWindow(queryWindow.get());
 
-    GuiModalWindows.addWindow(optionsWindow.get());
-    //GuiModalWindows.addWindow(budgetWindow.get());
-
     UiRects.push_back(&UiHeaderRect);
+
+    interfaceManager->centerAllWindows();
 }
 
 
@@ -1212,16 +1206,13 @@ void cleanUp()
 {
     deinitTimers();
 
-    //budgetWindow.reset(nullptr);
     graphWindow.reset(nullptr);
     evaluationWindow.reset(nullptr);
     miniMapWindow.reset(nullptr);
-    optionsWindow.reset(nullptr);
     queryWindow.reset(nullptr);
     stringRenderer.reset(nullptr);
     toolPalette.reset(nullptr);
 
-    //MainFont.reset(nullptr);
     MainFont.reset(nullptr);
 
     SDL_DestroyTexture(BigTileset.texture);
@@ -1249,16 +1240,7 @@ void GameLoop()
         pendingTool(toolPalette->tool());
         drawSprites();
 
-        interfaceManager->draw();
-
-        if (GuiModalWindows.windowVisible())
-        {
-            //SDL_SetRenderDrawColor(MainWindowRenderer, 0, 0, 0, 175);
-            //SDL_RenderFillRect(MainWindowRenderer, nullptr);
-            
-            GuiModalWindows.draw();
-        }
-        else
+        if (!interfaceManager->modalWindowVisible())
         {
             if (!GuiWindowStack.pointInWindow(EventHandling::MousePosition) &&
                 !interfaceManager->pointInWindow(EventHandling::MousePosition))
@@ -1277,11 +1259,10 @@ void GameLoop()
 
             GuiWindowStack.draw();
 
-            if(!interfaceManager->modalWindowVisible())
-            {
-                simLoop(SimulationStep);
-            }
+            simLoop(SimulationStep);
         }
+
+        interfaceManager->draw();
 
         SDL_RenderPresent(MainWindowRenderer);
         miniMapWindow->drawUI();
