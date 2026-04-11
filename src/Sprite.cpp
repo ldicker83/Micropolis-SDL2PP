@@ -561,7 +561,7 @@ void destroyTile(const Point<int>& location)
         }
         else
         {
-            tileValue(mapCoords.x, mapCoords.y) = (animationEnabled() ? ExplosionTiny : (ExplosionTinyLast - 3)) | BulldozableBit | AnimatedBit;
+            tileValue(mapCoords.x, mapCoords.y) = (gameplayOptions().animationEnabled ? ExplosionTiny : (ExplosionTinyLast - 3)) | BulldozableBit | AnimatedBit;
         }
     }
 }
@@ -791,7 +791,7 @@ void updateAirplane(SimSprite& sprite)
     }
 
     /* deh added test for !Disasters */
-    if (disastersEnabled())
+    if (gameplayOptions().disastersEnabled)
     {
         for (auto& other : Sprites)
         {

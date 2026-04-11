@@ -210,66 +210,6 @@ void showBudgetWindow()
 }
 
 
-bool autoBudget()
-{
-    return gameOptions.autoBudget;
-}
-
-
-void autoBudget(const bool b)
-{
-    gameOptions.autoBudget = b;
-}
-
-
-bool autoBulldoze()
-{
-    return gameOptions.autoBulldoze;
-}
-
-
-void autoBulldoze(const bool b)
-{
-    gameOptions.autoBulldoze = b;
-}
-
-
-bool disastersEnabled()
-{
-    return gameOptions.disastersEnabled;
-}
-
-
-void disastersEnabled(const bool b)
-{
-    gameOptions.disastersEnabled = b;
-}
-
-
-bool autoGoto()
-{
-    return gameOptions.autoGoto;
-}
-
-
-void autoGoto(const bool b)
-{
-    gameOptions.autoGoto = b;
-}
-
-
-bool animationEnabled()
-{
-    return gameOptions.animationEnabled;
-}
-
-
-void animationEnabled(bool b)
-{
-    gameOptions.animationEnabled = b;
-}
-
-
 void simExit()
 {
     Exit = true;
@@ -347,6 +287,12 @@ void initWillStuff()
 }
 
 
+GameOptions& gameplayOptions()
+{
+    return gameOptions;
+}
+
+
 void simInit()
 {
     userSoundOn(true);
@@ -355,9 +301,7 @@ void simInit()
     StartingYear = 1900;
     AutoGotoMessageLocation(true);
     CityTime = 50;
-    disastersEnabled(true);
-    autoBulldoze(true);
-    autoBudget(true);
+	gameplayOptions() = GameOptions{};
     MessageId(NotificationId::None);
     ClearMes();
     simSpeed(SimulationSpeed::Normal);

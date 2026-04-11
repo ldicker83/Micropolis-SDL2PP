@@ -322,7 +322,7 @@ void DoDisasters(CityProperties& properties)
         ScenarioDisaster();
     }
 
-    if (!disastersEnabled())
+    if (!gameplayOptions().disastersEnabled)
     {
         return;
     }

@@ -130,7 +130,7 @@ void updateDate()
 
 		// \fixme   This is inelegant. Find a better way to do this without
 		//          having to call back into a global function from here.
-        if (month == 0 && !autoBudget() && !newMap())
+        if (month == 0 && !gameplayOptions().autoBudget && !newMap())
         {
             showBudgetWindow();
         }

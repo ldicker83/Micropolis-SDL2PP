@@ -522,7 +522,7 @@ void updateSpecialZones(bool powered, const CityProperties& properties)
         return;
 
     case NuclearPower:
-        if (disastersEnabled() && !randomRange(0, MltdwnTab[properties.GameLevel()]))
+        if (gameplayOptions().disastersEnabled && !randomRange(0, MltdwnTab[properties.GameLevel()]))
         {
             DoMeltdown(SimulationTarget.x, SimulationTarget.y);
             return;

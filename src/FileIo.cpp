@@ -112,9 +112,9 @@ namespace
         CityTime = std::clamp(MiscHistory[8], 0, std::numeric_limits<int>::max());
         budget.CurrentFunds(MiscHistory[50]);
         budget.PreviousFunds(MiscHistory[51]);
-        autoBulldoze(MiscHistory[52]);
-        autoBudget(MiscHistory[53]);
-        autoGoto(MiscHistory[54]);
+        gameplayOptions().autoBulldoze = MiscHistory[52];
+        gameplayOptions().autoBudget = MiscHistory[53];
+        gameplayOptions().autoGoto = MiscHistory[54];
 
         userSoundOn(MiscHistory[55]);
         budget.TaxRate(std::clamp(MiscHistory[56], 0, 20));
@@ -145,9 +145,9 @@ namespace
         MiscHistory[50] = budget.CurrentFunds();
         MiscHistory[51] = budget.PreviousFunds();
 
-        MiscHistory[52] = autoBulldoze();
-        MiscHistory[53] = autoBudget();
-        MiscHistory[54] = autoGoto();
+        MiscHistory[52] = gameplayOptions().autoBulldoze;
+        MiscHistory[53] = gameplayOptions().autoBudget;
+        MiscHistory[54] = gameplayOptions().autoGoto;
         MiscHistory[55] = userSoundOn();
         MiscHistory[57] = static_cast<int>(simSpeed());
         MiscHistory[56] = budget.TaxRate();

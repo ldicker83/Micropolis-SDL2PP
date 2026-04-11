@@ -10,6 +10,7 @@
 // file, included in this distribution, for details.
 #pragma once
 
+#include "GameOptions.h"
 #include "Texture.h"
 
 #include "Math/Point.h"
@@ -58,20 +59,6 @@ void showBudgetWindow();
 
 void initWillStuff();
 
-bool autoBudget();
-void autoBudget(const bool b);
+GameOptions& gameplayOptions();
 
-bool autoGoto();
-void autoGoto(const bool b);
-
-bool autoBulldoze();
-void autoBulldoze(const bool b);
-
-bool disastersEnabled();
-void disastersEnabled(const bool b);
-
-bool animationEnabled();
-void animationEnabled(bool b);
-
-void simExit();
 const Point<int>& viewOffset();

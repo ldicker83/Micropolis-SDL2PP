@@ -421,7 +421,7 @@ ToolResult checkArea(const int mapH, const int mapV, const int base, const int s
         {
             const unsigned int tileValue{ maskedTileValue(mapX, mapY) };
 
-            if (autoBulldoze())
+            if (gameplayOptions().autoBulldoze)
             {
                 // if autoDoze is enabled, add up the cost of bulldozed tiles
                 if (tileValue != 0)
@@ -638,7 +638,7 @@ void putRubble(const int mapX, const int mapY, const int size)
                 int cellValue = maskedTileValue(x, y);
                 if ((cellValue != RadiationTile) && (cellValue != 0))
                 {
-                    tileValue(x, y) = (animationEnabled() ? (ExplosionTiny + randomRange(0, 2)) : ExplosionTinySome) | AnimatedBit | BulldozableBit;
+                    tileValue(x, y) = (gameplayOptions().animationEnabled ? (ExplosionTiny + randomRange(0, 2)) : ExplosionTinySome) | AnimatedBit | BulldozableBit;
                 }
             }
         }

@@ -587,7 +587,7 @@ ToolResult CanConnectTile(int x, int y, Tool tool, Budget& budget)
         return ToolResult::InsufficientFunds;
     }
 
-    if (autoBulldoze() && (budget.CurrentFunds() > 0) && (tileCanBeBulldozed({x, y})))
+    if (gameplayOptions().autoBulldoze && (budget.CurrentFunds() > 0) && (tileCanBeBulldozed({x, y})))
     {
         const int tile = NeutralizeRoad(tileValue(x, y));
         // Maybe this should check BULLBIT instead of checking tile values?
@@ -631,7 +631,7 @@ ToolResult ConnectTile(int x, int y, Tool tool, Budget& budget)
     // AutoDoze
     if (tool == Tool::Rail || tool == Tool::Road || tool == Tool::Wire)
     {
-        if (autoBulldoze() && (budget.CurrentFunds() > 0) && (Tile & BulldozableBit))
+        if (gameplayOptions().autoBulldoze && (budget.CurrentFunds() > 0) && (Tile & BulldozableBit))
         {
             Tile = NeutralizeRoad(Tile);
             // Maybe this should check BULLBIT instead of checking tile values?
