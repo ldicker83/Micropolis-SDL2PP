@@ -34,12 +34,15 @@ InterfaceManager::InterfaceManager(SDL_Renderer* renderer, SDL_Window* window, B
 	mBudgetWindow{ renderer, budget },
 	mGraphWindow{ renderer },
 	mToolPalette{ renderer },
-	mOptionsWindow{ renderer }
+	mOptionsWindow{ renderer },
+	mQueryWindow{ renderer }
 {
 	mWindowStack.addWindow(&mBudgetWindow);
 	mWindowStack.addWindow(&mGraphWindow);
 	mWindowStack.addWindow(&mOptionsWindow);
+	mWindowStack.addWindow(&mQueryWindow);
 	mWindowStack.addWindow(&mToolPalette);
+	
 
 	mModalWindows.addWindow(&mBudgetWindow);
 	mModalWindows.addWindow(&mOptionsWindow);
@@ -47,6 +50,7 @@ InterfaceManager::InterfaceManager(SDL_Renderer* renderer, SDL_Window* window, B
 	WindowTable[InterfaceManager::Window::Budget] = &mBudgetWindow;
 	WindowTable[InterfaceManager::Window::Graph] = &mGraphWindow;
 	WindowTable[InterfaceManager::Window::Options] = &mOptionsWindow;
+	WindowTable[InterfaceManager::Window::Query] = &mQueryWindow;
 	WindowTable[InterfaceManager::Window::ToolPalette] = &mToolPalette;
 
 	centerAllWindows();
@@ -112,9 +116,10 @@ void InterfaceManager::centerWindow(Window window)
 
 void InterfaceManager::centerAllWindows()
 {
-	CenterWindow(mWindow, mBudgetWindow);
-	CenterWindow(mWindow, mOptionsWindow);
-	CenterWindow(mWindow, mToolPalette);
+	for (auto& [id, window] : WindowTable)
+	{
+		CenterWindow(mWindow, *window);
+	}
 }
 
 
@@ -132,7 +137,9 @@ bool InterfaceManager::budgetWindowVisible() const
 
 void InterfaceManager::showWindow(Window window)
 {
-	BringWindowToFront(mWindowStack, *WindowTable.at(window));
+	auto windowPtr = WindowTable.at(window);
+	BringWindowToFront(mWindowStack, *windowPtr);
+	windowPtr->show();
 }
 
 

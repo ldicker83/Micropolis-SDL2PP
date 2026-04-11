@@ -64,7 +64,10 @@ public:
 
 	void showWindow(Window window);
 
+	void bringWindowToFront(Window window);
+
 	OptionsWindow& optionsWindow() { return mOptionsWindow; }
+	QueryWindow& queryWindow() { return mQueryWindow; }
 	ToolPalette& toolPalette() { return mToolPalette; }
 
 	bool modalWindowVisible() const;
@@ -83,8 +86,7 @@ private:
 	//MiniMapWindow mMiniMapWindow;
 	ToolPalette mToolPalette;
 	OptionsWindow mOptionsWindow;
-	//QueryWindow mQueryWindow;
-	//StringRender mStringRenderer;
+	QueryWindow mQueryWindow;
 	//FileIoDialog mFileIo;
 
 	WindowStack mWindowStack;

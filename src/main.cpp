@@ -148,9 +148,9 @@ namespace
 
     std::unique_ptr<EvaluationWindow> evaluationWindow;
     std::unique_ptr<MiniMapWindow> miniMapWindow;
-    std::unique_ptr<QueryWindow> queryWindow;
-    std::unique_ptr<StringRender> stringRenderer;
     std::unique_ptr<FileIoDialog> fileIo;
+
+    std::unique_ptr<StringRender> stringRenderer;
 
     std::unique_ptr<Font> MainFont;
 
@@ -596,6 +596,7 @@ void windowResized(const Vector<int>& size)
     interfaceManager->centerWindow(InterfaceManager::Window::Budget);
     interfaceManager->centerWindow(InterfaceManager::Window::Graph);
     interfaceManager->centerWindow(InterfaceManager::Window::Options);
+    interfaceManager->centerWindow(InterfaceManager::Window::Query);
 
     centerWindow(*evaluationWindow);
 
@@ -773,7 +774,7 @@ void handleKeyEvent(SDL_Event& event)
         break;
 
     case SDLK_F11:
-        ShowWindowAndBringToFront(*queryWindow.get());
+        interfaceManager->showWindow(InterfaceManager::Window::Query);
         break;
 
     case SDLK_F1:
@@ -856,9 +857,8 @@ void handleMouseEvent(SDL_Event& event)
 
             if (pendingTool() == Tool::Query)
             {
-                GuiWindowStack.bringToFront(queryWindow.get());
-                queryWindow->setQueryResult(queryResult());
-                queryWindow->show();
+                interfaceManager->queryWindow().setQueryResult(queryResult());
+                interfaceManager->showWindow(InterfaceManager::Window::Query);
             }
         }
         break;
@@ -1177,8 +1177,6 @@ void initUI()
     interfaceManager = std::make_unique<InterfaceManager>(MainWindowRenderer, MainWindow, budget);
     interfaceManager->positionWindow(InterfaceManager::Window::ToolPalette, { UiHeaderRect.x, UiHeaderRect.y + UiHeaderRect.h + 5 });
 
-    interfaceManager->centerWindow(InterfaceManager::Window::Graph);
-    
     evaluationWindow = std::make_unique<EvaluationWindow>(MainWindowRenderer);
     centerWindow(*evaluationWindow);
 
@@ -1187,11 +1185,7 @@ void initUI()
     interfaceManager->optionsWindow().saveGameCallbackConnect(saveGame);
     interfaceManager->optionsWindow().openGameCallbackConnect(openGame);
 
-    queryWindow = std::make_unique<QueryWindow>(MainWindowRenderer);
-    centerWindow(*queryWindow);
-
     GuiWindowStack.addWindow(evaluationWindow.get());
-    GuiWindowStack.addWindow(queryWindow.get());
 
     UiRects.push_back(&UiHeaderRect);
 }
@@ -1203,7 +1197,6 @@ void cleanUp()
 
     evaluationWindow.reset(nullptr);
     miniMapWindow.reset(nullptr);
-    queryWindow.reset(nullptr);
     
     interfaceManager.reset(nullptr);
 
