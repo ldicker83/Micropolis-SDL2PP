@@ -15,6 +15,7 @@
 #include "Button.h"
 
 #include "../Font.h"
+#include "../GameOptions.h"
 #include "../StringRender.h"
 #include "../Texture.h"
 
@@ -29,17 +30,7 @@
 class OptionsWindow : public WindowBase
 {
 public:
-    struct Options
-    {
-        bool autoBudget{ false };
-        bool autoBulldoze{ true };
-        bool autoGoto{ true };
-        bool disastersEnabled{ true };
-        bool playMusic{ true };
-        bool playSound{ true };
-    };
-
-    using CallbackOptionsChanged = std::function<void(const Options&)>;
+    using CallbackOptionsChanged = std::function<void(const GameOptions&)>;
     using CallbackSignal = std::function<void(void)>;
 
 public:
@@ -54,7 +45,7 @@ public:
     void openGameCallbackConnect(CallbackSignal);
     void saveGameCallbackConnect(CallbackSignal);
 
-    void setOptions(const Options&);
+    void setOptions(const GameOptions&);
 
     void draw() override;
     void update() override {}
@@ -94,7 +85,7 @@ private:
 
     std::vector<Button> mButtons;
 
-    Options mOptions;
+    GameOptions mOptions;
 
     SDL_Renderer* mRenderer{ nullptr };
 };

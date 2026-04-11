@@ -65,6 +65,7 @@
     <ClInclude Include="src\Evaluation.h" />
     <ClInclude Include="src\FileIo.h" />
     <ClInclude Include="src\Font.h" />
+    <ClInclude Include="src\GameOptions.h" />
     <ClInclude Include="src\Graph.h" />
     <ClInclude Include="src\Graphics.h" />
     <ClInclude Include="src\g_ani.h" />

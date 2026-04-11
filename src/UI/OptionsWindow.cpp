@@ -42,14 +42,14 @@ namespace
 	};
 
 	
-	void setOptionsFromCheckboxValues(OptionsWindow::Options& options)
+	void setOptionsFromCheckboxValues(GameOptions& options)
 	{
 		options.autoBudget = std::get<bool>(CheckBoxes[0]);
 		options.autoBulldoze = std::get<bool>(CheckBoxes[1]);
 		options.autoGoto = std::get<bool>(CheckBoxes[2]);
 		options.disastersEnabled = std::get<bool>(CheckBoxes[3]);
-		options.playMusic = std::get<bool>(CheckBoxes[4]);
-		options.playSound = std::get<bool>(CheckBoxes[5]);
+		options.musicEnabled = std::get<bool>(CheckBoxes[4]);
+		options.soundEnabled = std::get<bool>(CheckBoxes[5]);
 	}
 
 
@@ -126,7 +126,7 @@ void OptionsWindow::saveGameCallbackConnect(CallbackSignal callback)
 }
 
 
-void OptionsWindow::setOptions(const Options& options)
+void OptionsWindow::setOptions(const GameOptions& options)
 {
 	mOptions = options;
 
@@ -139,8 +139,8 @@ void OptionsWindow::setOptions(const Options& options)
 	std::get<bool>(CheckBoxes[1]) = options.autoBulldoze;
 	std::get<bool>(CheckBoxes[2]) = options.autoGoto;
 	std::get<bool>(CheckBoxes[3]) = options.disastersEnabled;
-	std::get<bool>(CheckBoxes[4]) = options.playMusic;
-	std::get<bool>(CheckBoxes[5]) = options.playSound;
+	std::get<bool>(CheckBoxes[4]) = options.musicEnabled;
+	std::get<bool>(CheckBoxes[5]) = options.soundEnabled;
 
 	drawChecks();
 }

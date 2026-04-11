@@ -18,6 +18,7 @@
 #include "FileIo.h"
 #include "Font.h"
 #include "g_ani.h"
+#include "GameOptions.h"
 #include "Graph.h"
 #include "Map.h"
 #include "s_alloc.h"
@@ -76,12 +77,8 @@ Texture BigTileset{};
 Texture RCI_Indicator{};
 
 
-bool AutoBulldoze{ false };
-bool AutoGo{ false };
-
 int InitSimLoad;
 int ScenarioID;
-bool NoDisasters;
 
 
 namespace
@@ -108,10 +105,10 @@ namespace
     bool Exit{ false };
     bool RedrawMinimap{ false };
     bool SimulationStep{ false };
-    bool AnimationEnabled{ true };
     bool AnimationStep{ false };
-    bool AutoBudget{ false };
     bool RightButtonDrag{ false };
+
+    GameOptions gameOptions;
 
     constexpr unsigned int SimStepDefaultTime{ 100 };
     constexpr unsigned int AnimationStepDefaultTime{ 150 };
@@ -183,7 +180,7 @@ namespace
 
     void showBudgetIfNeeded()
     {
-        if (!AutoBudget && budget.NeedsAttention())
+        if (!gameOptions.autoBudget && budget.NeedsAttention())
         {
 			interfaceManager->showWindow(InterfaceManager::Window::Budget);
         }
@@ -215,61 +212,61 @@ void showBudgetWindow()
 
 bool autoBudget()
 {
-    return AutoBudget;
+    return gameOptions.autoBudget;
 }
 
 
 void autoBudget(const bool b)
 {
-    AutoBudget = b;
+    gameOptions.autoBudget = b;
 }
 
 
 bool autoBulldoze()
 {
-    return AutoBulldoze;
+    return gameOptions.autoBulldoze;
 }
 
 
 void autoBulldoze(const bool b)
 {
-    AutoBulldoze = b;
+    gameOptions.autoBulldoze = b;
 }
 
 
 bool disastersEnabled()
 {
-    return NoDisasters;
+    return gameOptions.disastersEnabled;
 }
 
 
 void disastersEnabled(const bool b)
 {
-    NoDisasters = b;
+    gameOptions.disastersEnabled = b;
 }
 
 
 bool autoGoto()
 {
-    return AutoGo;
+    return gameOptions.autoGoto;
 }
 
 
 void autoGoto(const bool b)
 {
-    AutoGo = b;
+    gameOptions.autoGoto = b;
 }
 
 
 bool animationEnabled()
 {
-    return AnimationEnabled;
+    return gameOptions.animationEnabled;
 }
 
 
 void animationEnabled(bool b)
 {
-    AnimationEnabled = b;
+    gameOptions.animationEnabled = b;
 }
 
 
@@ -666,21 +663,11 @@ void handleKeyEvent(SDL_Event& event)
         return;
     }
 
-    const OptionsWindow::Options options
-    {
-        autoBudget(),
-        autoBulldoze(),
-        autoGoto(),
-        disastersEnabled(),
-        false, // playMusic() - not implemented
-        false  // playSound() - not implemented
-    };
-
     switch (event.key.keysym.sym)
     {
     case SDLK_ESCAPE:
         interfaceManager->hideAllWindows();
-        interfaceManager->optionsWindow().setOptions(options);
+        interfaceManager->optionsWindow().setOptions(gameOptions);
         interfaceManager->optionsWindow().show();
         break;
 
@@ -1087,14 +1074,9 @@ void gameInit()
 }
 
 
-void optionsChanged(const OptionsWindow::Options& options)
+void optionsChanged(const GameOptions& options)
 {
-    autoBudget(options.autoBudget);
-    autoBulldoze(options.autoBulldoze);
-    autoGoto(options.autoGoto);
-    disastersEnabled(options.disastersEnabled);
-
-    /// \todo Add music/sound playback options
+	gameOptions = options;
 }
 
 
