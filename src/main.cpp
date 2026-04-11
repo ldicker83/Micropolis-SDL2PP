@@ -154,8 +154,6 @@ namespace
 
 	std::unique_ptr<InterfaceManager> interfaceManager;
 
-    WindowStack GuiWindowStack;
-
     unsigned int speedModifier()
     {
         return SpeedModifierTable[static_cast<unsigned int>(simSpeed())];
@@ -632,28 +630,18 @@ bool IgnoreToolMouseUp(Point<int>& mousePosition)
         }
     }
 
-    if (GuiWindowStack.pointInWindow(EventHandling::MousePosition) ||
-        interfaceManager->pointInWindow(EventHandling::MousePosition))
+    if (interfaceManager->pointInWindow(EventHandling::MousePosition))
     {
         return true;
     }
 
     if (EventHandling::MouseDownPosition != EventHandling::MousePosition &&
-        (GuiWindowStack.pointInWindow(EventHandling::MouseDownPosition) ||
-        interfaceManager->pointInWindow(EventHandling::MouseDownPosition)))
+        interfaceManager->pointInWindow(EventHandling::MouseDownPosition))
     {
         return true;
     }
 
     return false;
-}
-
-
-void ShowWindowAndBringToFront(WindowBase& window)
-{
-    window.toggleVisible();
-    GuiWindowStack.bringToFront(&window);
-    if (window.visible()) { window.update(); }
 }
 
 
@@ -709,9 +697,7 @@ void handleKeyEvent(SDL_Event& event)
     switch (event.key.keysym.sym)
     {
     case SDLK_ESCAPE:
-        GuiWindowStack.hide();
         interfaceManager->hideAllWindows();
-
         interfaceManager->optionsWindow().setOptions(options);
         interfaceManager->optionsWindow().show();
         break;
@@ -807,7 +793,6 @@ void handleMouseEvent(SDL_Event& event)
 
         calculateMouseToWorld();
 
-        GuiWindowStack.injectMouseMotion(mouseMotionDelta);
 		interfaceManager->injectMouseMotion(mouseMotionDelta);
 
         if ((SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON_RMASK) != 0)
@@ -838,13 +823,6 @@ void handleMouseEvent(SDL_Event& event)
                 return;
             }
 
-            if (GuiWindowStack.pointInWindow(EventHandling::MousePosition))
-            {
-                GuiWindowStack.updateStack(EventHandling::MousePosition);
-                GuiWindowStack.front()->injectMouseDown(EventHandling::MousePosition);
-                return;
-            }
-
             toolStart(TilePointedAt);
             
             if (!interfaceManager->budgetWindowVisible() && !pendingToolProperties().draggable)
@@ -866,7 +844,6 @@ void handleMouseEvent(SDL_Event& event)
             EventHandling::MouseLeftDown = false;
             EventHandling::MouseClickPosition = { event.button.x, event.button.y };
 
-            GuiWindowStack.injectMouseUp();
             interfaceManager->injectMouseUp();
 
             if (IgnoreToolMouseUp(mousePosition))
@@ -1085,8 +1062,7 @@ void DrawPendingTool(const ToolPalette& palette)
 void drawDraggableToolVector()
 {
     if (!EventHandling::MouseLeftDown) { return; }
-    if (GuiWindowStack.pointInWindow(EventHandling::MouseDownPosition) ||
-        interfaceManager->pointInWindow(EventHandling::MouseDownPosition))
+    if (interfaceManager->pointInWindow(EventHandling::MouseDownPosition))
     {
         return;
     }
@@ -1220,8 +1196,7 @@ void GameLoop()
 
         if (!interfaceManager->modalWindowVisible())
         {
-            if (!GuiWindowStack.pointInWindow(EventHandling::MousePosition) &&
-                !interfaceManager->pointInWindow(EventHandling::MousePosition))
+            if (!interfaceManager->pointInWindow(EventHandling::MousePosition))
             {
                 DrawPendingTool(interfaceManager->toolPalette());
                 drawDraggableToolVector();
@@ -1234,8 +1209,6 @@ void GameLoop()
                 interfaceManager->evaluationWindow().setEvaluation(currentEvaluation());
                 currentEvaluationSeen();
             }
-
-            GuiWindowStack.draw();
 
             simLoop(SimulationStep);
         }
