@@ -138,5 +138,5 @@ struct Rectangle
 };
 
 
-template <typename BaseType>
-Rectangle(BaseType, BaseType, BaseType, BaseType) -> Rectangle<BaseType>;
+//template <typename BaseType>
+//Rectangle(BaseType, BaseType, BaseType, BaseType) -> Rectangle<BaseType>;
