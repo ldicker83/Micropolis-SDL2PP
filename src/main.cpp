@@ -314,7 +314,7 @@ void simUpdate()
 
     showBudgetIfNeeded();
 
-    scoreDoer(cityProperties);
+    refreshCityEvaluation(cityProperties);
 }
 
 

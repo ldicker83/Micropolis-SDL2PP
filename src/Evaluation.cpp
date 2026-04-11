@@ -461,7 +461,7 @@ void CityEvaluation(const Budget& budget)
 }
 
 
-void doScoreCard(const CityProperties& properties)
+void buildEvaluationReport(const CityProperties& properties)
 {
     CurrentEvaluation =
     {
@@ -493,11 +493,11 @@ void doScoreCard(const CityProperties& properties)
 }
 
 
-void scoreDoer(const CityProperties& properties)
+void refreshCityEvaluation(const CityProperties& properties)
 {
     if (EvalChanged)
     {
-        doScoreCard(properties);
+        buildEvaluationReport(properties);
         EvalChanged = false;
     }
 }
