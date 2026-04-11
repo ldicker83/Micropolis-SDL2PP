@@ -301,7 +301,7 @@ void simInit()
     StartingYear = 1900;
     AutoGotoMessageLocation(true);
     CityTime = 50;
-	gameplayOptions() = GameOptions{};
+    gameOptions = GameOptions{};
     MessageId(NotificationId::None);
     ClearMes();
     simSpeed(SimulationSpeed::Normal);
