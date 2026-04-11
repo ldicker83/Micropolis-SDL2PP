@@ -48,18 +48,20 @@ public:
 	InterfaceManager(SDL_Renderer* renderer, SDL_Window* window, Budget& budget);
 
 	void injectMouseMotion(const Vector<int>& delta);
-	void injectMouseDown(const Point<int>& position);
+	bool injectMouseDown(const Point<int>& position);
 	void injectMouseUp();
 
 	bool pointInWindow(const Point<int>& position) const;
 
-	void centerAllWindows();
+	void positionWindow(Window window, const Point<int>& position);
 	void centerWindow(Window window);
+	void centerAllWindows();
 
 	void showBudgetWindow();
 	bool budgetWindowVisible() const;
 
 	OptionsWindow& optionsWindow() { return mOptionsWindow; }
+	ToolPalette& toolPalette() { return mToolPalette; }
 
 	bool modalWindowVisible() const;
 
@@ -75,7 +77,7 @@ private:
 	//GraphWindow mGraphWindow;
 	//EvaluationWindow mEvaluationWindow;
 	//MiniMapWindow mMiniMapWindow;
-	//ToolPalette mToolPalette;
+	ToolPalette mToolPalette;
 	OptionsWindow mOptionsWindow;
 	//QueryWindow mQueryWindow;
 	//StringRender mStringRenderer;

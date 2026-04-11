@@ -149,7 +149,6 @@ namespace
     std::unique_ptr<GraphWindow> graphWindow;
     std::unique_ptr<EvaluationWindow> evaluationWindow;
     std::unique_ptr<MiniMapWindow> miniMapWindow;
-    std::unique_ptr<ToolPalette> toolPalette;
     std::unique_ptr<QueryWindow> queryWindow;
     std::unique_ptr<StringRender> stringRenderer;
     std::unique_ptr<FileIoDialog> fileIo;
@@ -837,7 +836,10 @@ void handleMouseEvent(SDL_Event& event)
                 }
             }
 
-			interfaceManager->injectMouseDown(EventHandling::MousePosition);
+            if (interfaceManager->injectMouseDown(EventHandling::MousePosition))
+            {
+                return;
+            }
 
             if (GuiWindowStack.pointInWindow(EventHandling::MousePosition))
             {
@@ -888,7 +890,7 @@ void handleMouseEvent(SDL_Event& event)
             if (!RightButtonDrag)
             {
                 pendingTool(Tool::None);
-                toolPalette->cancelTool();
+                interfaceManager->toolPalette().cancelTool();
             }
 
             RightButtonDrag = false;
@@ -1172,10 +1174,9 @@ void initUI()
     fileIo = std::make_unique<FileIoDialog>(*MainWindow);
 
     stringRenderer = std::make_unique<StringRender>(MainWindowRenderer);
-    toolPalette = std::make_unique<ToolPalette>(MainWindowRenderer);
-    toolPalette->position({ UiHeaderRect.x, UiHeaderRect.y + UiHeaderRect.h + 5 });
 
     interfaceManager = std::make_unique<InterfaceManager>(MainWindowRenderer, MainWindow, budget);
+    interfaceManager->positionWindow(InterfaceManager::Window::ToolPalette, { UiHeaderRect.x, UiHeaderRect.y + UiHeaderRect.h + 5 });
 
     graphWindow = std::make_unique<GraphWindow>(MainWindowRenderer);
     centerWindow(*graphWindow);
@@ -1193,12 +1194,9 @@ void initUI()
 
     GuiWindowStack.addWindow(evaluationWindow.get());
     GuiWindowStack.addWindow(graphWindow.get());
-    GuiWindowStack.addWindow(toolPalette.get());
     GuiWindowStack.addWindow(queryWindow.get());
 
     UiRects.push_back(&UiHeaderRect);
-
-    interfaceManager->centerAllWindows();
 }
 
 
@@ -1210,8 +1208,10 @@ void cleanUp()
     evaluationWindow.reset(nullptr);
     miniMapWindow.reset(nullptr);
     queryWindow.reset(nullptr);
+    
+    interfaceManager.reset(nullptr);
+
     stringRenderer.reset(nullptr);
-    toolPalette.reset(nullptr);
 
     MainFont.reset(nullptr);
 
@@ -1237,7 +1237,7 @@ void GameLoop()
 
         currentBudget = numberToDollarDecimal(budget.CurrentFunds());
 
-        pendingTool(toolPalette->tool());
+        pendingTool(interfaceManager->toolPalette().tool());
         drawSprites();
 
         if (!interfaceManager->modalWindowVisible())
@@ -1245,7 +1245,7 @@ void GameLoop()
             if (!GuiWindowStack.pointInWindow(EventHandling::MousePosition) &&
                 !interfaceManager->pointInWindow(EventHandling::MousePosition))
             {
-                DrawPendingTool(*toolPalette);
+                DrawPendingTool(interfaceManager->toolPalette());
                 drawDraggableToolVector();
             }
 

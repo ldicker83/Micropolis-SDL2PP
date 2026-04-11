@@ -32,16 +32,21 @@ InterfaceManager::InterfaceManager(SDL_Renderer* renderer, SDL_Window* window, B
 	mRenderer{ renderer },
 	mWindow{ window },
 	mBudgetWindow{ renderer, budget },
+	mToolPalette{ renderer },
 	mOptionsWindow{ renderer }
 {
 	mWindowStack.addWindow(&mBudgetWindow);
 	mWindowStack.addWindow(&mOptionsWindow);
+	mWindowStack.addWindow(&mToolPalette);
 
 	mModalWindows.addWindow(&mBudgetWindow);
 	mModalWindows.addWindow(&mOptionsWindow);
 
 	WindowTable[InterfaceManager::Window::Budget] = &mBudgetWindow;
 	WindowTable[InterfaceManager::Window::Options] = &mOptionsWindow;
+	WindowTable[InterfaceManager::Window::ToolPalette] = &mToolPalette;
+
+	centerAllWindows();
 }
 
 
@@ -51,14 +56,21 @@ void InterfaceManager::injectMouseMotion(const Vector<int>& delta)
 }
 
 
-void InterfaceManager::injectMouseDown(const Point<int>& position)
+/**
+ * Injects a mouse down event into the InterfaceManager.
+ * 
+ * \return True if the event was consumed.
+ **/
+bool InterfaceManager::injectMouseDown(const Point<int>& position)
 {
 	if (mWindowStack.pointInWindow(position))
 	{
 		mWindowStack.updateStack(position);
 		mWindowStack.front()->injectMouseDown(position);
-		return;
+		return true;
 	}
+
+	return false;
 }
 
 
@@ -74,16 +86,23 @@ bool InterfaceManager::pointInWindow(const Point<int>& position) const
 }
 
 
-void InterfaceManager::centerAllWindows()
+void InterfaceManager::positionWindow(Window window, const Point<int>& position)
 {
-	CenterWindow(mWindow, mBudgetWindow);
-	CenterWindow(mWindow, mOptionsWindow);
+	WindowTable.at(window)->position(position);
 }
 
 
 void InterfaceManager::centerWindow(Window window)
 {
 	CenterWindow(mWindow, *WindowTable.at(window));
+}
+
+
+void InterfaceManager::centerAllWindows()
+{
+	CenterWindow(mWindow, mBudgetWindow);
+	CenterWindow(mWindow, mOptionsWindow);
+	CenterWindow(mWindow, mToolPalette);
 }
 
 
