@@ -10,7 +10,7 @@
 // file, included in this distribution, for details.
 #include "ToolPalette.h"
 
-#include "../Vector.h"
+#include "../Math/Vector.h"
 
 #include <stdexcept>
 #include <string>

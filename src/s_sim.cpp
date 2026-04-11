@@ -16,7 +16,6 @@
 
 #include "Map.h"
 
-#include "Point.h"
 #include "Power.h"
 
 #include "s_alloc.h"
@@ -29,6 +28,9 @@
 #include "Sprite.h"
 #include "Traffic.h"
 #include "Zone.h"
+
+#include "Math/Point.h"
+
 
 #include <SDL2/SDL.h>
 

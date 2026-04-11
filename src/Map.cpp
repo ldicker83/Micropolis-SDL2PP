@@ -11,13 +11,11 @@
 #include "Map.h"
 
 #include "s_alloc.h"
-
-#include "Point.h"
-
-#include "Texture.h"
 #include "Sprite.h"
-
+#include "Texture.h"
 #include "Util.h"
+
+#include "Math/Point.h"
 
 #include <vector>
 

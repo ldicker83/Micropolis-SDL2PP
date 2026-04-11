@@ -20,7 +20,7 @@
 #include "w_tk.h"
 #include "Util.h"
 
-#include "Point.h"
+#include "Math/Point.h"
 
 #include <algorithm>
 #include <string>

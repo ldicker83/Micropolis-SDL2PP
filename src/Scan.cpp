@@ -12,13 +12,12 @@
 
 #include "EffectMap.h"
 #include "Map.h"
-#include "Vector.h"
-#include "Zone.h"
-
 #include "s_alloc.h"
 #include "s_sim.h"
-
 #include "Util.h"
+#include "Zone.h"
+
+#include "Math/Vector.h"
 
 #include <algorithm>
 #include <array>

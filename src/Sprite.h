@@ -10,9 +10,10 @@
 // file, included in this distribution, for details.
 #pragma once
 
-#include "Point.h"
 #include "Texture.h"
-#include "Vector.h"
+
+#include "Math/Point.h"
+#include "Math/Vector.h"
 
 #include <string>
 #include <vector>

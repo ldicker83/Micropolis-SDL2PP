@@ -14,9 +14,10 @@
 
 #include <SDL2/SDL.h>
 
-#include "../Point.h"
 #include "../Texture.h"
 #include "../Tool.h"
+
+#include "../Math/Point.h"
 
 #include "WindowBase.h"
 

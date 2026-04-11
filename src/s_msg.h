@@ -10,8 +10,9 @@
 // file, included in this distribution, for details.
 #pragma once
 
-#include "Point.h"
 #include "w_resrc.h"
+
+#include "Math/Point.h"
 
 class Budget;
 

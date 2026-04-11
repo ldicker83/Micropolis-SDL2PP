@@ -11,10 +11,11 @@
 #pragma once
 
 #include "EffectMap.h"
-#include "Point.h"
+#include "main.h"
 #include "Util.h"
 
-#include "main.h"
+#include "Math/Point.h"
+
 
 #include <array>
 

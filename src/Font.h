@@ -9,8 +9,8 @@
 // ==================================================================================
 #pragma once
 
-#include "Rectangle.h"
-#include "Vector.h"
+#include "Math/Rectangle.h"
+#include "Math/Vector.h"
 
 #include <string>
 #include <vector>

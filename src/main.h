@@ -10,8 +10,9 @@
 // file, included in this distribution, for details.
 #pragma once
 
-#include "Point.h"
 #include "Texture.h"
+
+#include "Math/Point.h"
 
 #include <string>
 

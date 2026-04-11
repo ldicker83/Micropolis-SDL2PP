@@ -20,9 +20,10 @@
 
 #include "../Budget.h"
 #include "../Font.h"
-#include "../Point.h"
 #include "../StringRender.h"
 #include "../Texture.h"
+
+#include "../Math/Point.h"
 
 
 class BudgetWindow : public WindowBase

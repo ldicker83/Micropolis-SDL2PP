@@ -12,7 +12,7 @@
 
 #include <array>
 
-#include "Point.h"
+#include "Math/Point.h"
 
 const Point<int>& pollutionMax();
 void powerScan();

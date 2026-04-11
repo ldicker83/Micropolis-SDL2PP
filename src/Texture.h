@@ -10,7 +10,7 @@
 // file, included in this distribution, for details.
 #pragma once
 
-#include "Vector.h"
+#include "Math/Vector.h"
 
 #include <SDL2/SDL.h>
 
