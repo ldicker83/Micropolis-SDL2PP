@@ -60,10 +60,9 @@ public:
 	void centerWindows(const std::vector<Window>& windows);
 	void centerAllWindows();
 
-	bool budgetWindowVisible() const;
-
 	void showWindow(Window window);
 
+	BudgetWindow& budgetWindow() { return mBudgetWindow; }
 	EvaluationWindow& evaluationWindow() { return mEvaluationWindow; }
 	FileIoDialog& fileIoDialog() { return mFileIo; }
 	OptionsWindow& optionsWindow() { return mOptionsWindow; }

@@ -136,12 +136,6 @@ void InterfaceManager::centerAllWindows()
 }
 
 
-bool InterfaceManager::budgetWindowVisible() const
-{
-	return mBudgetWindow.visible();
-}
-
-
 void InterfaceManager::showWindow(Window window)
 {
 	auto windowPtr = WindowTable.at(window);

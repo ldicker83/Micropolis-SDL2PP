@@ -825,7 +825,7 @@ void handleMouseEvent(SDL_Event& event)
 
             toolStart(TilePointedAt);
             
-            if (!interfaceManager->budgetWindowVisible() && !pendingToolProperties().draggable)
+            if (!interfaceManager->budgetWindow().visible() && !pendingToolProperties().draggable)
             {
                 ToolDown(TilePointedAt, budget);
             }
