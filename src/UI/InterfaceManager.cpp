@@ -32,10 +32,12 @@ InterfaceManager::InterfaceManager(SDL_Renderer* renderer, SDL_Window* window, B
 	mRenderer{ renderer },
 	mWindow{ window },
 	mBudgetWindow{ renderer, budget },
+	mGraphWindow{ renderer },
 	mToolPalette{ renderer },
 	mOptionsWindow{ renderer }
 {
 	mWindowStack.addWindow(&mBudgetWindow);
+	mWindowStack.addWindow(&mGraphWindow);
 	mWindowStack.addWindow(&mOptionsWindow);
 	mWindowStack.addWindow(&mToolPalette);
 
@@ -43,6 +45,7 @@ InterfaceManager::InterfaceManager(SDL_Renderer* renderer, SDL_Window* window, B
 	mModalWindows.addWindow(&mOptionsWindow);
 
 	WindowTable[InterfaceManager::Window::Budget] = &mBudgetWindow;
+	WindowTable[InterfaceManager::Window::Graph] = &mGraphWindow;
 	WindowTable[InterfaceManager::Window::Options] = &mOptionsWindow;
 	WindowTable[InterfaceManager::Window::ToolPalette] = &mToolPalette;
 
@@ -77,6 +80,15 @@ bool InterfaceManager::injectMouseDown(const Point<int>& position)
 void InterfaceManager::injectMouseUp()
 {
 	mWindowStack.injectMouseUp();
+}
+
+
+void InterfaceManager::newMonth()
+{
+	if (mGraphWindow.visible())
+	{
+		mGraphWindow.update();
+	}
 }
 
 
@@ -115,6 +127,12 @@ void InterfaceManager::showBudgetWindow()
 bool InterfaceManager::budgetWindowVisible() const
 {
 	return mBudgetWindow.visible();
+}
+
+
+void InterfaceManager::showWindow(Window window)
+{
+	BringWindowToFront(mWindowStack, *WindowTable.at(window));
 }
 
 

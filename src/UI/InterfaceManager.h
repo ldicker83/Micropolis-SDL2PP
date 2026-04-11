@@ -51,6 +51,8 @@ public:
 	bool injectMouseDown(const Point<int>& position);
 	void injectMouseUp();
 
+	void newMonth();
+
 	bool pointInWindow(const Point<int>& position) const;
 
 	void positionWindow(Window window, const Point<int>& position);
@@ -59,6 +61,8 @@ public:
 
 	void showBudgetWindow();
 	bool budgetWindowVisible() const;
+
+	void showWindow(Window window);
 
 	OptionsWindow& optionsWindow() { return mOptionsWindow; }
 	ToolPalette& toolPalette() { return mToolPalette; }
@@ -74,7 +78,7 @@ private:
 	SDL_Window* mWindow{ nullptr };
 
 	BudgetWindow mBudgetWindow;
-	//GraphWindow mGraphWindow;
+	GraphWindow mGraphWindow;
 	//EvaluationWindow mEvaluationWindow;
 	//MiniMapWindow mMiniMapWindow;
 	ToolPalette mToolPalette;

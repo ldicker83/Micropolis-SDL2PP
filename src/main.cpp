@@ -146,7 +146,6 @@ namespace
     Budget budget{};
     CityProperties cityProperties{};
 
-    std::unique_ptr<GraphWindow> graphWindow;
     std::unique_ptr<EvaluationWindow> evaluationWindow;
     std::unique_ptr<MiniMapWindow> miniMapWindow;
     std::unique_ptr<QueryWindow> queryWindow;
@@ -306,9 +305,9 @@ void simUpdate()
 {
     updateDate();
 
-    if (newMonth() && graphWindow->visible())
+    if (newMonth())
     {
-        graphWindow->update();
+        interfaceManager->newMonth();
     }
 
     showBudgetIfNeeded();
@@ -595,9 +594,9 @@ void windowResized(const Vector<int>& size)
     updateMapDrawParameters();
 
     interfaceManager->centerWindow(InterfaceManager::Window::Budget);
+    interfaceManager->centerWindow(InterfaceManager::Window::Graph);
     interfaceManager->centerWindow(InterfaceManager::Window::Options);
 
-    centerWindow(*graphWindow);
     centerWindow(*evaluationWindow);
 
     UiHeaderRect.w = WindowSize.x - 20;
@@ -766,11 +765,11 @@ void handleKeyEvent(SDL_Event& event)
         break;
 
     case SDLK_F9:
-        ShowWindowAndBringToFront(*graphWindow.get());
+        interfaceManager->showWindow(InterfaceManager::Window::Graph);
         break;
 
     case SDLK_F10:
-		interfaceManager->showBudgetWindow();
+		interfaceManager->showWindow(InterfaceManager::Window::Budget);
         break;
 
     case SDLK_F11:
@@ -1178,8 +1177,7 @@ void initUI()
     interfaceManager = std::make_unique<InterfaceManager>(MainWindowRenderer, MainWindow, budget);
     interfaceManager->positionWindow(InterfaceManager::Window::ToolPalette, { UiHeaderRect.x, UiHeaderRect.y + UiHeaderRect.h + 5 });
 
-    graphWindow = std::make_unique<GraphWindow>(MainWindowRenderer);
-    centerWindow(*graphWindow);
+    interfaceManager->centerWindow(InterfaceManager::Window::Graph);
     
     evaluationWindow = std::make_unique<EvaluationWindow>(MainWindowRenderer);
     centerWindow(*evaluationWindow);
@@ -1193,7 +1191,6 @@ void initUI()
     centerWindow(*queryWindow);
 
     GuiWindowStack.addWindow(evaluationWindow.get());
-    GuiWindowStack.addWindow(graphWindow.get());
     GuiWindowStack.addWindow(queryWindow.get());
 
     UiRects.push_back(&UiHeaderRect);
@@ -1204,7 +1201,6 @@ void cleanUp()
 {
     deinitTimers();
 
-    graphWindow.reset(nullptr);
     evaluationWindow.reset(nullptr);
     miniMapWindow.reset(nullptr);
     queryWindow.reset(nullptr);
