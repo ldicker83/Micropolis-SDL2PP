@@ -261,7 +261,7 @@ void BudgetWindow::onMouseUp()
 
 void BudgetWindow::draw()
 {
-    const SDL_Rect rect{area().x, area().y, area().width, area().height };
+    const SDL_Rect rect{area().position.x, area().position.y, area().size.x, area().size.y };
 	SDL_RenderCopy(mRenderer, mTexture.texture, &bgRect, &rect);
 
 	for (auto id : buttons)

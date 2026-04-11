@@ -144,6 +144,15 @@
     <ClCompile Include="src\UI\InterfaceManager.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rectangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Point.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\IsZero.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\animtab.h">
@@ -257,9 +266,6 @@
     <ClInclude Include="src\Traffic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Button.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -301,6 +307,12 @@
     </ClInclude>
     <ClInclude Include="src\UI\InterfaceManager.h">
       <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rectangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\IsZero.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

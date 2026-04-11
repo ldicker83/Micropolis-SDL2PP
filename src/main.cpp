@@ -576,7 +576,7 @@ void minimapViewUpdated(const Point<int>& newOffset)
 
 void centerWindow(WindowBase& window)
 {
-    window.position({ WindowSize.x / 2 - window.area().width / 2, WindowSize.y / 2 - window.area().height / 2 });
+    window.position({ WindowSize.x / 2 - window.area().size.x / 2, WindowSize.y / 2 - window.area().size.y / 2 });
 }
 
 

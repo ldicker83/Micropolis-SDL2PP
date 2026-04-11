@@ -115,11 +115,11 @@ GraphWindow::GraphWindow(SDL_Renderer* renderer) :
 
 void GraphWindow::onMoved(const Vector<int>& movement)
 {
-	GraphPosition = { GraphLayout.x + area().x, GraphLayout.y + area().y, GraphLayout.w, GraphLayout.h };
+	GraphPosition = { GraphLayout.x + area().position.x, GraphLayout.y + area().position.y, GraphLayout.w, GraphLayout.h };
 
 	for (auto& button : Buttons)
 	{
-		button.area = { ButtonLayout.at(button.id).x + area().x, ButtonLayout.at(button.id).y + area().y, 36, 36 };
+		button.area = { ButtonLayout.at(button.id).x + area().position.x, ButtonLayout.at(button.id).y + area().position.y, 36, 36 };
 		button.iconPosition = { button.area.x + 6, button.area.y + 6, 22, 22 };
 	}
 }
@@ -127,11 +127,11 @@ void GraphWindow::onMoved(const Vector<int>& movement)
 
 void GraphWindow::onPositionChanged(const Point<int>& position)
 {
-	GraphPosition = { GraphLayout.x + area().x, GraphLayout.y + area().y, GraphLayout.w, GraphLayout.h };
+	GraphPosition = { GraphLayout.x + area().position.x, GraphLayout.y + area().position.y, GraphLayout.w, GraphLayout.h };
 
 	for (auto& button : Buttons)
 	{
-		button.area = { ButtonLayout.at(button.id).x + area().x, ButtonLayout.at(button.id).y + area().y, 36, 36 };
+		button.area = { ButtonLayout.at(button.id).x + area().position.x, ButtonLayout.at(button.id).y + area().position.y, 36, 36 };
 		button.iconPosition = { button.area.x + 6, button.area.y + 6, 22, 22 };
 	}
 }
@@ -155,7 +155,7 @@ void GraphWindow::onMouseDown(const Point<int>& position)
 
 void GraphWindow::draw()
 {
-    const SDL_Rect rect{ area().x, area().y, area().width, area().height};
+    const SDL_Rect rect{ area().position.x, area().position.y, area().size.x, area().size.y};
 	SDL_RenderCopy(&mRenderer, mTexture.texture, &Bg, &rect);
 
 	for (auto& button : Buttons)

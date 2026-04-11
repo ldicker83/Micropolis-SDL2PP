@@ -5,7 +5,7 @@
 // = NAS2D is distributed under the terms of the zlib license. You are free to copy,
 // = modify and distribute the software under the terms of the zlib license.
 // =
-// = Acknowledgement of your use of NAS2D is appriciated but is not required.
+// = Acknowledgment of your use of NAS2D is appreciated but is not required.
 // ==================================================================================
 
 #pragma once
@@ -14,129 +14,143 @@
 #include "Vector.h"
 
 
+
 template <typename BaseType>
 struct Rectangle
 {
-	BaseType x = 0;
-	BaseType y = 0;
-	BaseType width = 0;
-	BaseType height = 0;
+	Point<BaseType> position;
+	Vector<BaseType> size;
 
-	// Factory method
-	constexpr static Rectangle<BaseType> Create(Point<BaseType> startPoint, Vector<BaseType> size) {
-		return {
-			startPoint.x,
-			startPoint.y,
-			size.x,
-			size.y
-		};
+
+	constexpr static Rectangle<BaseType> Create(Point<BaseType> startPoint, Point<BaseType> endPoint)
+	{
+		return {startPoint, endPoint - startPoint};
 	}
 
-	// Factory method
-	constexpr static Rectangle<BaseType> Create(Point<BaseType> startPoint, Point<BaseType> endPoint) {
-		return {
-			startPoint.x,
-			startPoint.y,
-			endPoint.x - startPoint.x,
-			endPoint.y - startPoint.y
-		};
+
+	constexpr bool operator==(const Rectangle& rect) const
+	{
+		return (position == rect.position) && (size == rect.size);
 	}
 
-	constexpr bool operator==(const Rectangle& rect) const {
-		return (x == rect.x) && (y == rect.y) && (width == rect.width) && (height == rect.height);
-	}
-	constexpr bool operator!=(const Rectangle& rect) const {
+	constexpr bool operator!=(const Rectangle& rect) const
+	{
 		return !(*this == rect);
 	}
 
-	constexpr Vector<BaseType> size() const {
-		return {width, height};
+	constexpr Point<BaseType> startPoint() const
+	{
+		return position;
 	}
 
-	constexpr Point<BaseType> startPoint() const {
-		return {x, y};
+	constexpr Point<BaseType> endPoint() const
+	{
+		return position + size;
 	}
 
-	constexpr Point<BaseType> endPoint() const {
-		return Point{x, y} + Vector{width, height};
+	constexpr Point<BaseType> crossXPoint() const
+	{
+		return {position.x + size.x, position.y};
 	}
 
-	constexpr Point<BaseType> crossXPoint() const {
-		return {x + width, y};
+	constexpr Point<BaseType> crossYPoint() const
+	{
+		return {position.x, position.y + size.y};
 	}
 
-	constexpr Point<BaseType> crossYPoint() const {
-		return {x, y + height};
+	constexpr bool null() const
+	{
+		return size == Vector<BaseType>{0, 0};
 	}
 
-	constexpr bool null() const {
-		return (width == 0) || (height == 0);
+	constexpr bool empty() const
+	{
+		return (size.x <= 0) || (size.y <= 0);
 	}
 
-	void size(Vector<BaseType> newSize) {
-		width = newSize.x;
-		height = newSize.y;
+	void startPoint(Point<BaseType> newStartPoint)
+	{
+		position = newStartPoint;
 	}
 
-	void startPoint(Point<BaseType> newStartPoint) {
-		x = newStartPoint.x;
-		y = newStartPoint.y;
+	constexpr Rectangle translate(Vector<BaseType> offset) const
+	{
+		return {position + offset, size};
 	}
 
-	constexpr Rectangle inset(BaseType amount) const {
-		return {x + amount, y + amount, width - 2 * amount, height - 2 * amount};
+	constexpr Rectangle inset(BaseType amount) const
+	{
+		return {{position.x + amount, position.y + amount}, {size.x - 2 * amount, size.y - 2 * amount}};
 	}
 
-	constexpr Rectangle inset(Vector<BaseType> amount) const {
-		return {x + amount.x, y + amount.y, width - 2 * amount.x, height - 2 * amount.y};
+	constexpr Rectangle inset(Vector<BaseType> amount) const
+	{
+		return {position + amount, size - (amount * 2)};
 	}
 
-	constexpr Rectangle inset(Vector<BaseType> amountStart, Vector<BaseType> amountEnd) const {
-		return {x + amountStart.x, y + amountStart.y, width - amountStart.x - amountEnd.x, height - amountStart.y - amountEnd.y};
+	constexpr Rectangle inset(Vector<BaseType> amountStart, Vector<BaseType> amountEnd) const
+	{
+		return {position + amountStart, size - amountStart - amountEnd};
 	}
 
-	constexpr Rectangle skewBy(const Vector<BaseType>& scaleFactor) const {
-		return Create(startPoint().skewBy(scaleFactor), size().skewBy(scaleFactor));
+	constexpr Rectangle skewBy(const Vector<BaseType>& scaleFactor) const
+	{
+		return {position.skewBy(scaleFactor), size.skewBy(scaleFactor)};
 	}
 
-	constexpr Rectangle skewInverseBy(const Vector<BaseType>& scaleFactor) const {
-		return Create(startPoint().skewInverseBy(scaleFactor), size().skewInverseBy(scaleFactor));
+	constexpr Rectangle skewInverseBy(const Vector<BaseType>& scaleFactor) const
+	{
+		return {position.skewInverseBy(scaleFactor), size.skewInverseBy(scaleFactor)};
 	}
 
 	template <typename NewBaseType>
-	constexpr operator Rectangle<NewBaseType>() const {
+	constexpr operator Rectangle<NewBaseType>() const
+	{
 		return {
-			static_cast<NewBaseType>(x),
-			static_cast<NewBaseType>(y),
-			static_cast<NewBaseType>(width),
-			static_cast<NewBaseType>(height)
+			Point<NewBaseType>(position),
+			Vector<NewBaseType>(size),
 		};
 	}
 
 	template <typename NewBaseType>
-	constexpr Rectangle<NewBaseType> to() const {
-		return static_cast<Rectangle<NewBaseType>>(*this);
+	constexpr Rectangle<NewBaseType> to() const
+	{
+		return Rectangle<NewBaseType>(*this);
 	}
 
 	// Start point inclusive (x, y), endpoint exclusive (x + width, y + height)
 	// Area in interval notation: [x .. x + width), [y .. y + height)
-	constexpr bool contains(const Point<BaseType>& point) const {
-		auto px = point.x;
-		auto py = point.y;
-		return ((x <= px) && (px < x + width)) && ((y <= py) && (py < y + height));
+	constexpr bool contains(const Point<BaseType>& point) const
+	{
+		return position <= point && point < endPoint();
+	}
+
+	constexpr bool contains(const Rectangle<BaseType>& rect) const
+	{
+		return position <= rect.position && rect.endPoint() <= endPoint();
 	}
 
 	// Start point inclusive (x, y), endpoint exclusive (x + width, y + height)
 	// Area in interval notation: [x .. x + width), [y .. y + height)
-	constexpr bool overlaps(const Rectangle& rect) const {
-		return ((x < rect.x + rect.width) && (rect.x < x + width)) && ((y < rect.y + rect.height) && (rect.y < y + height));
+	constexpr bool overlaps(const Rectangle& rect) const
+	{
+		return position < rect.endPoint() && rect.position < endPoint();
 	}
 
-	constexpr Point<BaseType> center() const {
-		return {x + (width / 2), y + (height / 2)};
+	constexpr Point<BaseType> center() const
+	{
+		return position + size / 2;
 	}
 };
 
 
-//template <typename BaseType>
-//Rectangle(BaseType, BaseType, BaseType, BaseType) -> Rectangle<BaseType>;
+template <typename BaseType>
+Rectangle(BaseType, BaseType, BaseType, BaseType) -> Rectangle<BaseType>;
+
+template <typename BaseType>
+Rectangle(Point<BaseType>, Vector<BaseType>) -> Rectangle<BaseType>;
+
+
+extern template struct Rectangle<int>;
+extern template struct Rectangle<float>;
+

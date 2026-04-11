@@ -22,7 +22,7 @@ namespace
 	{
 		int windowWidth = 0, windowHeight = 0;
 		SDL_GetWindowSize(sdlWindow, &windowWidth, &windowHeight);
-		window.position({ windowWidth / 2 - window.area().width / 2, windowHeight / 2 - window.area().height / 2 });
+		window.position({ windowWidth / 2 - window.area().size.x / 2, windowHeight / 2 - window.area().size.y / 2 });
 	}
 
 

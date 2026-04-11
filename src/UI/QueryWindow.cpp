@@ -80,7 +80,7 @@ void QueryWindow::setQueryResult(const ZoneStats& stats)
 
 void QueryWindow::draw()
 {
-    const SDL_Rect rect{ area().x, area().y, area().width, area().height };
+    const SDL_Rect rect{ area().position.x, area().position.y, area().size.x, area().size.y };
     SDL_RenderCopy(mRenderer, mTexture.texture, &BgRect, &rect);
     SDL_RenderCopy(mRenderer, mTextTexture.texture, &BgRect, &rect);
 }
@@ -90,8 +90,8 @@ void QueryWindow::onMouseDown(const Point<int>& pt)
 {
     const Rectangle<int> closeButtonRect =
     {
-        area().x + CloseButtonRect.x,
-        area().y + CloseButtonRect.y,
+        area().position.x + CloseButtonRect.x,
+        area().position.y + CloseButtonRect.y,
         CloseButtonRect.w,
         CloseButtonRect.h
     };

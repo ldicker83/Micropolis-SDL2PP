@@ -148,7 +148,7 @@ void OptionsWindow::setOptions(const Options& options)
 
 void OptionsWindow::draw()
 {
-	const SDL_Rect rect{ area().x, area().y, area().width, area().height };
+	const SDL_Rect rect{ area().position.x, area().position.y, area().size.x, area().size.y };
 	SDL_RenderCopy(mRenderer, mTexture.texture, &BgRect, &rect);
 	SDL_RenderCopy(mRenderer, mCheckTexture.texture, &BgRect, &rect);
 }

@@ -97,8 +97,8 @@ void ToolPalette::updateButtonPositions()
     {
         mToolButtons[i].rect =
         {
-            (((i % 3) * 32) + (i % 3) * 2) + clientArea().x,
-            (((i / 3) * 32) + (i / 3) * 2) + clientArea().y + 5,
+            (((i % 3) * 32) + (i % 3) * 2) + clientArea().position.x,
+            (((i / 3) * 32) + (i / 3) * 2) + clientArea().position.y + 5,
             32, 32
         };
     }
@@ -238,7 +238,7 @@ void ToolPalette::setButtonState(int buttonIndex, int buttonState)
 
 void ToolPalette::drawBackground()
 {
-    const SDL_Rect rect{ area().x, area().y, area().width, area().height };
+    const SDL_Rect rect{ area().position.x, area().position.y, area().size.x, area().size.y };
     SDL_RenderCopy(mRenderer, mBackground.texture, &bgRect, &rect);
 }
 

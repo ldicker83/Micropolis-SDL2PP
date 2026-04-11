@@ -40,7 +40,7 @@ public:
 
     constexpr Vector<int> size() const
     {
-        return mArea.size();
+        return mArea.size;
     }
 
     const Rectangle<int>& area() const;

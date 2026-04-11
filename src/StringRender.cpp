@@ -36,8 +36,8 @@ void StringRender::drawString(Font& font, std::string_view text, const Point<int
 
         const SDL_Rect srcRect
         {
-            static_cast<int>(gm.uvRect.x),
-            static_cast<int>(gm.uvRect.y),
+            static_cast<int>(gm.uvRect.position.x),
+            static_cast<int>(gm.uvRect.position.y),
             static_cast<int>(glyphCellSize.x),
             static_cast<int>(glyphCellSize.y)
         };
