@@ -142,7 +142,7 @@
       <Filter>Source Files\UI</Filter>
     </ClCompile>
     <ClCompile Include="src\UI\InterfaceManager.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
