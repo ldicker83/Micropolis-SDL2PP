@@ -11,50 +11,32 @@
 #include "main.h"
 
 #include "Budget.h"
-
 #include "CityProperties.h"
 #include "Colors.h"
 #include "Connection.h"
 #include "Evaluation.h"
 #include "FileIo.h"
 #include "Font.h"
+#include "g_ani.h"
 #include "Graph.h"
 #include "Map.h"
-#include "Tool.h"
-
-#include "g_ani.h"
-
 #include "s_alloc.h"
 #include "s_disast.h"
 #include "s_gen.h"
 #include "s_msg.h"
 #include "s_sim.h"
-
 #include "Scan.h"
 #include "Sprite.h"
 #include "StringRender.h"
-
+#include "Texture.h"
+#include "Tool.h"
+#include "Util.h"
 #include "w_sound.h"
 #include "w_tk.h"
 #include "w_update.h"
-#include "Util.h"
-
-#include "Texture.h"
-
-#include "UI/BudgetWindow.h"
-#include "UI/EvaluationWindow.h"
-#include "UI/FileIoDialog.h"
-#include "UI/GraphWindow.h"
-#include "UI/MiniMapWindow.h"
-#include "UI/OptionsWindow.h"
-#include "UI/QueryWindow.h"
-#include "UI/ToolPalette.h"
-#include "UI/WindowGroup.h"
-#include "UI/WindowStack.h"
-
 
 #include "UI/InterfaceManager.h"
-
+#include "UI/MiniMapWindow.h"
 
 #include <algorithm>
 #include <cstdint>
