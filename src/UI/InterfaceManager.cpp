@@ -118,6 +118,15 @@ void InterfaceManager::centerWindow(Window window)
 }
 
 
+void InterfaceManager::centerWindows(const std::vector<Window>& windows)
+{
+	for (auto window : windows)
+	{
+		centerWindow(window);
+	}
+}
+
+
 void InterfaceManager::centerAllWindows()
 {
 	for (auto& [id, window] : WindowTable)

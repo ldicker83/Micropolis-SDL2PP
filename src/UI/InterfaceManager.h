@@ -57,6 +57,7 @@ public:
 
 	void positionWindow(Window window, const Point<int>& position);
 	void centerWindow(Window window);
+	void centerWindows(const std::vector<Window>& windows);
 	void centerAllWindows();
 
 	void showBudgetWindow();

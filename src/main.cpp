@@ -589,11 +589,11 @@ void windowResized(const Vector<int>& size)
 
     updateMapDrawParameters();
 
-    interfaceManager->centerWindow(InterfaceManager::Window::Budget);
-	interfaceManager->centerWindow(InterfaceManager::Window::Evaluation);
-    interfaceManager->centerWindow(InterfaceManager::Window::Graph);
-    interfaceManager->centerWindow(InterfaceManager::Window::Options);
-    interfaceManager->centerWindow(InterfaceManager::Window::Query);
+	interfaceManager->centerWindows({ InterfaceManager::Window::Budget,
+        InterfaceManager::Window::Evaluation,
+        InterfaceManager::Window::Graph,
+        InterfaceManager::Window::Options,
+        InterfaceManager::Window::Query});
 
     UiHeaderRect.w = WindowSize.x - 20;
 }
