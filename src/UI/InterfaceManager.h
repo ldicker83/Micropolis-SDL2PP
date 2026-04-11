@@ -64,8 +64,7 @@ public:
 
 	void showWindow(Window window);
 
-	void bringWindowToFront(Window window);
-
+	FileIoDialog& fileIoDialog() { return mFileIo; }
 	OptionsWindow& optionsWindow() { return mOptionsWindow; }
 	QueryWindow& queryWindow() { return mQueryWindow; }
 	ToolPalette& toolPalette() { return mToolPalette; }
@@ -83,11 +82,10 @@ private:
 	BudgetWindow mBudgetWindow;
 	GraphWindow mGraphWindow;
 	//EvaluationWindow mEvaluationWindow;
-	//MiniMapWindow mMiniMapWindow;
 	ToolPalette mToolPalette;
 	OptionsWindow mOptionsWindow;
 	QueryWindow mQueryWindow;
-	//FileIoDialog mFileIo;
+	FileIoDialog mFileIo;
 
 	WindowStack mWindowStack;
 	WindowGroup mModalWindows;

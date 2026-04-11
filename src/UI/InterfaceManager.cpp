@@ -35,7 +35,8 @@ InterfaceManager::InterfaceManager(SDL_Renderer* renderer, SDL_Window* window, B
 	mGraphWindow{ renderer },
 	mToolPalette{ renderer },
 	mOptionsWindow{ renderer },
-	mQueryWindow{ renderer }
+	mQueryWindow{ renderer },
+	mFileIo{ *window }
 {
 	mWindowStack.addWindow(&mBudgetWindow);
 	mWindowStack.addWindow(&mGraphWindow);

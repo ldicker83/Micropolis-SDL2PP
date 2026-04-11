@@ -148,7 +148,6 @@ namespace
 
     std::unique_ptr<EvaluationWindow> evaluationWindow;
     std::unique_ptr<MiniMapWindow> miniMapWindow;
-    std::unique_ptr<FileIoDialog> fileIo;
 
     std::unique_ptr<StringRender> stringRenderer;
 
@@ -454,7 +453,7 @@ void resetGame()
 
 void newGame()
 {
-    fileIo->clearSaveFilename();
+    interfaceManager->fileIoDialog().clearSaveFilename();
     resetGame();
     drawBigMap();
 }
@@ -462,10 +461,10 @@ void newGame()
 
 void openGame()
 {
-    if (fileIo->pickOpenFile())
+    if (interfaceManager->fileIoDialog().pickOpenFile())
     {
         resetGame();
-        LoadCity(fileIo->fullPath(), cityProperties, budget);
+        LoadCity(interfaceManager->fileIoDialog().fullPath(), cityProperties, budget);
         drawBigMap();
     }
 }
@@ -473,9 +472,9 @@ void openGame()
 
 void saveGame()
 {
-    if (!fileIo->filePicked() || SDL_GetModState() & KMOD_SHIFT)
+    if (!interfaceManager->fileIoDialog().filePicked() || SDL_GetModState() & KMOD_SHIFT)
     {
-        if (!fileIo->pickSaveFile())
+        if (!interfaceManager->fileIoDialog().pickSaveFile())
         {
             {
                 return;
@@ -483,7 +482,7 @@ void saveGame()
         }
     }
 
-    SaveCity(fileIo->fullPath(), cityProperties, budget);
+    SaveCity(interfaceManager->fileIoDialog().fullPath(), cityProperties, budget);
 }
 
 
@@ -1169,8 +1168,6 @@ void initUI()
     miniMapWindow->linkEffectMap(MiniMapWindow::ButtonId::PopulationDensity, PopulationDensityMap);
     miniMapWindow->linkEffectMap(MiniMapWindow::ButtonId::PopulationGrowth, RateOfGrowthMap);
     miniMapWindow->linkEffectMap(MiniMapWindow::ButtonId::TrafficDensity, TrafficDensityMap);
-
-    fileIo = std::make_unique<FileIoDialog>(*MainWindow);
 
     stringRenderer = std::make_unique<StringRender>(MainWindowRenderer);
 
