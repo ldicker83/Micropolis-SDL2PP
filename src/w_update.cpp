@@ -128,6 +128,8 @@ void updateDate()
 
         NewMonth = true;
 
+		// \fixme   This is inelegant. Find a better way to do this without
+		//          having to call back into a global function from here.
         if (month == 0 && !autoBudget() && !newMap())
         {
             showBudgetWindow();
