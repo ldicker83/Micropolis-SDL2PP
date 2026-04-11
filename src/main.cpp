@@ -426,7 +426,7 @@ void primeGame(const int startFlag, CityProperties& properties, Budget& budget)
 
     case -1:
         properties.GameLevel(0);
-        properties.CityName("NowHere");
+        properties.CityName("NoWhere");
         doPlayNewCity(properties, budget);
         break;
 
