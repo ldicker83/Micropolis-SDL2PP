@@ -60,7 +60,6 @@ public:
 	void centerWindows(const std::vector<Window>& windows);
 	void centerAllWindows();
 
-	void showBudgetWindow();
 	bool budgetWindowVisible() const;
 
 	void showWindow(Window window);

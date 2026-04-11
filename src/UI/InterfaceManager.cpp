@@ -136,12 +136,6 @@ void InterfaceManager::centerAllWindows()
 }
 
 
-void InterfaceManager::showBudgetWindow()
-{
-	BringWindowToFront(mWindowStack, mBudgetWindow);
-}
-
-
 bool InterfaceManager::budgetWindowVisible() const
 {
 	return mBudgetWindow.visible();

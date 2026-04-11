@@ -203,7 +203,7 @@ namespace
     {
         if (!AutoBudget && budget.NeedsAttention())
         {
-            interfaceManager->showBudgetWindow();
+			interfaceManager->showWindow(InterfaceManager::Window::Budget);
         }
     }
 };
@@ -227,7 +227,7 @@ const Point<int>& viewOffset()
 
 void showBudgetWindow()
 {
-    interfaceManager->showBudgetWindow();
+    interfaceManager->showWindow(InterfaceManager::Window::Budget);
 }
 
 
