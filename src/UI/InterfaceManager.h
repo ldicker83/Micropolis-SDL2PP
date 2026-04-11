@@ -64,6 +64,7 @@ public:
 
 	void showWindow(Window window);
 
+	EvaluationWindow& evaluationWindow() { return mEvaluationWindow; }
 	FileIoDialog& fileIoDialog() { return mFileIo; }
 	OptionsWindow& optionsWindow() { return mOptionsWindow; }
 	QueryWindow& queryWindow() { return mQueryWindow; }
@@ -81,7 +82,7 @@ private:
 
 	BudgetWindow mBudgetWindow;
 	GraphWindow mGraphWindow;
-	//EvaluationWindow mEvaluationWindow;
+	EvaluationWindow mEvaluationWindow;
 	ToolPalette mToolPalette;
 	OptionsWindow mOptionsWindow;
 	QueryWindow mQueryWindow;

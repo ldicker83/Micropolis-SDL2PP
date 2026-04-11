@@ -146,7 +146,6 @@ namespace
     Budget budget{};
     CityProperties cityProperties{};
 
-    std::unique_ptr<EvaluationWindow> evaluationWindow;
     std::unique_ptr<MiniMapWindow> miniMapWindow;
 
     std::unique_ptr<StringRender> stringRenderer;
@@ -593,11 +592,10 @@ void windowResized(const Vector<int>& size)
     updateMapDrawParameters();
 
     interfaceManager->centerWindow(InterfaceManager::Window::Budget);
+	interfaceManager->centerWindow(InterfaceManager::Window::Evaluation);
     interfaceManager->centerWindow(InterfaceManager::Window::Graph);
     interfaceManager->centerWindow(InterfaceManager::Window::Options);
     interfaceManager->centerWindow(InterfaceManager::Window::Query);
-
-    centerWindow(*evaluationWindow);
 
     UiHeaderRect.w = WindowSize.x - 20;
 }
@@ -684,9 +682,9 @@ void ToggleMiniMapVisibility()
 
 void showEvaluationWindow()
 {
-    evaluationWindow->setEvaluation(currentEvaluation());
+    interfaceManager->evaluationWindow().setEvaluation(currentEvaluation());
+    interfaceManager->showWindow(InterfaceManager::Window::Evaluation);
     currentEvaluationSeen();
-    ShowWindowAndBringToFront(*evaluationWindow.get());
 }
 
 
@@ -1174,15 +1172,10 @@ void initUI()
     interfaceManager = std::make_unique<InterfaceManager>(MainWindowRenderer, MainWindow, budget);
     interfaceManager->positionWindow(InterfaceManager::Window::ToolPalette, { UiHeaderRect.x, UiHeaderRect.y + UiHeaderRect.h + 5 });
 
-    evaluationWindow = std::make_unique<EvaluationWindow>(MainWindowRenderer);
-    centerWindow(*evaluationWindow);
-
     interfaceManager->optionsWindow().optionsChangedConnect(optionsChanged);
     interfaceManager->optionsWindow().newGameCallbackConnect(newGame);
     interfaceManager->optionsWindow().saveGameCallbackConnect(saveGame);
     interfaceManager->optionsWindow().openGameCallbackConnect(openGame);
-
-    GuiWindowStack.addWindow(evaluationWindow.get());
 
     UiRects.push_back(&UiHeaderRect);
 }
@@ -1192,7 +1185,6 @@ void cleanUp()
 {
     deinitTimers();
 
-    evaluationWindow.reset(nullptr);
     miniMapWindow.reset(nullptr);
     
     interfaceManager.reset(nullptr);
@@ -1239,7 +1231,7 @@ void GameLoop()
 
             if (currentEvaluation().needsAttention)
             {
-                evaluationWindow->setEvaluation(currentEvaluation());
+                interfaceManager->evaluationWindow().setEvaluation(currentEvaluation());
                 currentEvaluationSeen();
             }
 

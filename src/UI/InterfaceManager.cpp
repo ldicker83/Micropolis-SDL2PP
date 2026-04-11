@@ -33,12 +33,14 @@ InterfaceManager::InterfaceManager(SDL_Renderer* renderer, SDL_Window* window, B
 	mWindow{ window },
 	mBudgetWindow{ renderer, budget },
 	mGraphWindow{ renderer },
+	mEvaluationWindow{ renderer },
 	mToolPalette{ renderer },
 	mOptionsWindow{ renderer },
 	mQueryWindow{ renderer },
 	mFileIo{ *window }
 {
 	mWindowStack.addWindow(&mBudgetWindow);
+	mWindowStack.addWindow(&mEvaluationWindow);
 	mWindowStack.addWindow(&mGraphWindow);
 	mWindowStack.addWindow(&mOptionsWindow);
 	mWindowStack.addWindow(&mQueryWindow);
@@ -49,6 +51,7 @@ InterfaceManager::InterfaceManager(SDL_Renderer* renderer, SDL_Window* window, B
 	mModalWindows.addWindow(&mOptionsWindow);
 
 	WindowTable[InterfaceManager::Window::Budget] = &mBudgetWindow;
+	WindowTable[InterfaceManager::Window::Evaluation] = &mEvaluationWindow;
 	WindowTable[InterfaceManager::Window::Graph] = &mGraphWindow;
 	WindowTable[InterfaceManager::Window::Options] = &mOptionsWindow;
 	WindowTable[InterfaceManager::Window::Query] = &mQueryWindow;
