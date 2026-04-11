@@ -1,7 +1,7 @@
 // This file is part of Micropolis-SDL2PP
 // Micropolis-SDL2PP is based on Micropolis
 //
-// Copyright © 2022 - 2024 Leeor Dicker
+// Copyright © 2022 - 2026 Leeor Dicker
 //
 // Portions Copyright © 1989-2007 Electronic Arts Inc.
 //
