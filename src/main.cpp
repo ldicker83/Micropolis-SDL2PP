@@ -205,7 +205,7 @@ namespace
         }
     }
 
-    void showBudgetIfBudgetNeedsAttention()
+    void showBudgetIfNeeded()
     {
         if (!AutoBudget && budget.NeedsAttention())
         {
@@ -312,7 +312,7 @@ void simUpdate()
         graphWindow->update();
     }
 
-    showBudgetIfBudgetNeedsAttention();
+    showBudgetIfNeeded();
 
     scoreDoer(cityProperties);
 }
