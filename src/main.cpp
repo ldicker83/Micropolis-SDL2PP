@@ -52,7 +52,7 @@
 #include <SDL3/SDL_main.h>
 
 #if defined(__APPLE__)
-#include <SDL2_image/SDL_image.h>
+#include <SDL3_image/SDL_image.h>
 #else
 //#include <SDL3/SDL_image.h>
 #include <SDL3_image/SDL_Image.h>

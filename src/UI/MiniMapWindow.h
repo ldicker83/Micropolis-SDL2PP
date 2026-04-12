@@ -113,7 +113,7 @@ private:
 private:
 	struct ButtonMeta
 	{
-		SDL_Rect rect{};
+		SDL_FRect rect{};
 		int state{};
 		ButtonId id{ ButtonId::Normal };
 	};
@@ -126,17 +126,17 @@ private:
 	Texture mTexture{};
 	Texture mButtonTextures{};
 
-	SDL_Rect mSelector{};
-	SDL_Rect mTileHighlight{ 0, 0, MiniTileSize, MiniTileSize };
-	SDL_Rect mTileRect{ 0, 0, MiniTileSize, MiniTileSize };
-	SDL_Rect mMinimapArea{};
-	SDL_Rect mButtonArea{};
+	SDL_FRect mSelector{};
+	SDL_FRect mTileHighlight{ 0.0f, 0.0f, static_cast<float>(MiniTileSize), static_cast<float>(MiniTileSize) };
+	SDL_FRect mTileRect{ 0.0f, 0.0f, static_cast<float>(MiniTileSize), static_cast<float>(MiniTileSize) };
+	SDL_FRect mMinimapArea{};
+	SDL_FRect mButtonArea{};
 
 	uint32_t mWindowID{};
 
 	Vector<int> mMapSize{};
 
-	std::array<SDL_Rect, 28> mButtonUV{};
+	std::array<SDL_FRect, 28> mButtonUV{};
 	std::array<ButtonMeta, 14> mButtons{};
 
 	std::map<ButtonId, Texture> mOverlayTextures;

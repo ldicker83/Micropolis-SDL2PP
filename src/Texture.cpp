@@ -13,7 +13,7 @@
 #include "Graphics.h"
 
 #if defined(__APPLE__)
-#include <SDL2_image/SDL_image.h>
+#include <SDL3_Image/SDL_image.h>
 #else
 #include <SDL3_Image/SDL_image.h>
 #endif
