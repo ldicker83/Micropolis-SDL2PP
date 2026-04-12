@@ -13,7 +13,7 @@
 
 namespace
 {
-    const SDL_Rect BgRect{ 0, 0, 503, 256 };
+    const SDL_FRect BgRect{ 0.0f, 0.0f, 503.0f, 256.0f };
 
     constexpr SDL_Rect YesNoRect{ 12, 50, 234, 70 };
     constexpr SDL_Rect OpinionRect{ 12, 128, 234, 115 };
@@ -61,7 +61,7 @@ EvaluationWindow::EvaluationWindow(SDL_Renderer* renderer):
     mRenderer{ renderer },
     mStringRenderer{ renderer }
 {
-    size({ BgRect.w, BgRect.h });
+    size({ static_cast<int>(BgRect.w), static_cast<int>(BgRect.h) });
 
     SDL_SetTextureColorMod(mFont->texture(), 0, 0, 0);
     SDL_SetTextureColorMod(mFontBold->texture(), 0, 0, 0);
@@ -251,7 +251,13 @@ void EvaluationWindow::setEvaluation(const Evaluation& evaluation)
 
 void EvaluationWindow::draw()
 {
-    const SDL_Rect rect{ area().position.x, area().position.y, area().size.x, area().size.y };
-    SDL_RenderCopy(mRenderer, mTexture.texture, &BgRect, &rect);
-    SDL_RenderCopy(mRenderer, mTextTexture.texture, &BgRect, &rect);
+    const SDL_FRect rect{
+        static_cast<float>(area().position.x),
+        static_cast<float>(area().position.y),
+        static_cast<float>(area().size.x),
+        static_cast<float>(area().size.y)
+    };
+    
+    SDL_RenderTexture(mRenderer, mTexture.texture, &BgRect, &rect);
+    SDL_RenderTexture(mRenderer, mTextTexture.texture, &BgRect, &rect);
 }

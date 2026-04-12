@@ -10,7 +10,7 @@
 // file, included in this distribution, for details.
 #include "WindowBase.h"
 
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
 
 namespace

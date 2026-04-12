@@ -17,7 +17,7 @@
 
 #include <string>
 
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
  /* Constants */
 extern int CurrentTile; // unmasked tile value

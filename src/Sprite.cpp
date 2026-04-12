@@ -26,7 +26,7 @@
 #include <map>
 #include <string>
 
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
 
 int absDist;
@@ -225,15 +225,14 @@ namespace
     {
         const auto& spriteFrame = sprite.frames[sprite.frame];
 
-        const SDL_Rect dstRect
-        {
+        const auto dstRect = fRectFromRect({
             sprite.position.x - viewOffset().x + sprite.offset.x,
             sprite.position.y - viewOffset().y + sprite.offset.y,
             spriteFrame.dimensions.x,
             spriteFrame.dimensions.y
-        };
+            });
 
-        SDL_RenderCopy(MainWindowRenderer, spriteFrame.texture, &spriteFrame.area, &dstRect);
+        SDL_RenderTexture(MainWindowRenderer, spriteFrame.texture, &spriteFrame.area, &dstRect);
     }
 
 };

@@ -18,12 +18,12 @@
 
 #include "../Util.h"
 
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
 #if defined(__APPLE__)
-#include <SDL2_image/SDL_image.h>
+#include <SDL3_image/SDL_image.h>
 #else
-#include <SDL2/SDL_image.h>
+#include <SDL3_image/SDL_image.h>
 #endif
 
 #include <algorithm>

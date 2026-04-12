@@ -14,12 +14,12 @@
 #include "s_alloc.h"
 
 
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
 
 struct Graph
 {
-    using PointsList = std::array<SDL_Point, HistoryLength>;
+    using PointsList = std::array<SDL_FPoint, HistoryLength>;
 
     const GraphHistory& history;
     const std::string name;

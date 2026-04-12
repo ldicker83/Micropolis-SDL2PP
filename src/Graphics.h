@@ -15,7 +15,7 @@
 #include "Math/Point.h"
 #include "Math/Vector.h"
 
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
 void turnOffBlending(SDL_Renderer& renderer, const Texture& texture);
 void turnOnBlending(SDL_Renderer& renderer, const Texture& texture);

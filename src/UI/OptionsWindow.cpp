@@ -10,6 +10,7 @@
 // file, included in this distribution, for details.
 #include "OptionsWindow.h"
 
+#include "../Util.h"
 
 #include <algorithm>
 #include <array>
@@ -18,8 +19,8 @@
 
 namespace
 {
-	constexpr SDL_Rect BgRect{ 0, 0, 256, 256 };
-	constexpr SDL_Rect CheckedBox{ 261, 13, 14, 12 };
+	constexpr SDL_FRect BgRect{ 0.0f, 0.0f, 256.0f, 256.0f };
+	constexpr SDL_FRect CheckedBox{ 261, 13, 14, 12 };
 
 	enum class CheckBox
 	{
@@ -70,7 +71,7 @@ namespace
 	void postQuit()
 	{
 		SDL_Event event{};
-		event.type = SDL_QUIT;
+		event.type = SDL_EVENT_QUIT;
 		SDL_PushEvent(&event);
 	}
 };
@@ -81,7 +82,7 @@ OptionsWindow::OptionsWindow(SDL_Renderer* renderer):
 	mCheckTexture(newTexture(renderer, mTexture.dimensions)),
 	mRenderer{ renderer }
 {
-    size({ BgRect.w, BgRect.h });
+	size({ static_cast<int>(BgRect.w), static_cast<int>(BgRect.h) });
     closeButtonActive(false);
 	anchor();
 
@@ -148,9 +149,9 @@ void OptionsWindow::setOptions(const GameOptions& options)
 
 void OptionsWindow::draw()
 {
-	const SDL_Rect rect{ area().position.x, area().position.y, area().size.x, area().size.y };
-	SDL_RenderCopy(mRenderer, mTexture.texture, &BgRect, &rect);
-	SDL_RenderCopy(mRenderer, mCheckTexture.texture, &BgRect, &rect);
+	const auto rect = fRectFromRect({ area().position.x, area().position.y, area().size.x, area().size.y });
+	SDL_RenderTexture(mRenderer, mTexture.texture, &BgRect, &rect);
+	SDL_RenderTexture(mRenderer, mCheckTexture.texture, &BgRect, &rect);
 }
 
 
@@ -267,8 +268,8 @@ void OptionsWindow::drawChecks()
 	{
 		if (checked)
 		{
-			const SDL_Rect adjustedRect{ rect.x, rect.y, CheckedBox.w, CheckedBox.h };
-			SDL_RenderCopy(mRenderer, mTexture.texture, &CheckedBox, &adjustedRect);
+			const SDL_FRect adjustedRect = { static_cast<float>(rect.x), static_cast<float>(rect.y), CheckedBox.w, CheckedBox.h };
+			SDL_RenderTexture(mRenderer, mTexture.texture, &CheckedBox, &adjustedRect);
 		}
 	}
 

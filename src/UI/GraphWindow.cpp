@@ -18,12 +18,12 @@
 
 namespace
 {
-	const SDL_Rect ButtonUp{ 285, 0, 36, 36 };
-	const SDL_Rect ButtonDown{ 326, 0, 36, 36 };
-	const SDL_Rect Bg{ 0, 0, 264, 287 };
+	const SDL_FRect ButtonUp{ 285.0f, 0.0f, 36.0f, 36.0f };
+	const SDL_FRect ButtonDown{ 326.0f, 0.0f, 36.0f, 36.0f };
+	const SDL_FRect Bg{ 0.0f, 0.0f, 264.0f, 287.0f };
 
-	const SDL_Rect GraphLayout{ 10, 71, 242, 202 };
-	SDL_Rect GraphPosition = GraphLayout;
+	const SDL_FRect GraphLayout{ 10.0f, 71.0f, 242.0f, 202.0f };
+	SDL_FRect GraphPosition = GraphLayout;
 
 	enum class ButtonId
 	{
@@ -50,20 +50,20 @@ namespace
 	struct ButtonMeta
 	{
 		ButtonId id{ ButtonId::Residential };
-		SDL_Rect area{ 0 };
-		SDL_Rect iconPosition{ 0 };
+		SDL_FRect area{ 0.0f };
+		SDL_FRect iconPosition{ 0.0f };
 		bool toggled{ false };
 	};
 
 
-	const std::map<ButtonId, SDL_Rect> ButtonLayout
+	const std::map<ButtonId, SDL_FRect> ButtonLayout
 	{
-		{ ButtonId::Residential, { 13, 31, 36, 36 } },
-		{ ButtonId::Commercial, { 53, 31, 36, 36 } },
-		{ ButtonId::Industrial, { 93, 31, 36, 36 } },
-		{ ButtonId::Pollution, { 133, 31, 36, 36 } },
-		{ ButtonId::Crime, { 173, 31, 36, 36 } },
-		{ ButtonId::Money, { 213, 31, 36, 36 } },
+		{ ButtonId::Residential, { 13.0f, 31.0f, 36.0f, 36.0f } },
+		{ ButtonId::Commercial, { 53.0f, 31.0f, 36.0f, 36.0f } },
+		{ ButtonId::Industrial, { 93.0f, 31.0f, 36.0f, 36.0f } },
+		{ ButtonId::Pollution, { 133.0f, 31.0f, 36.0f, 36.0f } },
+		{ ButtonId::Crime, { 173.0f, 31.0f, 36.0f, 36.0f } },
+		{ ButtonId::Money, { 213.0f, 31.0f, 36.0f, 36.0f } },
 	};
 
 
@@ -78,14 +78,14 @@ namespace
 	};
 
 
-	const std::map<ButtonId, SDL_Rect> IconRects
+	const std::map<ButtonId, SDL_FRect> IconRects
 	{
-		{ ButtonId::Residential, { 285, 59, 22, 22 } },
-		{ ButtonId::Commercial, { 285, 82, 22, 22 } },
-		{ ButtonId::Industrial, { 285, 105, 22, 22 } },
-		{ ButtonId::Pollution, { 285, 128, 22, 22 } },
-		{ ButtonId::Crime, { 285, 151, 22, 22 } },
-		{ ButtonId::Money, { 285, 174, 22, 22 } }
+		{ ButtonId::Residential, { 285.0f, 59.0f, 22.0f, 22.0f } },
+		{ ButtonId::Commercial, { 285.0f, 82.0f, 22.0f, 22.0f } },
+		{ ButtonId::Industrial, { 285.0f, 105.0f, 22.0f, 22.0f } },
+		{ ButtonId::Pollution, { 285.0f, 128.0f, 22.0f, 22.0f } },
+		{ ButtonId::Crime, { 285.0f, 151.0f, 22.0f, 22.0f } },
+		{ ButtonId::Money, { 285.0f, 174.0f, 22.0f, 22.0f } }
 	};
 
 
@@ -109,7 +109,7 @@ GraphWindow::GraphWindow(SDL_Renderer* renderer) :
 	mTexture(loadTexture(renderer, "images/graph.png"))
 {
     size({264, 287});
-	initTexture(*MainWindowRenderer, mGraphTexture, { GraphLayout.w, GraphLayout.h });
+	initTexture(*MainWindowRenderer, mGraphTexture, { static_cast<int>(GraphLayout.w), static_cast<int>(GraphLayout.h) });
 }
 
 
@@ -139,11 +139,11 @@ void GraphWindow::onPositionChanged(const Point<int>& position)
 
 void GraphWindow::onMouseDown(const Point<int>& position)
 { 
-	const SDL_Point& pt{ position.x, position.y };
+	const SDL_FPoint& pt{ static_cast<float>(position.x), static_cast<float>(position.y) };
 
 	for (auto& button : Buttons)
 	{
-		if (SDL_PointInRect(&pt, &button.area))
+		if (SDL_PointInRectFloat(&pt, &button.area))
 		{
 			button.toggled = !button.toggled;
 			update();
@@ -155,19 +155,18 @@ void GraphWindow::onMouseDown(const Point<int>& position)
 
 void GraphWindow::draw()
 {
-    const SDL_Rect rect{ area().position.x, area().position.y, area().size.x, area().size.y};
-	SDL_RenderCopy(&mRenderer, mTexture.texture, &Bg, &rect);
+    const SDL_FRect rect{ static_cast<float>(area().position.x), static_cast<float>(area().position.y), static_cast<float>(area().size.x), static_cast<float>(area().size.y)};
+	SDL_RenderTexture(&mRenderer, mTexture.texture, &Bg, &rect);
 
 	for (auto& button : Buttons)
 	{
-		const SDL_Rect& buttonTexture = button.toggled ? ButtonDown : ButtonUp;
+		const SDL_FRect& buttonTexture = button.toggled ? ButtonDown : ButtonUp;
 		const int offset = button.toggled ? 1 : 0;
-		const SDL_Rect iconPosition{ button.iconPosition.x + offset, button.iconPosition.y + offset, button.iconPosition.w, button.iconPosition.h };
+		const SDL_FRect iconPosition{ button.iconPosition.x + offset, button.iconPosition.y + offset, button.iconPosition.w, button.iconPosition.h };
 
-		SDL_RenderCopy(&mRenderer, mTexture.texture, &buttonTexture, &button.area);
-		SDL_RenderCopy(&mRenderer, mTexture.texture, &IconRects.at(button.id), &iconPosition);
-		
-		SDL_RenderCopy(&mRenderer, mGraphTexture.texture, &mGraphTexture.area, &GraphPosition);
+		SDL_RenderTexture(&mRenderer, mTexture.texture, &buttonTexture, &button.area);
+		SDL_RenderTexture(&mRenderer, mTexture.texture, &IconRects.at(button.id), &iconPosition);
+		SDL_RenderTexture(&mRenderer, mGraphTexture.texture, &mGraphTexture.area, &GraphPosition);
 	}
 }
 
@@ -190,7 +189,7 @@ void GraphWindow::update()
 	{
 		if (!ButtonToggled(type)) { continue; }
 		SDL_SetRenderDrawColor(MainWindowRenderer, graph.color.r, graph.color.g, graph.color.b, 255);
-		SDL_RenderDrawLines(MainWindowRenderer, graph.points.data(), static_cast<int>(graph.points.size()));
+		SDL_RenderLines(MainWindowRenderer, graph.points.data(), static_cast<int>(graph.points.size()));
 	}
 
 	turnOnBlending(*MainWindowRenderer, mGraphTexture);
@@ -205,8 +204,8 @@ void GraphWindow::fillGraphPoints(Graph::PointsList& points, const GraphHistory&
 
 	for (int i = 0; i < HistoryLength; ++i)
 	{
-		const int x = static_cast<int>(i * sx);
-		const int y = GraphLayout.h - static_cast<int>(history[i] * sy);
+		const float x = i * sx;
+		const float y = GraphLayout.h - (history[i] * sy);
 
 		points[i] = { x, y };
 	}

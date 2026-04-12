@@ -10,10 +10,12 @@
 // file, included in this distribution, for details.
 #include "Texture.h"
 
+#include "Graphics.h"
+
 #if defined(__APPLE__)
 #include <SDL2_image/SDL_image.h>
 #else
-#include <SDL2/SDL_image.h>
+#include <SDL3_Image/SDL_image.h>
 #endif
 
 #include <iostream>
@@ -28,7 +30,7 @@ Texture loadTexture(SDL_Renderer* renderer, const std::string& filename)
     }
 
     SDL_Texture* out = SDL_CreateTextureFromSurface(renderer, temp);
-    SDL_FreeSurface(temp);
+    SDL_DestroySurface(temp);
 
     if (!out)
     {
@@ -36,10 +38,7 @@ Texture loadTexture(SDL_Renderer* renderer, const std::string& filename)
         throw std::runtime_error("loadTexture(): Unable to load '" + filename + "': " + SDL_GetError());
     }
 
-    int width = 0, height = 0;
-    SDL_QueryTexture(out, nullptr, nullptr, &width, &height);
-
-    return Texture{ out, SDL_Rect{ 0, 0, width, height }, { width, height } };
+    return buildTexture(out);
 }
 
 
@@ -54,10 +53,27 @@ Texture newTexture(SDL_Renderer* renderer, const Vector<int>& dimensions)
         throw std::runtime_error(std::string{ "newTexture() : Unable to create new texture : " } + SDL_GetError());
     }
 
-    int width = 0, height = 0;
-    SDL_QueryTexture(texture, nullptr, nullptr, &width, &height);
+    return buildTexture(texture);
+}
 
-    return Texture{ texture, SDL_Rect{ 0, 0, width, height }, { width, height } };
+
+Texture buildTexture(SDL_Texture* texture)
+{
+    const auto textureProperties = SDL_GetTextureProperties(texture);
+    const Vector<int> textureSize{
+            static_cast<int>(SDL_GetNumberProperty(textureProperties, SDL_PROP_TEXTURE_WIDTH_NUMBER, 0)),
+            static_cast<int>(SDL_GetNumberProperty(textureProperties, SDL_PROP_TEXTURE_HEIGHT_NUMBER, 0))
+    };
+
+    SDL_DestroyProperties(textureProperties);
+
+    const SDL_FRect area{
+        0.0f, 0.0f,
+        static_cast<float>(textureSize.x),
+        static_cast<float>(textureSize.y)
+    };
+
+    return { texture, area, textureSize };
 }
 
 

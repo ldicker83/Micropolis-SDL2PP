@@ -19,7 +19,7 @@
 
 #include <vector>
 
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
 extern SDL_Renderer* MainWindowRenderer;
 
@@ -31,7 +31,7 @@ namespace
 {
 	std::vector<int> MapBuffer;
 
-	SDL_Rect TileDrawRect{ 0, 0, 16, 16 };
+	SDL_FRect TileDrawRect{ 0, 0, 16, 16 };
 	bool Blink{ false };
 };
 
@@ -173,7 +173,7 @@ void drawBigMapSegment(const Point<int>& begin, const Point<int>& end)
 {
 	SDL_SetRenderTarget(MainWindowRenderer, MainMapTexture.texture);
 
-	SDL_Rect drawRect{ 0, 0, 16, 16 };
+	SDL_FRect drawRect{ 0.0f, 0.0f, 16.0f, 16.0f };
 	unsigned int tile = 0;
 
 	for (int row = begin.x; row < end.x; row++)
@@ -192,12 +192,12 @@ void drawBigMapSegment(const Point<int>& begin, const Point<int>& end)
 			const unsigned int masked = maskedTileValue(tile);
 			TileDrawRect =
 			{
-				(static_cast<int>(masked) % 32) * 16,
-				(static_cast<int>(masked) / 32) * 16,
-				16, 16
+				static_cast<float>((static_cast<int>(masked) % 32) * 16),
+				static_cast<float>((static_cast<int>(masked) / 32) * 16),
+				16.0f, 16.0f
 			};
 
-			SDL_RenderCopy(MainWindowRenderer, BigTileset.texture, &TileDrawRect, &drawRect);
+			SDL_RenderTexture(MainWindowRenderer, BigTileset.texture, &TileDrawRect, &drawRect);
 		}
 	}
 

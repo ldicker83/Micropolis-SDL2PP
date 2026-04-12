@@ -12,14 +12,14 @@
 
 #include "Math/Vector.h"
 
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
 #include <string>
 
 struct Texture final
 {
     SDL_Texture* texture{ nullptr };
-    SDL_Rect area{};
+    SDL_FRect area{};
 
     Vector<int> dimensions{};
 };
@@ -27,4 +27,5 @@ struct Texture final
 
 Texture loadTexture(SDL_Renderer* renderer, const std::string& filename);
 Texture newTexture(SDL_Renderer* renderer, const Vector<int>& dimensions);
+Texture buildTexture(SDL_Texture* texture);
 void flushTexture(SDL_Renderer* renderer, Texture& texture);

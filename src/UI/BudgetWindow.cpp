@@ -17,8 +17,8 @@
 
 namespace
 {
-	const SDL_Rect bgRect{ 0, 0, 456, 422 };
-	const SDL_Rect mainButtonDown{ 2, 426, 434, 36 };
+	const SDL_FRect bgRect{ 0.0f, 0.0f, 456.0f, 422.0f };
+	const SDL_FRect mainButtonDown{ 2.0f, 426.0f, 434.0f, 36.0f };
 
 	enum class TextPanelId
 	{
@@ -100,10 +100,10 @@ namespace
 		BudgetWindow::ButtonId::Accept
 	};
 
-	const SDL_Rect upArrowButtonDown{ 470, 7, 13, 13 };
-	const SDL_Rect downArrowButtonDown{ 485, 7, 13, 13 };
+	const SDL_FRect upArrowButtonDown{ 470.0f, 7.0f, 13.0f, 13.0f };
+	const SDL_FRect downArrowButtonDown{ 485.0f, 7.0f, 13.0f, 13.0f };
 
-	const std::map<BudgetWindow::ButtonId, SDL_Rect> ButtonDownTable
+	const std::map<BudgetWindow::ButtonId, SDL_FRect> ButtonDownTable
 	{
 		{ BudgetWindow::ButtonId::None, {} },
 		{ BudgetWindow::ButtonId::TaxRateUp, upArrowButtonDown },
@@ -117,21 +117,21 @@ namespace
 		{ BudgetWindow::ButtonId::Accept, mainButtonDown }
 	};
 
-	const std::map<BudgetWindow::ButtonId, const SDL_Rect> ButtonLayout
+	const std::map<BudgetWindow::ButtonId, const SDL_FRect> ButtonLayout
 	{
 		{ BudgetWindow::ButtonId::None, {} },
-		{ BudgetWindow::ButtonId::TaxRateUp, { 431, 36, 13, 13 } },
-		{ BudgetWindow::ButtonId::TaxRateDown, { 431, 50, 13, 13 } },
-		{ BudgetWindow::ButtonId::TransportUp, { 431, 137, 13, 13 } },
-		{ BudgetWindow::ButtonId::TransportDown, { 431, 151, 13, 13 } },
-		{ BudgetWindow::ButtonId::PoliceUp, { 431, 168, 13, 13 } },
-		{ BudgetWindow::ButtonId::PoliceDown, { 431, 182, 13, 13 } },
-		{ BudgetWindow::ButtonId::FireUp, { 431, 200, 13, 13 } },
-		{ BudgetWindow::ButtonId::FireDown, { 431, 214, 13, 13 } },
-		{ BudgetWindow::ButtonId::Accept, { 11, 373, 434, 36 } }
+		{ BudgetWindow::ButtonId::TaxRateUp, { 431.0f, 36.0f, 13.0f, 13.0f } },
+		{ BudgetWindow::ButtonId::TaxRateDown, { 431.0f, 50.0f, 13.0f, 13.0f } },
+		{ BudgetWindow::ButtonId::TransportUp, { 431.0f, 137.0f, 13.0f, 13.0f } },
+		{ BudgetWindow::ButtonId::TransportDown, { 431.0f, 151.0f, 13.0f, 13.0f } },
+		{ BudgetWindow::ButtonId::PoliceUp, { 431.0f, 168.0f, 13.0f, 13.0f } },
+		{ BudgetWindow::ButtonId::PoliceDown, { 431.0f, 182.0f, 13.0f, 13.0f } },
+		{ BudgetWindow::ButtonId::FireUp, { 431.0f, 200.0f, 13.0f, 13.0f } },
+		{ BudgetWindow::ButtonId::FireDown, { 431.0f, 214.0f, 13.0f, 13.0f } },
+		{ BudgetWindow::ButtonId::Accept, { 11.0f, 373.0f, 434.0f, 36.0f } }
 	};
 
-	std::map<BudgetWindow::ButtonId, SDL_Rect> ButtonRects;
+	std::map<BudgetWindow::ButtonId, SDL_FRect> ButtonRects;
 };
 
 
@@ -242,8 +242,7 @@ void BudgetWindow::onMouseDown(const Point<int>& pos)
 {
 	for (auto id : buttons)
 	{
-		const SDL_Point pt{ pos.x, pos.y };
-		if (id != ButtonId::None && SDL_PointInRect(&pt, &ButtonRects[id]))
+		if (id != ButtonId::None && pointInFRect(pos, ButtonRects[id]))
 		{
 			mButtonDownId = id;
 			handleMouseDown(id);
@@ -261,14 +260,14 @@ void BudgetWindow::onMouseUp()
 
 void BudgetWindow::draw()
 {
-    const SDL_Rect rect{area().position.x, area().position.y, area().size.x, area().size.y };
-	SDL_RenderCopy(mRenderer, mTexture.texture, &bgRect, &rect);
+    const auto rect = fRectFromRect({ area().position.x, area().position.y, area().size.x, area().size.y });
+	SDL_RenderTexture(mRenderer, mTexture.texture, &bgRect, &rect);
 
 	for (auto id : buttons)
 	{
 		if (id == mButtonDownId)
 		{
-			SDL_RenderCopy(mRenderer, mTexture.texture, &ButtonDownTable.at(id), &ButtonRects[id]);
+			SDL_RenderTexture(mRenderer, mTexture.texture, &ButtonDownTable.at(id), &ButtonRects[id]);
 		}
 	}
 
