@@ -201,7 +201,7 @@ void ToolPalette::loadToolGhosts()
         if (item.ghost.texture)
         {
             SDL_SetTextureBlendMode(item.ghost.texture, SDL_BLENDMODE_BLEND);
-            if(SDL_SetTextureAlphaMod(item.ghost.texture, 125))
+            if(!SDL_SetTextureAlphaMod(item.ghost.texture, 125))
             {
                 throw std::runtime_error(std::string("Unable to set alpha mod: ") + SDL_GetError());
             }
