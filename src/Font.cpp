@@ -158,7 +158,7 @@ namespace {
 
 		if (TTF_WasInit() == 0)
 		{
-			if (TTF_Init() != 0)
+			if (!TTF_Init())
 			{
 				throw std::runtime_error("Unable to load font: " + std::string{ SDL_GetError() });
 			}

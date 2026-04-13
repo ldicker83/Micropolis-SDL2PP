@@ -1035,7 +1035,12 @@ void initUI()
     Point<int> mainWindowPosition{};
     SDL_GetWindowPosition(MainWindow, &mainWindowPosition.x, &mainWindowPosition.y);
 
-    const auto mode = SDL_GetDesktopDisplayMode(0);
+    const auto mode = SDL_GetDesktopDisplayMode(SDL_GetPrimaryDisplay());
+
+    if(!mode)
+    {
+        throw std::runtime_error(std::string("initUI(): Unable to get desktop display mode: ") + SDL_GetError());
+	}
 
     const Point<int> miniMapWindowPosition
     {
@@ -1143,6 +1148,9 @@ void GameLoop()
 }
 
 
+#include <Windows.h>
+
+
 int main(int argc, char* argv[])
 {
     std::cout << "Starting Micropolis-SDL2 version " << MicropolisVersion << " originally by Will Wright and Don Hopkins." << std::endl;
@@ -1153,7 +1161,7 @@ int main(int argc, char* argv[])
 
     try
     {
-        if (SDL_Init(SDL_INIT_VIDEO))
+        if (!SDL_Init(SDL_INIT_VIDEO))
         {
             throw std::runtime_error(std::string("Unable to initialize SDL: ") + SDL_GetError());
         }
@@ -1177,11 +1185,11 @@ int main(int argc, char* argv[])
     {
         std::string message(std::string(e.what()) + "\n\nMicropolis-SDL2PP will now close.");
         
-        #if defined(WIN32)
+        //#if defined(WIN32)
         MessageBoxA(nullptr, message.c_str(), "Micropolis-SDL2PP", MB_ICONERROR | MB_OK);
-        #else
+        //#else
         std::cout << message << std::endl;
-        #endif
+        //#endif
     }
 
     return 0;
