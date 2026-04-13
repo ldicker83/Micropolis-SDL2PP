@@ -17,3 +17,5 @@
 /*.exe
 /*.ini
 /*.aps
+/vcpkg_installed
+/micropolis-sdlpp
