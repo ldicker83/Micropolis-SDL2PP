@@ -96,6 +96,7 @@
     <ClInclude Include="src\UI\MiniMapWindow.h" />
     <ClInclude Include="src\UI\OptionsWindow.h" />
     <ClInclude Include="src\UI\QueryWindow.h" />
+    <ClInclude Include="src\UI\ToggleButton.h" />
     <ClInclude Include="src\UI\ToolPalette.h" />
     <ClInclude Include="src\UI\WindowBase.h" />
     <ClInclude Include="src\UI\WindowGroup.h" />

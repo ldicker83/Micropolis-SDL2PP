@@ -323,6 +323,9 @@
     <ClInclude Include="src\GameOptions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\UI\ToggleButton.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="micropolis.ico">
