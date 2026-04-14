@@ -111,14 +111,14 @@
     <ClInclude Include="src\Zone.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="micropolis-sdl2.rc" />
-  </ItemGroup>
-  <ItemGroup>
     <Image Include="micropolis.ico" />
     <Image Include="Micropolis.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="vcpkg.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="micropolis-sdlpp.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
