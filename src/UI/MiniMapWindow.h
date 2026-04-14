@@ -19,7 +19,7 @@
 
 #include <array>
 #include <cstdint>
-#include <map>
+#include <unordered_map>
 #include <vector>
 
 #include <SDL3/SDL.h>
@@ -133,8 +133,8 @@ private:
 	std::array<SDL_FRect, 28> mButtonUV{};
 	std::array<ToggleButton, 14> mButtons{};
 
-	std::map<ButtonId, Texture> mOverlayTextures;
-	std::map<ButtonId, const EffectMap*> mEffectMaps;
+	std::unordered_map<ButtonId, Texture> mOverlayTextures;
+	std::unordered_map<ButtonId, const EffectMap*> mEffectMaps;
 
 	std::vector<fnPointIntParam> mFocusOnTileCallbacks;
 
