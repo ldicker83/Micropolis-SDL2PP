@@ -222,32 +222,15 @@ Uint32 MiniMapWindow::id() const
 }
 
 
-void MiniMapWindow::focusOnMapCoordBind(fnPointIntParam fn)
+void MiniMapWindow::focusOnMapCoordBind(MapCoordsDelegate delegate)
 {
-    mFocusOnTileCallbacks.push_back(fn);
+    mFocusOnTileCallback = delegate;
 }
 
 
-void MiniMapWindow::focusOnMapCoordUnbind(fnPointIntParam fn)
+void MiniMapWindow::focusOnMapCoordUnbind()
 {
-    auto fnTarget = fn.template target<void(*)(const Point<int>&)>();
-    if (!fnTarget)
-    {
-        throw std::runtime_error("focusOnMapCoordUnbind(): Cannot unbind this type of callable.");
-    }
-
-    auto it = std::find_if(mFocusOnTileCallbacks.begin(), mFocusOnTileCallbacks.end(),
-        [fnTarget](const fnPointIntParam& callback) {
-            auto callbackTarget = callback.template target<void(*)(const Point<int>&)>();
-            return callbackTarget && *callbackTarget == *fnTarget;
-        });
-
-    if (it == mFocusOnTileCallbacks.end())
-    {
-        throw std::runtime_error("focusOnMapCoordUnbind(): function pointer not bound.");
-    }
-
-    mFocusOnTileCallbacks.erase(it);
+    mFocusOnTileCallback = nullptr;
 }
 
 
@@ -806,15 +789,15 @@ void MiniMapWindow::handleNoUiButtonSelected(ButtonId previousButtonDownId)
 void MiniMapWindow::focusViewpoint(const Point<int>& point)
 {
 	const Vector<int> selectorSize{ static_cast<int>(mSelector.w) / 2, static_cast<int>(mSelector.h) / 2 };
-    const Point<int> adjustedPosition{ point - selectorSize };
+	const Point<int> adjustedPosition{ point - selectorSize };
 
-    updateMapViewPosition(adjustedPosition.skewBy({ TileSize, TileSize }).skewInverseBy({ MiniTileSize, MiniTileSize }));
+	updateMapViewPosition(adjustedPosition.skewBy({ TileSize, TileSize }).skewInverseBy({ MiniTileSize, MiniTileSize }));
 
-    for (auto callback : mFocusOnTileCallbacks)
-    {
+	if (mFocusOnTileCallback)
+	{
 		const Point<int> position{ static_cast<int>(mSelector.x), static_cast<int>(mSelector.y) };
-        callback(position);
-    }
+		mFocusOnTileCallback(position);
+	}
 }
 
 

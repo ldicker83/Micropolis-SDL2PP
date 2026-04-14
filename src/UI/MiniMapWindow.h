@@ -12,6 +12,7 @@
 
 #include "ToggleButton.h"
 
+#include "../Delegate.h"
 #include "../Texture.h"
 
 #include "../Math/Point.h"
@@ -55,7 +56,7 @@ public:
 	static constexpr auto TileSize{ 16 };
 	static constexpr auto ButtonAreaHeight{ 28 };
 
-	using fnPointIntParam = std::function<void(const Point<int>&)>;
+	using MapCoordsDelegate = std::function<void(const Point<int>&)>;
 
 public:
 	MiniMapWindow() = delete;
@@ -65,8 +66,8 @@ public:
 
 	uint32_t id() const;
 
-	void focusOnMapCoordBind(fnPointIntParam);
-	void focusOnMapCoordUnbind(fnPointIntParam);
+	void focusOnMapCoordBind(MapCoordsDelegate);
+	void focusOnMapCoordUnbind();
 
 	void updateMapViewPosition(const Point<int>& position);
 	void updateViewportSize(const Vector<int>& viewportSize);
@@ -139,9 +140,9 @@ private:
 	std::unordered_map<ButtonId, Texture> mOverlayTextures;
 	std::unordered_map<ButtonId, const EffectMap*> mEffectMaps;
 
-	std::unordered_map<ButtonId, std::function<void(void)>> mDrawHandlers;
+	std::unordered_map<ButtonId, VoidDelegate> mDrawHandlers;
 
-	std::vector<fnPointIntParam> mFocusOnTileCallbacks;
+	MapCoordsDelegate mFocusOnTileCallback;
 
 	ButtonId mButtonDownId{ ButtonId::Normal };
 
