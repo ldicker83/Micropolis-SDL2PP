@@ -51,12 +51,9 @@ public:
 	struct ButtonMeta
 	{
 		SDL_FRect rect{};
-		int state{};
+		bool toggled{ false };
 		ButtonId id{ ButtonId::Normal };
 	};
-
-	static constexpr auto ButtonStateNormal{ 0 };
-	static constexpr auto ButtonStatePressed{ 1 };
 
 	static constexpr auto MiniTileSize{ 3 };
 	static constexpr auto TileSize{ 16 };
