@@ -17,14 +17,25 @@
 class Button
 {
 public:
+    static constexpr auto DefaultSize = 10;
+
     using ClickedCallback = std::function<void(void)>;
 
 public:
-    Button() = delete;
-
-    Button(ClickedCallback clicked, const SDL_Rect& area) :
-        mClicked{ clicked }, mArea(area)
+    Button():
+        mClicked{ []() {} }, mArea{ 0, 0, DefaultSize, DefaultSize }
     {}
+
+
+    Button(ClickedCallback clicked, const SDL_Rect& area, int userValue = 0) :
+        mClicked{ clicked }, mArea(area), mUserValue(userValue)
+    {}
+
+
+	void area(const SDL_Rect& area)
+    {
+        mArea = area;
+    }
 
 
     const SDL_Rect& area() const
@@ -33,12 +44,38 @@ public:
     }
 
 
+    void areaF(const SDL_FRect& areaF)
+    {
+        area({ static_cast<int>(areaF.x), static_cast<int>(areaF.y), static_cast<int>(areaF.w), static_cast<int>(areaF.h) });
+    }
+
+
+    const SDL_FRect areaF() const
+    {
+        return { static_cast<float>(mArea.x), static_cast<float>(mArea.y), static_cast<float>(mArea.w), static_cast<float>(mArea.h) };
+	}
+
+
     void click() const
     {
         mClicked();
     }
 
+
+    void userValue(int value)
+    {
+        mUserValue = value;
+	}
+
+
+    int userValue() const
+    {
+        return mUserValue;
+	}
+
 private:
     ClickedCallback mClicked;
     SDL_Rect mArea;
+
+	int mUserValue{ 0 };
 };
