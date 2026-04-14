@@ -88,6 +88,7 @@ public:
 
 private:
 	void handleMouseEvent(const SDL_Event& event);
+	void handleMouseButtonDown(const SDL_Event& event);
 	void handleWindowEvent(const SDL_Event& event);
 	void handleMouseMotion(const SDL_Event& event);
 
