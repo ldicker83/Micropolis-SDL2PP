@@ -91,7 +91,7 @@ private:
 
 	void handleMinimapArea(const Point<int>& point);
 	void handleButtonArea(const Point<int>& point);
-	void handleNoUiButtonSelected();
+	void handleNoUiButtonSelected(ButtonId previousButtonDownId);
 
 	void focusViewpoint(const Point<int>& point);
 

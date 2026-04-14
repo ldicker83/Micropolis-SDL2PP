@@ -740,6 +740,8 @@ void MiniMapWindow::handleMinimapArea(const Point<int>& point)
 
 void MiniMapWindow::handleButtonArea(const Point<int>& point)
 {
+    auto previousButtonDownId = mButtonDownId;
+
     for (auto& button : mButtons)
     {
         if (!pointInRect(point, button.area()))
@@ -780,16 +782,16 @@ void MiniMapWindow::handleButtonArea(const Point<int>& point)
         }
     }
 
-    handleNoUiButtonSelected();
+    handleNoUiButtonSelected(previousButtonDownId);
 }
 
 
-void MiniMapWindow::handleNoUiButtonSelected()
+void MiniMapWindow::handleNoUiButtonSelected(ButtonId previousButtonDownId)
 {
     if (noButtonsSelected())
     {
-        mButtons[0].toggled(true);
-        mButtonDownId = ButtonId::Normal;
+        mButtons[static_cast<size_t>(previousButtonDownId)].toggled(true);
+        mButtonDownId = previousButtonDownId;
     }
 }
 
