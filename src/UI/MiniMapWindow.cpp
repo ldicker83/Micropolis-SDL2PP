@@ -743,40 +743,39 @@ void MiniMapWindow::handleButtonArea(const Point<int>& point)
 {
     for (auto& button : mButtons)
     {
-        if (pointInFRect(point, button.rect))
+        if (!pointInFRect(point, button.rect))
         {
-            button.state = ButtonStatePressed;
-            mButtonDownId = button.id;
+            button.state = ButtonStateNormal;
+            continue;
+        }
 
-            // fixme    Find a better way to do this
-            if (button.id == ButtonId::TransportationNetwork)
-            {
-                drawLilTransMap();
-            }
-            else if (button.id == ButtonId::PowerGrid)
-            {
-                drawPowerMap();
-            }
-            else if (button.id == ButtonId::Residential)
-            {
-                drawResidential();
-            }
-            else if (button.id == ButtonId::Commercial)
-            {
-                drawCommercial();
-            }
-            else if (button.id == ButtonId::Industrial)
-            {
-                drawIndustrial();
-            }
-            else
-            {
-                drawCurrentOverlay();
-            }
+        button.state = ButtonStatePressed;
+        mButtonDownId = button.id;
+
+        // fixme    Find a better way to do this
+        if (button.id == ButtonId::TransportationNetwork)
+        {
+            drawLilTransMap();
+        }
+        else if (button.id == ButtonId::PowerGrid)
+        {
+            drawPowerMap();
+        }
+        else if (button.id == ButtonId::Residential)
+        {
+            drawResidential();
+        }
+        else if (button.id == ButtonId::Commercial)
+        {
+            drawCommercial();
+        }
+        else if (button.id == ButtonId::Industrial)
+        {
+            drawIndustrial();
         }
         else
         {
-            button.state = ButtonStateNormal;
+            drawCurrentOverlay();
         }
     }
 
