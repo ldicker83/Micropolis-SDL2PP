@@ -10,7 +10,7 @@
 // file, included in this distribution, for details.
 #pragma once
 
-#include <functional>
+#include "../Delegate.h"
 
 #include <SDL3/SDL.h>
 
@@ -27,7 +27,7 @@ class Button
 public:
     static constexpr SDL_Rect DefaultSize{ 0, 0, 10, 10 };
 
-    using ClickedCallback = std::function<void(void)>;
+    using ClickedCallback = VoidDelegate;
 
 public:
     /**
