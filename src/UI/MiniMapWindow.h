@@ -10,6 +10,8 @@
 // file, included in this distribution, for details.
 #pragma once
 
+#include "ToggleButton.h"
+
 #include "../Texture.h"
 
 #include "../Math/Point.h"
@@ -46,13 +48,6 @@ public:
 		Residential,
 		Commercial,
 		Industrial
-	};
-
-	struct ToggleButton
-	{
-		SDL_FRect rect{};
-		bool toggled{ false };
-		ButtonId id{ ButtonId::Normal };
 	};
 
 	static constexpr auto MiniTileSize{ 3 };

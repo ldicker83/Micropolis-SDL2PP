@@ -146,11 +146,11 @@ namespace
     }
 
 
-    void resetButtonsToNormal(std::array<MiniMapWindow::ToggleButton, 14>& buttons)
+    void resetButtonsToNormal(std::array<ToggleButton, 14>& buttons)
     {
 		for (auto& button : buttons)
         {
-            button.toggled = false;
+            button.reset();
         }
     }
 };
@@ -616,7 +616,9 @@ void MiniMapWindow::drawUI()
     const int arraySize = static_cast<int>(mButtons.size());
     for (int i{ 0 }; i < arraySize; ++i)
     {
-        SDL_RenderTexture(mRenderer, mButtonTextures.texture, &mButtonUV[i + (static_cast<int>(mButtons[i].toggled) * static_cast<size_t>(arraySize))], &mButtons[i].rect);
+		const int textureColumn = mButtons[i].toggled() ? 1 : 0;
+		const auto buttonArea = mButtons[i].areaF();
+        SDL_RenderTexture(mRenderer, mButtonTextures.texture, &mButtonUV[i + (textureColumn * static_cast<size_t>(arraySize))], &buttonArea);
     }
 
     SDL_RenderPresent(mRenderer);
@@ -740,33 +742,35 @@ void MiniMapWindow::handleButtonArea(const Point<int>& point)
 {
     for (auto& button : mButtons)
     {
-        if (!pointInFRect(point, button.rect))
+        if (!pointInRect(point, button.area()))
         {
-            button.toggled = false;
+            button.reset();
             continue;
         }
 
-        button.toggled = true;
-        mButtonDownId = button.id;
+        button.toggled(true);
+        mButtonDownId = static_cast<ButtonId>(button.userValue());
+
+		const auto buttonId = static_cast<ButtonId>(button.userValue());
 
         // fixme    Find a better way to do this
-        if (button.id == ButtonId::TransportationNetwork)
+        if (buttonId == ButtonId::TransportationNetwork)
         {
             drawLilTransMap();
         }
-        else if (button.id == ButtonId::PowerGrid)
+        else if (buttonId == ButtonId::PowerGrid)
         {
             drawPowerMap();
         }
-        else if (button.id == ButtonId::Residential)
+        else if (buttonId == ButtonId::Residential)
         {
             drawResidential();
         }
-        else if (button.id == ButtonId::Commercial)
+        else if (buttonId == ButtonId::Commercial)
         {
             drawCommercial();
         }
-        else if (button.id == ButtonId::Industrial)
+        else if (buttonId == ButtonId::Industrial)
         {
             drawIndustrial();
         }
@@ -784,7 +788,7 @@ void MiniMapWindow::handleNoUiButtonSelected()
 {
     if (noButtonsSelected())
     {
-        mButtons[0].toggled = true;
+        mButtons[0].toggled(true);
         mButtonDownId = ButtonId::Normal;
     }
 }
@@ -807,20 +811,20 @@ void MiniMapWindow::focusViewpoint(const Point<int>& point)
 
 void MiniMapWindow::setButtonValues()
 {
-    mButtons[0].id = ButtonId::Normal;
-    mButtons[1].id = ButtonId::LandValue;
-    mButtons[2].id = ButtonId::Crime;
-    mButtons[3].id = ButtonId::FireProtection;
-    mButtons[4].id = ButtonId::PoliceProtection;
-    mButtons[5].id = ButtonId::PopulationDensity;
-    mButtons[6].id = ButtonId::PopulationGrowth;
-    mButtons[7].id = ButtonId::Pollution;
-    mButtons[8].id = ButtonId::TrafficDensity;
-    mButtons[9].id = ButtonId::TransportationNetwork;
-    mButtons[10].id = ButtonId::PowerGrid;
-    mButtons[11].id = ButtonId::Residential;
-    mButtons[12].id = ButtonId::Commercial;
-    mButtons[13].id = ButtonId::Industrial;
+    mButtons[0].userValue(static_cast<int>(ButtonId::Normal));
+    mButtons[1].userValue(static_cast<int>(ButtonId::LandValue));
+    mButtons[2].userValue(static_cast<int>(ButtonId::Crime));
+    mButtons[3].userValue(static_cast<int>(ButtonId::FireProtection));
+    mButtons[4].userValue(static_cast<int>(ButtonId::PoliceProtection));
+    mButtons[5].userValue(static_cast<int>(ButtonId::PopulationDensity));
+    mButtons[6].userValue(static_cast<int>(ButtonId::PopulationGrowth));
+    mButtons[7].userValue(static_cast<int>(ButtonId::Pollution));
+    mButtons[8].userValue(static_cast<int>(ButtonId::TrafficDensity));
+    mButtons[9].userValue(static_cast<int>(ButtonId::TransportationNetwork));
+    mButtons[10].userValue(static_cast<int>(ButtonId::PowerGrid));
+    mButtons[11].userValue(static_cast<int>(ButtonId::Residential));
+    mButtons[12].userValue(static_cast<int>(ButtonId::Commercial));
+    mButtons[13].userValue(static_cast<int>(ButtonId::Industrial));
 }
 
 
@@ -844,7 +848,7 @@ void MiniMapWindow::setButtonPositions()
 
     for (int i{ 0 }; i < arraySize; ++i)
     {
-        mButtons[i].rect = { startPosition + buttonTransform.x * i, mButtonArea.y + 3, buttonSize.x, buttonSize.y };
+        mButtons[i].areaF({ startPosition + buttonTransform.x * i, mButtonArea.y + 3, buttonSize.x, buttonSize.y });
     }
 }
 
@@ -853,7 +857,7 @@ bool MiniMapWindow::noButtonsSelected()
 {
     for (auto& button : mButtons)
     {
-        if (button.toggled)
+        if (button.toggled())
         {
             return false;
         }
