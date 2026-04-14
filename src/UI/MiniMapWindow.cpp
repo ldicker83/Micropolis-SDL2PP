@@ -682,7 +682,7 @@ void MiniMapWindow::handleMouseButtonDown(const SDL_Event& event)
         return;
     }
 
-    const Point<float> point{ static_cast<float>(event.button.x), static_cast<float>(event.button.y) };
+    const Point<int> point{ static_cast<int>(event.button.x), static_cast<int>(event.button.y) };
     if (pointInFRect(point, mMinimapArea))
     {
         mButtonDownInMinimapArea = true;
