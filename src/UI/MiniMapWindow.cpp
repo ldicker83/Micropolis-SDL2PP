@@ -768,21 +768,16 @@ void MiniMapWindow::handleMouseMotion(const SDL_Event& event)
 
 
 void MiniMapWindow::focusViewpoint(const Point<int>& point)
-{   
-    const SDL_Rect intSelector{
-        static_cast<int>(mSelector.x),
-		static_cast<int>(mSelector.y),
-        static_cast<int>(mSelector.w),
-		static_cast<int>(mSelector.h)
-    };
-    
-    const Point<int> adjustedPosition{ point - Vector<int>{intSelector.x / 2, intSelector.y / 2} };
+{
+	const Vector<int> selectorSize{ static_cast<int>(mSelector.w) / 2, static_cast<int>(mSelector.h) / 2 };
+    const Point<int> adjustedPosition{ point - selectorSize };
 
-    updateMapViewPosition(adjustedPosition.skewBy({ TileSize, TileSize }).skewInverseBy({ MiniTileSize,MiniTileSize }));
+    updateMapViewPosition(adjustedPosition.skewBy({ TileSize, TileSize }).skewInverseBy({ MiniTileSize, MiniTileSize }));
 
     for (auto callback : mFocusOnTileCallbacks)
     {
-        callback({ intSelector.x, intSelector.y });
+		const Point<int> position{ static_cast<int>(mSelector.x), static_cast<int>(mSelector.y) };
+        callback(position);
     }
 }
 
