@@ -663,6 +663,7 @@ void MiniMapWindow::handleMouseEvent(const SDL_Event& event)
             {
                 mButtonDownInMinimapArea = true;
                 focusViewpoint(point);
+                return;
             }
             else if (pointInFRect(point, mButtonArea))
             {
