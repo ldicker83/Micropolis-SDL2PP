@@ -13,6 +13,9 @@
 #include "Button.h"
 
 
+/**
+ * ToggleButton class representing a button that can be toggled on or off.
+ */
 class ToggleButton : public Button
 {
 public:
