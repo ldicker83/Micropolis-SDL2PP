@@ -170,7 +170,7 @@ MiniMapWindow::MiniMapWindow(const Point<int>& position, const Vector<int>& size
 
 	mWindow = SDL_CreateWindow("Minimap Window",
         size.x * MiniTileSize,
-        size.y * MiniTileSize,
+        size.y * MiniTileSize + ButtonAreaHeight,
         SDL_WINDOW_ALWAYS_ON_TOP | SDL_WINDOW_UTILITY | SDL_WINDOW_HIDDEN);
 
 	SDL_SetWindowPosition(mWindow, position.x, position.y);
@@ -617,7 +617,7 @@ void MiniMapWindow::drawUI()
     const int arraySize = static_cast<int>(mButtons.size());
     for (int i{ 0 }; i < arraySize; ++i)
     {
-        SDL_RenderTexture(mRenderer, mButtonTextures.texture, &mButtonUV[i + (mButtons[i].state * arraySize)], &mButtons[i].rect);
+        SDL_RenderTexture(mRenderer, mButtonTextures.texture, &mButtonUV[i + (mButtons[i].state * static_cast<size_t>(arraySize))], &mButtons[i].rect);
     }
 
     SDL_RenderPresent(mRenderer);
