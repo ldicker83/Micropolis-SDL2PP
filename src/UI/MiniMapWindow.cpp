@@ -685,56 +685,11 @@ void MiniMapWindow::handleMouseButtonDown(const SDL_Event& event)
     const Point<int> point{ static_cast<int>(event.button.x), static_cast<int>(event.button.y) };
     if (pointInFRect(point, mMinimapArea))
     {
-        mButtonDownInMinimapArea = true;
-        focusViewpoint(point);
-        return;
+        handleMinimapArea(point);
     }
     else if (pointInFRect(point, mButtonArea))
     {
-        for (auto& button : mButtons)
-        {
-            if (pointInFRect(point, button.rect))
-            {
-                button.state = ButtonStatePressed;
-                mButtonDownId = button.id;
-
-                // fixme    Find a better way to do this
-                if (button.id == ButtonId::TransportationNetwork)
-                {
-                    drawLilTransMap();
-                }
-                else if (button.id == ButtonId::PowerGrid)
-                {
-                    drawPowerMap();
-                }
-                else if (button.id == ButtonId::Residential)
-                {
-                    drawResidential();
-                }
-                else if (button.id == ButtonId::Commercial)
-                {
-                    drawCommercial();
-                }
-                else if (button.id == ButtonId::Industrial)
-                {
-                    drawIndustrial();
-                }
-                else
-                {
-                    drawCurrentOverlay();
-                }
-            }
-            else
-            {
-                button.state = ButtonStateNormal;
-            }
-        }
-
-        if (noButtonsSelected())
-        {
-            mButtons[0].state = ButtonStatePressed;
-            mButtonDownId = ButtonId::Normal;
-        }
+        handleButtonArea(point);
     }   
 }
 
@@ -773,6 +728,62 @@ void MiniMapWindow::handleMouseMotion(const SDL_Event& event)
             static_cast<int>(event.motion.x),
             static_cast<int>(event.motion.y)
             });
+    }
+}
+
+
+void MiniMapWindow::handleMinimapArea(const Point<int>& point)
+{
+    mButtonDownInMinimapArea = true;
+    focusViewpoint(point);
+}
+
+
+void MiniMapWindow::handleButtonArea(const Point<int>& point)
+{
+    for (auto& button : mButtons)
+    {
+        if (pointInFRect(point, button.rect))
+        {
+            button.state = ButtonStatePressed;
+            mButtonDownId = button.id;
+
+            // fixme    Find a better way to do this
+            if (button.id == ButtonId::TransportationNetwork)
+            {
+                drawLilTransMap();
+            }
+            else if (button.id == ButtonId::PowerGrid)
+            {
+                drawPowerMap();
+            }
+            else if (button.id == ButtonId::Residential)
+            {
+                drawResidential();
+            }
+            else if (button.id == ButtonId::Commercial)
+            {
+                drawCommercial();
+            }
+            else if (button.id == ButtonId::Industrial)
+            {
+                drawIndustrial();
+            }
+            else
+            {
+                drawCurrentOverlay();
+            }
+        }
+        else
+        {
+            button.state = ButtonStateNormal;
+        }
+    }
+
+    if (noButtonsSelected())
+    {
+        mButtons[0].state = ButtonStatePressed;
+        mButtonDownId = ButtonId::Normal;
     }
 }
 

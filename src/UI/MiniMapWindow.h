@@ -92,6 +92,9 @@ private:
 	void handleWindowEvent(const SDL_Event& event);
 	void handleMouseMotion(const SDL_Event& event);
 
+	void handleMinimapArea(const Point<int>& point);
+	void handleButtonArea(const Point<int>& point);
+
 	void focusViewpoint(const Point<int>& point);
 
 	void setButtonValues();
