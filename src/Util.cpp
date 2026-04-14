@@ -55,7 +55,21 @@ const Vector<int> vectorFromPoints(const Point<int>& start, const Point<int>& en
 
 bool pointInRect(const Point<int>& point, const SDL_Rect& rect)
 {
-    return point.x >= rect.x && point.x <= rect.x + rect.w && point.y >= rect.y && point.y <= rect.y + rect.h;
+    return point.x >= rect.x && point.x < rect.x + rect.w && point.y >= rect.y && point.y < rect.y + rect.h;
+}
+
+
+bool pointInFRect(const Point<int>& point, const SDL_FRect& rect)
+{
+    return point.x >= rect.x && point.x < rect.x + rect.w && point.y >= rect.y && point.y < rect.y + rect.h;
+}
+
+
+SDL_FRect fRectFromRect(const SDL_Rect& rect)
+{
+    SDL_FRect fRect{};
+    SDL_RectToFRect(&rect, &fRect);
+    return fRect;
 }
 
 

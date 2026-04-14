@@ -31,7 +31,7 @@ void turnOnBlending(SDL_Renderer& renderer, const Texture& texture)
 void drawPoint(SDL_Renderer& renderer, const Point<int>& point, const SDL_Color& color)
 {
     SDL_SetRenderDrawColor(&renderer, color.r, color.g, color.b, color.a);
-    SDL_RenderDrawPoint(&renderer, point.x, point.y);
+    SDL_RenderPoint(&renderer, static_cast<float>(point.x), static_cast<float>(point.y));
 }
 
 
@@ -48,6 +48,11 @@ void drawRect(SDL_Renderer& renderer, const SDL_Rect& rect, const SDL_Color& col
 void initTexture(SDL_Renderer& renderer, Texture& texture, const Vector<int>& dimensions)
 {
     texture.texture = SDL_CreateTexture(&renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, dimensions.x, dimensions.y);
-    SDL_QueryTexture(texture.texture, nullptr, nullptr, &texture.dimensions.x, &texture.dimensions.y);
-    texture.area = { 0, 0, texture.dimensions.x, texture.dimensions.y };
+
+    auto textureProperties = SDL_GetTextureProperties(texture.texture);
+    texture.area = {
+        0.0f, 0.0f,
+        static_cast<float>(SDL_GetNumberProperty(textureProperties, SDL_PROP_TEXTURE_WIDTH_NUMBER, 0)),
+        static_cast<float>(SDL_GetNumberProperty(textureProperties, SDL_PROP_TEXTURE_HEIGHT_NUMBER, 0))
+    };
 }

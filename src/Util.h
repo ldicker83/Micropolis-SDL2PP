@@ -13,7 +13,7 @@
 #include "Math/Point.h"
 #include "Math/Vector.h"
 
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
 #include <string>
 #include <unordered_map>
@@ -67,6 +67,9 @@ bool coordinatesValid(const Point<int>& position);
 Point<int> positionToCell(const Point<int>& position, const Point<int>& offset);
 const Vector<int> vectorFromPoints(const Point<int>& start, const Point<int>& end);
 bool pointInRect(const Point<int>& point, const SDL_Rect& rect);
+bool pointInFRect(const Point<int>& point, const SDL_FRect& rect);
+
+SDL_FRect fRectFromRect(const SDL_Rect& rect);
 
 int randomRange(int min, int max);
 int random();

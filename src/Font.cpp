@@ -12,11 +12,11 @@
 #include "Math/PointInRectangleRange.h"
 
 #if defined(__APPLE__)
-#include <SDL2_image/SDL_image.h>
-#include <SDL2_ttf//SDL_ttf.h>
+#include <SDL3_image/SDL_image.h>
+#include <SDL3_ttf//SDL_ttf.h>
 #else
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
+#include <SDL3_Image/SDL_image.h>
+#include <SDL3_ttf/SDL_ttf.h>
 #endif
 
 #include <cmath>
@@ -158,16 +158,16 @@ namespace {
 
 		if (TTF_WasInit() == 0)
 		{
-			if (TTF_Init() != 0)
+			if (!TTF_Init())
 			{
-				throw std::runtime_error("Unable to load font: " + std::string{TTF_GetError()});
+				throw std::runtime_error("Unable to load font: " + std::string{ SDL_GetError() });
 			}
 		}
 
-		TTF_Font* font = TTF_OpenFont(path.c_str(), ptSize);
+		TTF_Font* font = TTF_OpenFont(path.c_str(), static_cast<float>(ptSize));
 		if (!font)
 		{
-			throw std::runtime_error("Unable to load font: " + std::string{TTF_GetError()});
+			throw std::runtime_error("Unable to load font: " + std::string{ SDL_GetError() });
 		}
 
 		Font::FontInfo fontInfo;
@@ -178,11 +178,11 @@ namespace {
 		SDL_Surface* fontSurface = generateFontSurface(font, roundedCharSize);
 
 		fontInfo.pointSize = ptSize;
-		fontInfo.height = TTF_FontHeight(font);
-		fontInfo.ascent = TTF_FontAscent(font);
+		fontInfo.height = TTF_GetFontHeight(font);
+		fontInfo.ascent = TTF_GetFontAscent(font);
 		fontInfo.glyphSize = roundedCharSize;
 		fontInfo.texture = generateFontTexture(fontSurface, glm, roundedCharSize);
-		SDL_FreeSurface(fontSurface);
+		SDL_DestroySurface(fontSurface);
 		TTF_CloseFont(font);
 
 		return fontInfo;
@@ -201,7 +201,7 @@ namespace {
 
 		if (!out)
 		{
-			throw std::runtime_error(std::string("Unable to create font texture: ") + TTF_GetError());
+			throw std::runtime_error(std::string("Unable to create font texture: ") + SDL_GetError());
 		}
 		
 		return out;
@@ -211,7 +211,7 @@ namespace {
 	SDL_Surface* generateFontSurface(TTF_Font* font, Vector<int> characterSize)
 	{
 		const auto matrixSize = characterSize * GLYPH_MATRIX_SIZE;
-		SDL_Surface* fontSurface = SDL_CreateRGBSurface(SDL_SWSURFACE, matrixSize.x, matrixSize.y, BITS_32, MasksDefault.red, MasksDefault.green, MasksDefault.blue, MasksDefault.alpha);
+		auto fontSurface = SDL_CreateSurface(matrixSize.x, matrixSize.y, SDL_PIXELFORMAT_RGBA32);
 
 		SDL_Color white = { 255, 255, 255, 255 };
 		for (const auto glyphPosition : PointInRectangleRange(Rectangle{0, 0, GLYPH_MATRIX_SIZE, GLYPH_MATRIX_SIZE}))
@@ -232,7 +232,7 @@ namespace {
 			const auto pixelPosition = glyphPosition.skewBy(characterSize);
 			SDL_Rect rect = { pixelPosition.x, pixelPosition.y, 0, 0 };
 			SDL_BlitSurface(characterSurface, nullptr, fontSurface, &rect);
-			SDL_FreeSurface(characterSurface);
+			SDL_DestroySurface(characterSurface);
 		}
 		return fontSurface;
 	}
@@ -246,7 +246,7 @@ namespace {
 		{
 			Vector<int> sizeChar;
 			char text[2] = {static_cast<char>(i), 0};
-			TTF_SizeText(font, text, &sizeChar.x, &sizeChar.y);
+			TTF_GetStringSize(font, text, 0, &sizeChar.x, &sizeChar.y);
 			size = {std::max({size.x, sizeChar.x}), std::max({size.y, sizeChar.y})};
 		}
 		return size;
@@ -278,7 +278,7 @@ namespace {
 		for (Uint16 i = 0; i < ASCII_TABLE_COUNT; i++)
 		{
 			auto& metrics = glyphMetricsList.emplace_back();
-			TTF_GlyphMetrics(font, i, &metrics.minX, &metrics.maxX, &metrics.minY, &metrics.maxY, &metrics.advance);
+			TTF_GetGlyphMetrics(font, i, &metrics.minX, &metrics.maxX, &metrics.minY, &metrics.maxY, &metrics.advance);
 		}
 	}
 

@@ -1,13 +1,13 @@
-# Micropolis-SDL2PP
+# Micropolis-SDLPP
 
-This is a C++/SDL2 port of the SimCity/Micropolis code developed by Don Hopkins for Unix. See __README_OG for the original readme provided by Don Hopkins and EA.
+This is a C++/SDL port of the SimCity/Micropolis code developed by Don Hopkins for Unix. See __README_OG for the original readme provided by Don Hopkins and EA.
 
 ## License
 This project is licensed under the GPL as required by the original code. See COPYING for details. There are additional licensing stipulations required by EA, see "ADDITIONAL TERMS" in __README_OG.
 
 ## Goals
 * Port the original code to C++
-* Port all drawing/input/window management code to SDL2
+* Port all drawing/input/window management code to ~~SDL2~~ SDL3
 * Eliminate dependency on TCL/Tk
 
 ## Why?
@@ -15,3 +15,6 @@ After recovering from a COVID-19 infection, I was left with serious long-term ef
 
 ## Platforms
 My main development machine is Windows based so the current development efforts are for Windows. With some minor changes (notably in the filesystem handling code) this code base should work on all major platforms.
+
+## Name Change
+I originally started this project when SDL2 was in active development and SDL3 was in early alpha. I've opted to rename the project to simply 'SDLPP' to be less specific to which version of SDL when I opted to port everything to SDL3 to avoid confusion.

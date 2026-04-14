@@ -48,12 +48,14 @@
 #include <string>
 #include <vector>
 
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_main.h>
 
 #if defined(__APPLE__)
-#include <SDL2_image/SDL_image.h>
+#include <SDL3_image/SDL_image.h>
 #else
-#include <SDL2/SDL_image.h>
+//#include <SDL3/SDL_image.h>
+#include <SDL3_image/SDL_Image.h>
 #endif
 
 #if defined(WIN32)
@@ -88,13 +90,13 @@ namespace
     constexpr auto MiniTileSize = 3;
     constexpr auto MiniMapTileMultiplier = (TileSize + MiniTileSize - 1) / MiniTileSize;
 
-    SDL_Rect UiHeaderRect{ 10, 10, 0, 0 };
-    SDL_Rect RciDestination{};
-    SDL_Rect FullMapViewRect{};
+    SDL_FRect UiHeaderRect{ 10.0f, 10.0f, 0.0f, 0.0f };
+    SDL_FRect RciDestination{};
+    SDL_FRect FullMapViewRect{};
 
-    SDL_Rect ResidentialValveRect{ 0, 0, 4, 0 };
-    SDL_Rect CommercialValveRect{ 0, 0, 4, 0 };
-    SDL_Rect IndustrialValveRect{ 0, 0, 4, 0 };
+    SDL_FRect ResidentialValveRect{ 0.0f, 0.0f, 4.0f, 0.0f };
+    SDL_FRect CommercialValveRect{ 0.0f, 0.0f, 4.0f, 0.0f };
+    SDL_FRect IndustrialValveRect{ 0.0f, 0.0f, 4.0f, 0.0f };
 
     Vector<int> WindowSize{};
     Vector<int> DraggableToolVector{};
@@ -120,7 +122,7 @@ namespace
     std::string currentBudget{};
 
     std::vector<SDL_TimerID> Timers;
-    std::vector<const SDL_Rect*> UiRects{};
+    std::vector<const SDL_FRect*> UiRects{};
 
     Budget budget{};
     CityProperties cityProperties{};
@@ -138,25 +140,25 @@ namespace
         return SpeedModifierTable[static_cast<unsigned int>(simSpeed())];
     }
 
-    unsigned int zonePowerBlinkTick(unsigned int interval, void*)
+    Uint32 SDLCALL zonePowerBlinkTick(void*, SDL_TimerID timerID, Uint32 interval)
     {
         toggleBlinkFlag();
         return interval;
     }
 
-    unsigned int redrawMiniMapTick(unsigned int interval, void*)
+    Uint32 SDLCALL redrawMiniMapTick(void*, SDL_TimerID timerID, Uint32 interval)
     {
         RedrawMinimap = true;
         return interval;
     }
 
-    unsigned int simulationTick(unsigned int interval, void*)
+    Uint32 SDLCALL simulationTick(void*, SDL_TimerID timerID, Uint32 interval)
     {
         SimulationStep = true;
         return SimStepDefaultTime - speedModifier();
     }
 
-    unsigned int animationTick(unsigned int interval, void*)
+    Uint32 SDLCALL animationTick(void*, SDL_TimerID timerID, Uint32 interval)
     {
         AnimationStep = true;
         return interval;
@@ -392,7 +394,7 @@ void openGame()
 
 void saveGame()
 {
-    if (!interfaceManager->fileIoDialog().filePicked() || SDL_GetModState() & KMOD_SHIFT)
+    if (!interfaceManager->fileIoDialog().filePicked() || SDL_GetModState() & SDL_KMOD_SHIFT)
     {
         if (!interfaceManager->fileIoDialog().pickSaveFile())
         {
@@ -409,12 +411,7 @@ void saveGame()
 void buildBigTileset()
 {
     SDL_Surface* srcSurface = IMG_Load("images/tiles.xpm");
-    SDL_Surface* dstSurface = SDL_CreateRGBSurface(srcSurface->flags,
-        512, 512, 24,
-        srcSurface->format->Rmask,
-        srcSurface->format->Gmask,
-        srcSurface->format->Bmask,
-        srcSurface->format->Amask);
+    SDL_Surface* dstSurface = SDL_CreateSurface(512, 512, SDL_PIXELFORMAT_RGBA32);
 
     SDL_Rect srcRect{ 0, 0, TileSize, TileSize };
     SDL_Rect dstRect{ 0, 0, TileSize, TileSize };
@@ -428,8 +425,8 @@ void buildBigTileset()
 
     SDL_Texture* texture = SDL_CreateTextureFromSurface(MainWindowRenderer, dstSurface);
 
-    SDL_FreeSurface(srcSurface);
-    SDL_FreeSurface(dstSurface);
+    SDL_DestroySurface(srcSurface);
+    SDL_DestroySurface(dstSurface);
 
     if (!texture)
     {
@@ -438,10 +435,7 @@ void buildBigTileset()
         throw std::runtime_error(message);
     }
 
-    Vector<int> size{};
-    SDL_QueryTexture(texture, nullptr, nullptr, &size.x, &size.y);
-
-    BigTileset = { texture, SDL_Rect{ 0, 0, size.x, size.y }, { size.x, size.y } };
+    BigTileset = buildTexture(texture);
 }
 
 
@@ -463,10 +457,10 @@ void updateMapDrawParameters()
 {
     FullMapViewRect =
     {
-        MapViewOffset.x,
-        MapViewOffset.y,
-        WindowSize.x,
-        WindowSize.y
+        static_cast<float>(MapViewOffset.x),
+        static_cast<float>(MapViewOffset.y),
+        static_cast<float>(WindowSize.x),
+        static_cast<float>(WindowSize.y)
     };
 
     miniMapWindow->updateMapViewPosition(MapViewOffset);
@@ -518,7 +512,7 @@ void windowResized(const Vector<int>& size)
         InterfaceManager::Window::Options,
         InterfaceManager::Window::Query});
 
-    UiHeaderRect.w = WindowSize.x - 20;
+    UiHeaderRect.w = static_cast<float>(WindowSize.x) - 20.0f;
 }
 
 
@@ -547,7 +541,7 @@ bool IgnoreToolMouseUp(Point<int>& mousePosition)
 {
     for (auto rect : UiRects)
     {
-        if (pointInRect(mousePosition, *rect))
+        if (pointInFRect(mousePosition, *rect))
         {
             return true;
         }
@@ -603,11 +597,11 @@ void handleKeyEvent(SDL_Event& event)
 {
     if (interfaceManager->optionsWindow().visible())
     {
-        interfaceManager->optionsWindow().injectKeyDown(event.key.keysym.sym);
+        interfaceManager->optionsWindow().injectKeyDown(event.key.key);
         return;
     }
 
-    switch (event.key.keysym.sym)
+    switch (event.key.key)
     {
     case SDLK_ESCAPE:
         interfaceManager->hideAllWindows();
@@ -616,7 +610,7 @@ void handleKeyEvent(SDL_Event& event)
         break;
 
     case SDLK_0:
-    case SDLK_p:
+    case SDLK_P:
     case SDLK_SPACE:
         TogglePause();
         break;
@@ -693,9 +687,9 @@ void handleMouseEvent(SDL_Event& event)
 
     switch (event.type)
     {
-    case SDL_MOUSEMOTION:
-        EventHandling::MousePosition = { event.motion.x, event.motion.y };
-        mouseMotionDelta = { event.motion.xrel, event.motion.yrel };
+    case SDL_EVENT_MOUSE_MOTION:
+        EventHandling::MousePosition = { static_cast<int>(event.motion.x), static_cast<int>(event.motion.y) };
+        mouseMotionDelta = { static_cast<int>(event.motion.xrel), static_cast<int>(event.motion.yrel) };
 
         DraggableToolVector = {};
         if (pendingToolProperties().draggable && EventHandling::MouseLeftDown && toolStart() != TilePointedAt)
@@ -717,15 +711,15 @@ void handleMouseEvent(SDL_Event& event)
         }
         break;
 
-    case SDL_MOUSEBUTTONDOWN:
+    case SDL_EVENT_MOUSE_BUTTON_DOWN:
         if (event.button.button == SDL_BUTTON_LEFT)
         {
             EventHandling::MouseLeftDown = true;
-            EventHandling::MouseDownPosition = { event.motion.x, event.motion.y };
+            EventHandling::MouseDownPosition = { static_cast<int>(event.motion.x), static_cast<int>(event.motion.y) };
 
             for (auto rect : UiRects)
             {
-                if (pointInRect(mousePosition, *rect))
+                if (pointInFRect(mousePosition, *rect))
                 {
                     return;
                 }
@@ -751,12 +745,11 @@ void handleMouseEvent(SDL_Event& event)
         }
         break;
 
-    case SDL_MOUSEBUTTONUP:
+    case SDL_EVENT_MOUSE_BUTTON_UP:
         if (event.button.button == SDL_BUTTON_LEFT)
         {
             EventHandling::MouseLeftDown = false;
-            EventHandling::MouseClickPosition = { event.button.x, event.button.y };
-
+            EventHandling::MouseClickPosition = { static_cast<int>(event.button.x), static_cast<int>(event.button.y) };
             interfaceManager->injectMouseUp();
 
             if (IgnoreToolMouseUp(mousePosition))
@@ -791,13 +784,13 @@ void handleMouseEvent(SDL_Event& event)
 
 void handleWindowEvent(SDL_Event& event)
 {
-    switch (event.window.event)
+    switch (event.window.type)
     {
-    case SDL_WINDOWEVENT_RESIZED:
+    case SDL_EVENT_WINDOW_RESIZED:
         windowResized(Vector<int>{event.window.data1, event.window.data2});
         break;
 
-    case SDL_WINDOWEVENT_CLOSE:
+    case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
         if (event.window.windowID == miniMapWindow->id())
         {
             miniMapWindow->hide();
@@ -823,26 +816,28 @@ void pumpEvents()
     {
         miniMapWindow->injectEvent(event);
 
+        if (event.type >= SDL_EVENT_WINDOW_FIRST && event.type <= SDL_EVENT_WINDOW_LAST)
+        {
+            handleWindowEvent(event);
+            continue;
+        }
+
         switch (event.type)
         {
-        case SDL_KEYDOWN:
+        case SDL_EVENT_KEY_DOWN:
             handleKeyEvent(event);
             break;
 
-        case SDL_MOUSEMOTION:
-        case SDL_MOUSEBUTTONDOWN:
-        case SDL_MOUSEBUTTONUP:
+        case SDL_EVENT_MOUSE_MOTION:
+        case SDL_EVENT_MOUSE_BUTTON_DOWN:
+        case SDL_EVENT_MOUSE_BUTTON_UP:
             handleMouseEvent(event);
             break;
 
-        case SDL_QUIT:
+        case SDL_EVENT_QUIT:
             simExit();
             break;
-
-        case SDL_WINDOWEVENT:
-            handleWindowEvent(event);
-            break;
-            
+           
         default:
             break;
         }
@@ -850,21 +845,24 @@ void pumpEvents()
 }
 
 
-void initRenderer()
+void initMainWindow()
 {
-    MainWindow = SDL_CreateWindow("Micropolis", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_RESIZABLE);// | SDL_WINDOW_MAXIMIZED);
+	MainWindow = SDL_CreateWindow("Micropolis", 800, 600, SDL_WINDOW_RESIZABLE);
     if (!MainWindow)
     {
         throw std::runtime_error("initRenderer(): Unable to create primary window: " + std::string(SDL_GetError()));
     }
-
+    
     SDL_SetWindowMinimumSize(MainWindow, 800, 600);
+	SDL_SetWindowPosition(MainWindow, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+}
 
-    #if defined(__APPLE__)
-    MainWindowRenderer = SDL_CreateRenderer(MainWindow, -1, SDL_RENDERER_SOFTWARE);
-    #else
-    MainWindowRenderer = SDL_CreateRenderer(MainWindow, -1, SDL_RENDERER_ACCELERATED);
-    #endif
+
+void initRenderer()
+{
+    initMainWindow();
+
+    MainWindowRenderer = SDL_CreateRenderer(MainWindow, nullptr);
     
     if (!MainWindowRenderer)
     {
@@ -884,10 +882,15 @@ void initViewParamters()
     MainMapTexture.texture = SDL_CreateTexture(MainWindowRenderer, SDL_PIXELFORMAT_ARGB32, SDL_TEXTUREACCESS_TARGET, SimWidth * 16, SimHeight * 16);
     MainMapTexture.dimensions = { SimWidth * 16, SimHeight * 16 };
 
-    UiHeaderRect.w = WindowSize.x - 20;
-    UiHeaderRect.h = RCI_Indicator.dimensions.y + 10 + MainFont->height() + 10;
+    UiHeaderRect.w = static_cast<float>(WindowSize.x) - 20.0f;
+    UiHeaderRect.h = static_cast<float>(RCI_Indicator.dimensions.y) + 10.0f + static_cast<float>(MainFont->height()) + 10.0f;
 
-    RciDestination = { UiHeaderRect.x + 5, UiHeaderRect.y + MainFont->height() + 10, RCI_Indicator.dimensions.x, RCI_Indicator.dimensions.y };
+    RciDestination = {
+        UiHeaderRect.x + 5,
+        UiHeaderRect.y + MainFont->height() + 10,
+        static_cast<float>(RCI_Indicator.dimensions.x),
+        static_cast<float>(RCI_Indicator.dimensions.y)
+    };
 
     ResidentialValveRect = { RciDestination.x + 9, RciDestination.y + 24, 4, 0 };
     CommercialValveRect = { RciDestination.x + 18, RciDestination.y + 24, 4, 0 };
@@ -901,9 +904,9 @@ void drawValve()
     double commercialPercent = static_cast<double>(CValve) / 1500.0;
     double industrialPercent = static_cast<double>(IValve) / 1500.0;
 
-    ResidentialValveRect.h = -static_cast<int>(RciValveHeight * residentialPercent);
-    CommercialValveRect.h = -static_cast<int>(RciValveHeight * commercialPercent);
-    IndustrialValveRect.h = -static_cast<int>(RciValveHeight * industrialPercent);
+    ResidentialValveRect.h = -(RciValveHeight * static_cast<float>(residentialPercent));
+    CommercialValveRect.h = -(RciValveHeight * static_cast<float>(commercialPercent));
+    IndustrialValveRect.h = -(RciValveHeight * static_cast<float>(industrialPercent));
 
     SDL_SetRenderDrawColor(MainWindowRenderer, Colors::Green.r, Colors::Green.g, Colors::Green.b, 255);
     SDL_RenderFillRect(MainWindowRenderer, &ResidentialValveRect);
@@ -915,9 +918,9 @@ void drawValve()
     SDL_RenderFillRect(MainWindowRenderer, &IndustrialValveRect);
 
     // not a huge fan of this
-    SDL_Rect rciSrc{ 4, 19, 32, 11 };
-    SDL_Rect rciDst{ RciDestination.x + 4, RciDestination.y + 19, 32, 11 };
-    SDL_RenderCopy(MainWindowRenderer, RCI_Indicator.texture, &rciSrc, &rciDst);
+    SDL_FRect rciSrc{ 4.0f, 19.0f, 32.0f, 11.0f };
+    SDL_FRect rciDst{ RciDestination.x + 4.0f, RciDestination.y + 19.0f, 32.0f, 11.0f };
+    SDL_RenderTexture(MainWindowRenderer, RCI_Indicator.texture, &rciSrc, &rciDst);
 }
 
 
@@ -927,18 +930,22 @@ void drawTopUi()
     SDL_SetRenderDrawColor(MainWindowRenderer, 0, 0, 0, 150);
     SDL_RenderFillRect(MainWindowRenderer, &UiHeaderRect);
     SDL_SetRenderDrawColor(MainWindowRenderer, 0, 0, 0, 255);
-    SDL_RenderDrawRect(MainWindowRenderer, &UiHeaderRect);
+    SDL_RenderRect(MainWindowRenderer, &UiHeaderRect);
 
     // RCI
-    SDL_RenderCopy(MainWindowRenderer, RCI_Indicator.texture, nullptr, &RciDestination);
+    SDL_RenderTexture(MainWindowRenderer, RCI_Indicator.texture, nullptr, &RciDestination);
     drawValve();
 
-    stringRenderer->drawString(*MainFont, monthString(static_cast<Month>(lastCityMonth())), {UiHeaderRect.x + 5, UiHeaderRect.y + 5});
-    stringRenderer->drawString(*MainFont, std::to_string(currentYear()), { UiHeaderRect.x + 35, UiHeaderRect.y + 5});
+    stringRenderer->drawString(*MainFont, monthString(static_cast<Month>(lastCityMonth())), {static_cast<int>(UiHeaderRect.x) + 5, static_cast<int>(UiHeaderRect.y) + 5});
+    stringRenderer->drawString(*MainFont, std::to_string(currentYear()), { static_cast<int>(UiHeaderRect.x) + 35, static_cast<int>(UiHeaderRect.y) + 5});
 
-    stringRenderer->drawString(*MainFont, LastMessage(), {100, UiHeaderRect.y + 5});
+    stringRenderer->drawString(*MainFont, LastMessage(), { 100, static_cast<int>(UiHeaderRect.y) + 5 });
 
-    const Point<int> budgetPosition{ UiHeaderRect.x + UiHeaderRect.w - 5 - MainFont->width(currentBudget), UiHeaderRect.y + 5 };
+    const Point<int> budgetPosition{
+        static_cast<int>(UiHeaderRect.x + UiHeaderRect.w - 5 - MainFont->width(currentBudget)),
+        static_cast<int>(UiHeaderRect.y + 5)
+    };
+    
     stringRenderer->drawString(*MainFont, currentBudget, budgetPosition);
 }
 
@@ -950,17 +957,17 @@ void DrawPendingTool(const ToolPalette& palette)
         return;
     }
 
-    const SDL_Rect toolRect
-    {
+
+    const auto toolRect = fRectFromRect({
         TileHighlight.x - (pendingToolProperties().offset * TileSize),
         TileHighlight.y - (pendingToolProperties().offset * TileSize),
         pendingToolProperties().size * TileSize,
         pendingToolProperties().size * TileSize
-    };
+        });
 
     if (palette.toolGost().texture)
     {
-        SDL_RenderCopy(MainWindowRenderer, palette.toolGost().texture, &palette.toolGost().area, &toolRect);
+        SDL_RenderTexture(MainWindowRenderer, palette.toolGost().texture, &palette.toolGost().area, &toolRect);
         return;
     }
 
@@ -968,7 +975,7 @@ void DrawPendingTool(const ToolPalette& palette)
     SDL_RenderFillRect(MainWindowRenderer, &toolRect);
 
     SDL_SetRenderDrawColor(MainWindowRenderer, 255, 255, 255, 255);
-    SDL_RenderDrawRect(MainWindowRenderer, &toolRect);
+    SDL_RenderRect(MainWindowRenderer, &toolRect);
 }
 
 
@@ -980,30 +987,29 @@ void drawDraggableToolVector()
         return;
     }
     
-    SDL_Rect toolRect
-    {
+    auto toolRect = fRectFromRect({
         (toolStart().x * TileSize) - MapViewOffset.x,
         (toolStart().y * TileSize) - MapViewOffset.y,
         TileSize, TileSize
-    };
+		});
 
     const int axis = longestAxis(DraggableToolVector);
     const int size = (std::abs(axis) * TileSize) + TileSize;
 
     const bool xAxisLarger = std::abs(DraggableToolVector.x) > std::abs(DraggableToolVector.y);
-    xAxisLarger ? toolRect.w = size : toolRect.h = size;
+    xAxisLarger ? toolRect.w = static_cast<float>(size) : toolRect.h = static_cast<float>(size);
 
     if (axis < 0)
     {
         const int startValue = size - TileSize;
-        xAxisLarger ? toolRect.x -= startValue : toolRect.y -= startValue;
+        xAxisLarger ? toolRect.x -= static_cast<float>(startValue) : toolRect.y -= static_cast<float>(startValue);
     }
 
     SDL_SetRenderDrawColor(MainWindowRenderer, 255, 255, 255, 100);
     SDL_RenderFillRect(MainWindowRenderer, &toolRect);
 
     SDL_SetRenderDrawColor(MainWindowRenderer, 255, 255, 255, 255);
-    SDL_RenderDrawRect(MainWindowRenderer, &toolRect);
+    SDL_RenderRect(MainWindowRenderer, &toolRect);
 }
 
 
@@ -1029,13 +1035,17 @@ void initUI()
     Point<int> mainWindowPosition{};
     SDL_GetWindowPosition(MainWindow, &mainWindowPosition.x, &mainWindowPosition.y);
 
-    SDL_DisplayMode mode{};
-    SDL_GetDesktopDisplayMode(0, &mode);
+    const auto mode = SDL_GetDesktopDisplayMode(SDL_GetPrimaryDisplay());
+
+    if(!mode)
+    {
+        throw std::runtime_error(std::string("initUI(): Unable to get desktop display mode: ") + SDL_GetError());
+	}
 
     const Point<int> miniMapWindowPosition
     {
-        std::clamp(mainWindowPosition.x - (SimWidth * MiniTileSize) - 10, 10, mode.w),
-        std::clamp(mainWindowPosition.y, 10, mode.h)
+        std::clamp(mainWindowPosition.x - (SimWidth * MiniTileSize) - 10, 10, mode->w),
+        std::clamp(mainWindowPosition.y, 10, mode->h)
     };
 
     miniMapWindow = std::make_unique<MiniMapWindow>(miniMapWindowPosition, Vector<int>{ SimWidth, SimHeight });
@@ -1054,7 +1064,14 @@ void initUI()
     stringRenderer = std::make_unique<StringRender>(MainWindowRenderer);
 
     interfaceManager = std::make_unique<InterfaceManager>(MainWindowRenderer, MainWindow, budget);
-    interfaceManager->positionWindow(InterfaceManager::Window::ToolPalette, { UiHeaderRect.x, UiHeaderRect.y + UiHeaderRect.h + 5 });
+
+    const Point<int> toolPalettePosition
+    {
+        static_cast<int>(UiHeaderRect.x),
+        static_cast<int>(UiHeaderRect.y + UiHeaderRect.h + 5)
+	};
+
+    interfaceManager->positionWindow(InterfaceManager::Window::ToolPalette, toolPalettePosition);
 
     interfaceManager->optionsWindow().optionsChangedConnect(optionsChanged);
     interfaceManager->optionsWindow().newGameCallbackConnect(newGame);
@@ -1095,7 +1112,7 @@ void GameLoop()
         pumpEvents();
 
         SDL_RenderClear(MainWindowRenderer);
-        SDL_RenderCopy(MainWindowRenderer, MainMapTexture.texture, &FullMapViewRect, nullptr);
+        SDL_RenderTexture(MainWindowRenderer, MainMapTexture.texture, &FullMapViewRect, nullptr);
 
         currentBudget = numberToDollarDecimal(budget.CurrentFunds());
 
@@ -1131,6 +1148,9 @@ void GameLoop()
 }
 
 
+#include <Windows.h>
+
+
 int main(int argc, char* argv[])
 {
     std::cout << "Starting Micropolis-SDL2 version " << MicropolisVersion << " originally by Will Wright and Don Hopkins." << std::endl;
@@ -1141,7 +1161,7 @@ int main(int argc, char* argv[])
 
     try
     {
-        if (SDL_Init(SDL_INIT_EVERYTHING))
+        if (!SDL_Init(SDL_INIT_VIDEO))
         {
             throw std::runtime_error(std::string("Unable to initialize SDL: ") + SDL_GetError());
         }
@@ -1165,11 +1185,11 @@ int main(int argc, char* argv[])
     {
         std::string message(std::string(e.what()) + "\n\nMicropolis-SDL2PP will now close.");
         
-        #if defined(WIN32)
+        //#if defined(WIN32)
         MessageBoxA(nullptr, message.c_str(), "Micropolis-SDL2PP", MB_ICONERROR | MB_OK);
-        #else
+        //#else
         std::cout << message << std::endl;
-        #endif
+        //#endif
     }
 
     return 0;

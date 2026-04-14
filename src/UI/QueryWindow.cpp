@@ -17,7 +17,7 @@
 
 namespace
 {
-    constexpr SDL_Rect BgRect{ 0, 0, 256, 256 };
+    constexpr SDL_FRect BgRect{ 0.0f, 0.0f, 256.0f, 256.0f };
     constexpr SDL_Rect CloseButtonRect{ 61, 221, 142, 20 };
 };
 
@@ -31,7 +31,7 @@ QueryWindow::QueryWindow(SDL_Renderer* renderer) :
     mRenderer{ renderer },
     mStringRenderer{ renderer }
 {
-    size({ BgRect.w, BgRect.h });
+    size({ static_cast<int>(BgRect.w), static_cast<int>(BgRect.h) });
 
     SDL_SetTextureColorMod(mFont->texture(), 0, 0, 0);
     SDL_SetTextureColorMod(mFontBold->texture(), 0, 0, 0);
@@ -80,9 +80,15 @@ void QueryWindow::setQueryResult(const ZoneStats& stats)
 
 void QueryWindow::draw()
 {
-    const SDL_Rect rect{ area().position.x, area().position.y, area().size.x, area().size.y };
-    SDL_RenderCopy(mRenderer, mTexture.texture, &BgRect, &rect);
-    SDL_RenderCopy(mRenderer, mTextTexture.texture, &BgRect, &rect);
+    const SDL_FRect rect{
+        static_cast<float>(area().position.x),
+        static_cast<float>(area().position.y),
+        static_cast<float>(area().size.x),
+        static_cast<float>(area().size.y)
+    };
+
+    SDL_RenderTexture(mRenderer, mTexture.texture, &BgRect, &rect);
+    SDL_RenderTexture(mRenderer, mTextTexture.texture, &BgRect, &rect);
 }
 
 

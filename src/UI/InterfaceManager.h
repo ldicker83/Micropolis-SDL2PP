@@ -22,7 +22,7 @@
 #include "WindowStack.h"
 
 
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
 
 class InterfaceManager

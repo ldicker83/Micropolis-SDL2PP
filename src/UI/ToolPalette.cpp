@@ -19,7 +19,7 @@
 namespace
 {
     constexpr Vector<int> ToolPaletteSize{ 118, 235 };
-    const SDL_Rect bgRect{ 0, 0, ToolPaletteSize.x, ToolPaletteSize.y };
+    const SDL_FRect bgRect{ 0.0f, 0.0f, static_cast<float>(ToolPaletteSize.x), static_cast<float>(ToolPaletteSize.y) };
 };
 
 
@@ -70,7 +70,7 @@ void ToolPalette::draw()
     for (size_t i = 0; i < 20; ++i)
     {
         if (mToolButtons[i].tool == Tool::None) { continue; }
-        SDL_RenderCopy(mRenderer, mIcons.texture, &mToolButtonUV[i + (mToolButtons[i].state * 20)], &mToolButtons[i].rect);
+        SDL_RenderTexture(mRenderer, mIcons.texture, &mToolButtonUV[i + (mToolButtons[i].state * 20)], &mToolButtons[i].rect);
     }
 }
 
@@ -97,9 +97,9 @@ void ToolPalette::updateButtonPositions()
     {
         mToolButtons[i].rect =
         {
-            (((i % 3) * 32) + (i % 3) * 2) + clientArea().position.x,
-            (((i / 3) * 32) + (i / 3) * 2) + clientArea().position.y + 5,
-            32, 32
+            static_cast<float>((((i % 3) * 32) + (i % 3) * 2) + clientArea().position.x),
+            static_cast<float>((((i / 3) * 32) + (i / 3) * 2) + clientArea().position.y + 5),
+            32.0f, 32.0f
         };
     }
 }
@@ -142,7 +142,7 @@ void ToolPalette::onMouseDown(const Point<int>& position)
 {
     for (int i = 0; i < 20; ++i)
     {
-        const SDL_Rect& buttonRect = mToolButtons[i].rect;
+        const SDL_FRect& buttonRect = mToolButtons[i].rect;
         if (position.x >= buttonRect.x && position.x <= buttonRect.x + buttonRect.w &&
             position.y >= buttonRect.y && position.y <= buttonRect.y + buttonRect.h)
         {
@@ -163,7 +163,12 @@ void ToolPalette::initToolbarUv()
 {
     for (int i = 0; i < 80; ++i)
     {
-        mToolButtonUV[i] = { (i / 20) * 32, (i % 20) * 32, 32, 32 };
+        mToolButtonUV[i] = {
+            static_cast<float>((i / 20) * 32),
+            static_cast<float>((i % 20) * 32),
+            32.0f,
+            32.0f
+        };
     }
 }
 
@@ -196,7 +201,7 @@ void ToolPalette::loadToolGhosts()
         if (item.ghost.texture)
         {
             SDL_SetTextureBlendMode(item.ghost.texture, SDL_BLENDMODE_BLEND);
-            if(SDL_SetTextureAlphaMod(item.ghost.texture, 125))
+            if(!SDL_SetTextureAlphaMod(item.ghost.texture, 125))
             {
                 throw std::runtime_error(std::string("Unable to set alpha mod: ") + SDL_GetError());
             }
@@ -238,8 +243,14 @@ void ToolPalette::setButtonState(int buttonIndex, int buttonState)
 
 void ToolPalette::drawBackground()
 {
-    const SDL_Rect rect{ area().position.x, area().position.y, area().size.x, area().size.y };
-    SDL_RenderCopy(mRenderer, mBackground.texture, &bgRect, &rect);
+    const SDL_FRect rect{
+        static_cast<float>(area().position.x),
+        static_cast<float>(area().position.y),
+        static_cast<float>(area().size.x),
+        static_cast<float>(area().size.y)
+    };
+    
+    SDL_RenderTexture(mRenderer, mBackground.texture, &bgRect, &rect);
 }
 
 

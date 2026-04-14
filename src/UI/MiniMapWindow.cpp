@@ -18,12 +18,12 @@
 
 #include "../Util.h"
 
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
 #if defined(__APPLE__)
-#include <SDL2_image/SDL_image.h>
+#include <SDL3_image/SDL_image.h>
 #else
-#include <SDL2/SDL_image.h>
+#include <SDL3_image/SDL_image.h>
 #endif
 
 #include <algorithm>
@@ -156,8 +156,8 @@ namespace
  */
 MiniMapWindow::MiniMapWindow(const Point<int>& position, const Vector<int>& size):
     mMapSize{ size },
-    mMinimapArea{ 0, 0, size.x * MiniTileSize, size.y * MiniTileSize },
-    mButtonArea{ 0, mMinimapArea.h, mMinimapArea.w, ButtonAreaHeight }
+    mMinimapArea{ 0.0f, 0.0f, static_cast<float>(size.x * MiniTileSize), static_cast<float>(size.y * MiniTileSize) },
+    mButtonArea{ 0.0f, mMinimapArea.h, mMinimapArea.w, static_cast<float>(ButtonAreaHeight) }
 {
     if (!SDL_WasInit(SDL_INIT_VIDEO))
     {
@@ -168,21 +168,19 @@ MiniMapWindow::MiniMapWindow(const Point<int>& position, const Vector<int>& size
         }
     }
 
-    mWindow = SDL_CreateWindow("Mini Map",
-        position.x, position.y,
-        size.x * MiniTileSize, size.y * MiniTileSize + ButtonAreaHeight,
-        SDL_WINDOW_ALWAYS_ON_TOP | SDL_WINDOW_SKIP_TASKBAR | SDL_WINDOW_HIDDEN);
+	mWindow = SDL_CreateWindow("Minimap Window",
+        size.x * MiniTileSize,
+        size.y * MiniTileSize + ButtonAreaHeight,
+        SDL_WINDOW_ALWAYS_ON_TOP | SDL_WINDOW_UTILITY | SDL_WINDOW_HIDDEN);
+
+	SDL_SetWindowPosition(mWindow, position.x, position.y);
 
     if (!mWindow)
     {
         throw std::runtime_error("MiniMapWindow(): Unable to create primary window: " + std::string(SDL_GetError()));
     }
 
-    #if defined(__APPLE__)
-    mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_SOFTWARE);
-    #else
-    mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED);
-    #endif
+	mRenderer = SDL_CreateRenderer(mWindow, nullptr);
     
     if (!mRenderer)
     {
@@ -231,22 +229,30 @@ void MiniMapWindow::focusOnMapCoordUnbind(fnPointIntParam fn)
 
 void MiniMapWindow::updateMapViewPosition(const Point<int>& position)
 {
-    mSelector.x = std::clamp((position.x / TileSize) * MiniTileSize, 0, (mMapSize.x * MiniTileSize) - mSelector.w);
-    mSelector.y = std::clamp((position.y / TileSize) * MiniTileSize, 0, (mMapSize.y * MiniTileSize) - mSelector.h);
+    const Point<int> selectorPosition = position.skewInverseBy({ TileSize, TileSize }).skewBy({ MiniTileSize, MiniTileSize });
+    const Vector<int> selectorSize{ static_cast<int>(mSelector.w), static_cast<int>(mSelector.h) };
+    const Vector<int> selectorMaxPosition = mMapSize.skewBy({ MiniTileSize, MiniTileSize }) - selectorSize;
+
+    mSelector = {
+        static_cast<float>(std::clamp(selectorPosition.x, 0, selectorMaxPosition.x)),
+        static_cast<float>(std::clamp(selectorPosition.y, 0, selectorMaxPosition.y)),
+        mSelector.w,
+        mSelector.h
+	};
 }
 
 
 void MiniMapWindow::updateViewportSize(const Vector<int>& viewportSize)
 {
-    mSelector.w = static_cast<int>(std::ceil(viewportSize.x / static_cast<float>(TileSize)) * MiniTileSize);
-    mSelector.h = static_cast<int>(std::ceil(viewportSize.y / static_cast<float>(TileSize)) * MiniTileSize);
+    mSelector.w = std::ceil(viewportSize.x / static_cast<float>(TileSize)) * MiniTileSize;
+    mSelector.h = std::ceil(viewportSize.y / static_cast<float>(TileSize)) * MiniTileSize;
 }
 
 
 void MiniMapWindow::updateTilePointedAt(const Point<int>& tilePointedAt)
 {
-    mTileHighlight.x = tilePointedAt.x * MiniTileSize;
-    mTileHighlight.y = tilePointedAt.y * MiniTileSize;
+    mTileHighlight.x = static_cast<float>(tilePointedAt.x * MiniTileSize);
+    mTileHighlight.y = static_cast<float>(tilePointedAt.y * MiniTileSize);
 }
 
 
@@ -258,9 +264,13 @@ void MiniMapWindow::linkEffectMap(ButtonId id, const EffectMap& map)
 
 void MiniMapWindow::initTexture(Texture& texture, const Vector<int>& dimensions)
 {
-    texture.texture = SDL_CreateTexture(mRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, dimensions.x, dimensions.y);
-    SDL_QueryTexture(texture.texture, nullptr, nullptr, &texture.dimensions.x, &texture.dimensions.y);
-    texture.area = { 0, 0, texture.dimensions.x, texture.dimensions.y };
+    texture = {
+        SDL_CreateTexture(mRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, dimensions.x, dimensions.y),
+        { 0, 0, static_cast<float>(dimensions.x), static_cast<float>(dimensions.y) },
+        dimensions
+    };
+
+	SDL_SetTextureScaleMode(texture.texture, SDL_SCALEMODE_NEAREST);
 }
 
 
@@ -336,16 +346,22 @@ bool MiniMapWindow::hidden() const
 
 void MiniMapWindow::drawPlainMap()
 {
-    SDL_Rect miniMapDrawRect{ 0, 0, MiniTileSize, MiniTileSize };
+    SDL_FRect miniMapDrawRect{ 0.0f, 0.0f, static_cast<float>(MiniTileSize), static_cast<float>(MiniTileSize) };
     SDL_SetRenderTarget(mRenderer, mTexture.texture);
         
     for (int row = 0; row < mMapSize.x; row++)
     {
         for (int col = 0; col < mMapSize.y; col++)
         {
-            miniMapDrawRect = { row * MiniTileSize, col * MiniTileSize, miniMapDrawRect.w, miniMapDrawRect.h };
-            mTileRect.y = maskedTileValue(tileValue(row, col)) * MiniTileSize;
-            SDL_RenderCopy(mRenderer, mTiles.texture, &mTileRect, &miniMapDrawRect);
+            miniMapDrawRect = {
+                static_cast<float>(row * MiniTileSize),
+                static_cast<float>(col * MiniTileSize),
+                miniMapDrawRect.w,
+                miniMapDrawRect.h
+            };
+            
+            mTileRect.y = static_cast<float>(maskedTileValue(tileValue(row, col)) * MiniTileSize);
+            SDL_RenderTexture(mRenderer, mTiles.texture, &mTileRect, &miniMapDrawRect);
         }
     }
 
@@ -357,14 +373,19 @@ void MiniMapWindow::drawPlainMap()
 
 void MiniMapWindow::drawResidential()
 {
-    SDL_Rect miniMapDrawRect{ 0, 0, MiniTileSize, MiniTileSize };
+    SDL_FRect miniMapDrawRect{ 0.0f, 0.0f, static_cast<float>(MiniTileSize), static_cast<float>(MiniTileSize) };
     SDL_SetRenderTarget(mRenderer, mOverlayTextures[ButtonId::Residential].texture);
 
     for (int row = 0; row < mMapSize.x; row++)
     {
         for (int col = 0; col < mMapSize.y; col++)
         {
-            miniMapDrawRect = { row * MiniTileSize, col * MiniTileSize, miniMapDrawRect.w, miniMapDrawRect.h };
+            miniMapDrawRect = {
+                static_cast<float>(row * MiniTileSize),
+                static_cast<float>(col * MiniTileSize),
+                miniMapDrawRect.w,
+                miniMapDrawRect.h
+            };
 
             unsigned int tile = maskedTileValue(row, col);
 
@@ -373,8 +394,8 @@ void MiniMapWindow::drawResidential()
                 tile = 0;
             }
 
-            mTileRect.y = maskedTileValue(tile) * MiniTileSize;
-            SDL_RenderCopy(mRenderer, mTiles.texture, &mTileRect, &miniMapDrawRect);
+            mTileRect.y = static_cast<float>(maskedTileValue(tile) * MiniTileSize);
+            SDL_RenderTexture(mRenderer, mTiles.texture, &mTileRect, &miniMapDrawRect);
         }
     }
 
@@ -385,14 +406,19 @@ void MiniMapWindow::drawResidential()
 
 void MiniMapWindow::drawCommercial()
 {
-    SDL_Rect miniMapDrawRect{ 0, 0, MiniTileSize, MiniTileSize };
+    SDL_FRect miniMapDrawRect{ 0.0f, 0.0f, static_cast<float>(MiniTileSize), static_cast<float>(MiniTileSize) };
     SDL_SetRenderTarget(mRenderer, mOverlayTextures[ButtonId::Commercial].texture);
 
     for (int row = 0; row < mMapSize.x; row++)
     {
         for (int col = 0; col < mMapSize.y; col++)
         {
-            miniMapDrawRect = { row * MiniTileSize, col * MiniTileSize, miniMapDrawRect.w, miniMapDrawRect.h };
+            miniMapDrawRect = {
+                static_cast<float>(row * MiniTileSize),
+                static_cast<float>(col * MiniTileSize),
+                miniMapDrawRect.w,
+                miniMapDrawRect.h
+            };
 
             unsigned int tile = maskedTileValue(row, col);
 
@@ -401,8 +427,8 @@ void MiniMapWindow::drawCommercial()
                 tile = 0;
             }
 
-            mTileRect.y = maskedTileValue(tile) * MiniTileSize;
-            SDL_RenderCopy(mRenderer, mTiles.texture, &mTileRect, &miniMapDrawRect);
+            mTileRect.y = static_cast<float>(maskedTileValue(tile) * MiniTileSize);
+            SDL_RenderTexture(mRenderer, mTiles.texture, &mTileRect, &miniMapDrawRect);
         }
     }
 
@@ -413,14 +439,19 @@ void MiniMapWindow::drawCommercial()
 
 void MiniMapWindow::drawIndustrial()
 {
-    SDL_Rect miniMapDrawRect{ 0, 0, MiniTileSize, MiniTileSize };
+    SDL_FRect miniMapDrawRect{ 0.0f, 0.0f, static_cast<float>(MiniTileSize), static_cast<float>(MiniTileSize) };
     SDL_SetRenderTarget(mRenderer, mOverlayTextures[ButtonId::Industrial].texture);
 
     for (int row = 0; row < mMapSize.x; row++)
     {
         for (int col = 0; col < mMapSize.y; col++)
         {
-            miniMapDrawRect = { row * MiniTileSize, col * MiniTileSize, miniMapDrawRect.w, miniMapDrawRect.h };
+            miniMapDrawRect = {
+                static_cast<float>(row * MiniTileSize),
+                static_cast<float>(col * MiniTileSize),
+                miniMapDrawRect.w,
+                miniMapDrawRect.h
+            };
 
             unsigned int tile = maskedTileValue(row, col);
 
@@ -432,8 +463,8 @@ void MiniMapWindow::drawIndustrial()
                 tile = 0;
             }
 
-            mTileRect.y = maskedTileValue(tile) * MiniTileSize;
-            SDL_RenderCopy(mRenderer, mTiles.texture, &mTileRect, &miniMapDrawRect);
+            mTileRect.y = static_cast<float>(maskedTileValue(tile) * MiniTileSize);
+            SDL_RenderTexture(mRenderer, mTiles.texture, &mTileRect, &miniMapDrawRect);
         }
     }
 
@@ -445,14 +476,19 @@ void MiniMapWindow::drawIndustrial()
 void MiniMapWindow::drawPowerMap()
 {
     SDL_Color tileColor{};
-    SDL_Rect miniMapDrawRect{ 0, 0, MiniTileSize, MiniTileSize };
+    SDL_FRect miniMapDrawRect{ 0.0f, 0.0f, static_cast<float>(MiniTileSize), static_cast<float>(MiniTileSize) };
     SDL_SetRenderTarget(mRenderer, mOverlayTextures[ButtonId::PowerGrid].texture);
 
     for (int row = 0; row < mMapSize.x; row++)
     {
         for (int col = 0; col < mMapSize.y; col++)
         {
-            miniMapDrawRect = { row * MiniTileSize, col * MiniTileSize, miniMapDrawRect.w, miniMapDrawRect.h };
+            miniMapDrawRect = {
+                static_cast<float>(row * MiniTileSize),
+                static_cast<float>(col * MiniTileSize),
+                miniMapDrawRect.w,
+                miniMapDrawRect.h
+            };
 
             const unsigned int unmaskedTile = tileValue(row, col);
             unsigned int tile = maskedTileValue(unmaskedTile);
@@ -487,8 +523,8 @@ void MiniMapWindow::drawPowerMap()
             }
             else
             {
-                mTileRect.y = maskedTileValue(tileValue(row, col)) * MiniTileSize;
-                SDL_RenderCopy(mRenderer, mTiles.texture, &mTileRect, &miniMapDrawRect);
+                mTileRect.y = static_cast<float>(maskedTileValue(tileValue(row, col)) * MiniTileSize);
+                SDL_RenderTexture(mRenderer, mTiles.texture, &mTileRect, &miniMapDrawRect);
             }
         }
     }
@@ -500,14 +536,19 @@ void MiniMapWindow::drawPowerMap()
 
 void MiniMapWindow::drawLilTransMap()
 {
-    SDL_Rect miniMapDrawRect{ 0, 0, MiniTileSize, MiniTileSize };
+    SDL_FRect miniMapDrawRect{ 0.0f, 0.0f, static_cast<float>(MiniTileSize), static_cast<float>(MiniTileSize) };
     SDL_SetRenderTarget(mRenderer, mOverlayTextures[ButtonId::TransportationNetwork].texture);
     
     for (int row = 0; row < mMapSize.x; row++)
     {
         for (int col = 0; col < mMapSize.y; col++)
         {
-            miniMapDrawRect = { row * MiniTileSize, col * MiniTileSize, miniMapDrawRect.w, miniMapDrawRect.h };
+            miniMapDrawRect = {
+                static_cast<float>(row * MiniTileSize),
+                static_cast<float>(col * MiniTileSize),
+                miniMapDrawRect.w,
+                miniMapDrawRect.h
+            };
 
             unsigned int tile = maskedTileValue(row, col);
 
@@ -518,8 +559,8 @@ void MiniMapWindow::drawLilTransMap()
                 tile = 0;
             }
 
-            mTileRect.y = maskedTileValue(tile) * MiniTileSize;
-            SDL_RenderCopy(mRenderer, mTiles.texture, &mTileRect, &miniMapDrawRect);
+            mTileRect.y = static_cast<float>(maskedTileValue(tile) * MiniTileSize);
+            SDL_RenderTexture(mRenderer, mTiles.texture, &mTileRect, &miniMapDrawRect);
         }
     }
 
@@ -564,21 +605,21 @@ void MiniMapWindow::drawUI()
     SDL_SetRenderDrawColor(mRenderer, BackgroundColor.r, BackgroundColor.g, BackgroundColor.b, 255);
     SDL_RenderClear(mRenderer);
 
-    SDL_RenderCopy(mRenderer, mTexture.texture, nullptr, &mMinimapArea);
+    SDL_RenderTexture(mRenderer, mTexture.texture, nullptr, &mMinimapArea);
 
     if (mButtonDownId != ButtonId::Normal)
     {
-        SDL_RenderCopy(mRenderer, mOverlayTextures[mButtonDownId].texture, nullptr, &mMinimapArea);
+        SDL_RenderTexture(mRenderer, mOverlayTextures[mButtonDownId].texture, nullptr, &mMinimapArea);
     }
 
     SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 150);
-    SDL_RenderDrawRect(mRenderer, &mSelector);
-    SDL_RenderDrawRect(mRenderer, &mTileHighlight);
+    SDL_RenderRect(mRenderer, &mSelector);
+    SDL_RenderRect(mRenderer, &mTileHighlight);
 
     const int arraySize = static_cast<int>(mButtons.size());
     for (int i{ 0 }; i < arraySize; ++i)
     {
-        SDL_RenderCopy(mRenderer, mButtonTextures.texture, &mButtonUV[i + (mButtons[i].state * arraySize)], &mButtons[i].rect);
+        SDL_RenderTexture(mRenderer, mButtonTextures.texture, &mButtonUV[i + (mButtons[i].state * static_cast<size_t>(arraySize))], &mButtons[i].rect);
     }
 
     SDL_RenderPresent(mRenderer);
@@ -592,16 +633,18 @@ void MiniMapWindow::injectEvent(const SDL_Event& event)
         return;
     }
 
+    if (event.type >= SDL_EVENT_WINDOW_FIRST && event.type <= SDL_EVENT_WINDOW_LAST)
+    {
+        handleWindowEvent(event);
+        return;
+    }
+
     switch (event.type)
     {
-    case SDL_MOUSEMOTION:
-    case SDL_MOUSEBUTTONDOWN:
-    case SDL_MOUSEBUTTONUP:
+    case SDL_EVENT_MOUSE_MOTION:
+    case SDL_EVENT_MOUSE_BUTTON_DOWN:
+    case SDL_EVENT_MOUSE_BUTTON_UP:
         handleMouseEvent(event);
-        break;
-
-    case SDL_WINDOWEVENT:
-        handleWindowEvent(event);
         break;
 
     default:
@@ -614,20 +657,21 @@ void MiniMapWindow::handleMouseEvent(const SDL_Event& event)
 {
     switch (event.type)
     {
-    case SDL_MOUSEBUTTONDOWN:
+    case SDL_EVENT_MOUSE_BUTTON_DOWN:
         if (event.button.button == SDL_BUTTON_LEFT)
         {
-            const Point<int> point{ event.button.x, event.button.y };
-            if (pointInRect(point, mMinimapArea))
+            const Point<float> point{ static_cast<float>(event.button.x), static_cast<float>(event.button.y) };
+            if (pointInFRect(point, mMinimapArea))
             {
                 mButtonDownInMinimapArea = true;
                 focusViewpoint(point);
+                return;
             }
-            else if (pointInRect(point, mButtonArea))
+            else if (pointInFRect(point, mButtonArea))
             {
                 for (auto& button : mButtons)
                 {
-                    if (pointInRect(point, button.rect))
+                    if (pointInFRect(point, button.rect))
                     {
                         button.state = ButtonStatePressed;
                         mButtonDownId = button.id;
@@ -673,11 +717,11 @@ void MiniMapWindow::handleMouseEvent(const SDL_Event& event)
         }
         break;
 
-    case SDL_MOUSEMOTION:
+    case SDL_EVENT_MOUSE_MOTION:
         handleMouseMotion(event);
         break;
 
-    case SDL_MOUSEBUTTONUP:
+    case SDL_EVENT_MOUSE_BUTTON_UP:
         mButtonDownInMinimapArea = false;
         break;
 
@@ -689,16 +733,16 @@ void MiniMapWindow::handleMouseEvent(const SDL_Event& event)
 
 void MiniMapWindow::handleWindowEvent(const SDL_Event& event)
 {
-    switch (event.window.event)
+    switch (event.window.type)
     {
-    case SDL_WINDOWEVENT_MINIMIZED:
+    case SDL_EVENT_WINDOW_MINIMIZED:
         hide();
         mButtonDownInMinimapArea = false;
         break;
 
-    case SDL_WINDOWEVENT_FOCUS_LOST:
-    case SDL_WINDOWEVENT_HIDDEN:
-    case SDL_WINDOWEVENT_CLOSE:
+    case SDL_EVENT_WINDOW_FOCUS_LOST:
+    case SDL_EVENT_WINDOW_HIDDEN:
+    case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
         mButtonDownInMinimapArea = false;
         break;
 
@@ -717,20 +761,25 @@ void MiniMapWindow::handleMouseMotion(const SDL_Event& event)
 
     if (event.motion.state & SDL_BUTTON_LMASK)
     {
-        focusViewpoint({ event.motion.x, event.motion.y });
+        focusViewpoint({
+            static_cast<int>(event.motion.x),
+            static_cast<int>(event.motion.y)
+            });
     }
 }
 
 
 void MiniMapWindow::focusViewpoint(const Point<int>& point)
-{   
-    const Point<int> adjustedPosition{ point - Vector<int>{mSelector.w / 2, mSelector.h / 2} };
+{
+	const Vector<int> selectorSize{ static_cast<int>(mSelector.w) / 2, static_cast<int>(mSelector.h) / 2 };
+    const Point<int> adjustedPosition{ point - selectorSize };
 
-    updateMapViewPosition(adjustedPosition.skewBy({ TileSize, TileSize }).skewInverseBy({ MiniTileSize,MiniTileSize }));
+    updateMapViewPosition(adjustedPosition.skewBy({ TileSize, TileSize }).skewInverseBy({ MiniTileSize, MiniTileSize }));
 
     for (auto callback : mFocusOnTileCallbacks)
     {
-        callback({ mSelector.x, mSelector.y });
+		const Point<int> position{ static_cast<int>(mSelector.x), static_cast<int>(mSelector.y) };
+        callback(position);
     }
 }
 
@@ -759,18 +808,18 @@ void MiniMapWindow::setButtonTextureUv()
     const int arraySize = static_cast<int>(mButtons.size());
     for (int i = 0; i < arraySize * 2; ++i)
     {
-        mButtonUV[i] = { (i / arraySize) * 24, (i % arraySize) * 24, 24, 24 };
+        mButtonUV[i] = { static_cast<float>((i / arraySize) * 24), static_cast<float>((i % arraySize) * 24), 24.0f, 24.0f };
     }
 }
 
 
 void MiniMapWindow::setButtonPositions()
 {
-    constexpr Vector<int> buttonSize{ 24, 24 };
-    constexpr Vector<int> buttonTransform{buttonSize.x + 1, 0};
+    constexpr Vector<float> buttonSize{ 24.0f, 24.0f };
+    constexpr Vector<float> buttonTransform{ buttonSize.x + 1.0f, 0.0f };
     
     const int arraySize = static_cast<int>(mButtons.size());
-    const int startPosition = (mButtonArea.w - (buttonTransform.x * arraySize)) / 2;
+    const float startPosition = static_cast<float>((mButtonArea.w - (buttonTransform.x * arraySize)) / 2);
 
     for (int i{ 0 }; i < arraySize; ++i)
     {

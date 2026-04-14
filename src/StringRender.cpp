@@ -34,23 +34,23 @@ void StringRender::drawString(Font& font, std::string_view text, const Point<int
         const auto glyphCellSize = font.glyphCellSize().to<float>();
         const auto adjustX = (gm.minX < 0) ? gm.minX : 0;
 
-        const SDL_Rect srcRect
+        const SDL_FRect srcRect
         {
-            static_cast<int>(gm.uvRect.position.x),
-            static_cast<int>(gm.uvRect.position.y),
-            static_cast<int>(glyphCellSize.x),
-            static_cast<int>(glyphCellSize.y)
+            static_cast<float>(gm.uvRect.position.x),
+            static_cast<float>(gm.uvRect.position.y),
+            static_cast<float>(glyphCellSize.x),
+            static_cast<float>(glyphCellSize.y)
         };
 
-        const SDL_Rect dstRect
+        const SDL_FRect dstRect
         {
-            position.x + offset + adjustX,
-            position.y,
-            static_cast<int>(glyphCellSize.x),
-            static_cast<int>(glyphCellSize.y)
+            static_cast<float>(position.x + offset + adjustX),
+            static_cast<float>(position.y),
+            static_cast<float>(glyphCellSize.x),
+            static_cast<float>(glyphCellSize.y)
         };
 
-        SDL_RenderCopy(mRenderer, font.texture(), &srcRect, &dstRect);
+        SDL_RenderTexture(mRenderer, font.texture(), &srcRect, &dstRect);
 
         offset += gm.advance;
     }

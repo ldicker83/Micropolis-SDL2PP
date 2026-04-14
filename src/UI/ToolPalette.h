@@ -12,7 +12,7 @@
 
 #include <array>
 
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
 #include "../Texture.h"
 #include "../Tool.h"
@@ -51,7 +51,7 @@ public:
 private:
     struct ButtonMeta
     {
-        SDL_Rect rect{};
+        SDL_FRect rect{};
         Tool tool{};
 
         int state{};
@@ -76,7 +76,7 @@ private:
 
     void updateButtonPositions();
 
-    std::array<SDL_Rect, 80> mToolButtonUV{};
+    std::array<SDL_FRect, 80> mToolButtonUV{};
     std::array<ButtonMeta, 20> mToolButtons{};
 
     SDL_Renderer* mRenderer{ nullptr };

@@ -15,7 +15,7 @@
 
 #include <array>
 
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
 
 /* Character Mapping */

@@ -10,7 +10,7 @@
 // file, included in this distribution, for details.
 #pragma once
 
-#include <SDL2/SDL_pixels.h>
+#include <SDL3/SDL.h>
 
 namespace Colors
 {
