@@ -779,6 +779,12 @@ void MiniMapWindow::handleButtonArea(const Point<int>& point)
         }
     }
 
+    handleNoUiButtonSelected();
+}
+
+
+void MiniMapWindow::handleNoUiButtonSelected()
+{
     if (noButtonsSelected())
     {
         mButtons[0].state = ButtonStatePressed;
