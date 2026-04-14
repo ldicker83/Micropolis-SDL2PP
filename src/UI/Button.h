@@ -14,60 +14,94 @@
 
 #include <SDL3/SDL.h>
 
+/**
+ * Button class representing a clickable area of the UI.
+ * 
+ * The button is defined by a rectangular area and a callback function that is
+ * called when the button is clicked. The button also has an optional user-
+ * defined value that can be used to store additional information about the
+ * button.
+ */
 class Button
 {
 public:
-    static constexpr auto DefaultSize = 10;
+    static constexpr SDL_Rect DefaultSize{ 0, 0, 10, 10 };
 
     using ClickedCallback = std::function<void(void)>;
 
 public:
+    /**
+     * Default c'tor
+     * 
+     * Initializes the button with a default size and an empty callback.
+     */
     Button():
-        mClicked{ []() {} }, mArea{ 0, 0, DefaultSize, DefaultSize }
+        mClicked{ []() {} }, mArea{ DefaultSize }
     {}
 
 
-    Button(ClickedCallback clicked, const SDL_Rect& area, int userValue = 0) :
+    /**
+     * Constructor with parameters.
+     */
+    Button(ClickedCallback clicked, const SDL_Rect& area = DefaultSize, int userValue = 0) :
         mClicked{ clicked }, mArea(area), mUserValue(userValue)
     {}
 
 
-	void area(const SDL_Rect& area)
+    /**
+     * Set the area of the button.
+     */
+    void area(const SDL_Rect& area)
     {
         mArea = area;
     }
 
 
+    /**
+     * Get the area of the button.
+     */
     const SDL_Rect& area() const
     {
         return mArea;
     }
 
-
+    /**
+	 * Allow easy assignment of floating point values to the button area which is stored as integers.
+     * 
+     * \note Values will be truncated, so the caller should ensure that they are valid.
+     */
     void areaF(const SDL_FRect& areaF)
     {
         area({ static_cast<int>(areaF.x), static_cast<int>(areaF.y), static_cast<int>(areaF.w), static_cast<int>(areaF.h) });
     }
 
-
+    /**
+     * Allow easy retrieval of floating point values from the button area which is stored as integers.
+     */
     const SDL_FRect areaF() const
     {
         return { static_cast<float>(mArea.x), static_cast<float>(mArea.y), static_cast<float>(mArea.w), static_cast<float>(mArea.h) };
 	}
 
-
+    /**
+     * Click the button, triggering the assigned callback.
+     */
     void click() const
     {
         mClicked();
     }
 
-
+    /**
+     * Set the user-defined value associated with the button.
+     */
     void userValue(int value)
     {
         mUserValue = value;
 	}
 
-
+    /**
+     * Get the user-defined value associated with the button.
+     */
     int userValue() const
     {
         return mUserValue;
