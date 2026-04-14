@@ -239,9 +239,6 @@
     <ClInclude Include="src\Evaluation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\BindFunction.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\EffectMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -325,6 +322,9 @@
     </ClInclude>
     <ClInclude Include="src\UI\ToggleButton.h">
       <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Delegate.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

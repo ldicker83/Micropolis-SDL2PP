@@ -56,11 +56,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
-    <ClInclude Include="src\BindFunction.h" />
     <ClInclude Include="src\Budget.h" />
     <ClInclude Include="src\CityProperties.h" />
     <ClInclude Include="src\Colors.h" />
     <ClInclude Include="src\Connection.h" />
+    <ClInclude Include="src\Delegate.h" />
     <ClInclude Include="src\EffectMap.h" />
     <ClInclude Include="src\Evaluation.h" />
     <ClInclude Include="src\FileIo.h" />

@@ -19,6 +19,7 @@
 
 #include <array>
 #include <cstdint>
+#include <functional>
 #include <unordered_map>
 #include <vector>
 
@@ -54,7 +55,7 @@ public:
 	static constexpr auto TileSize{ 16 };
 	static constexpr auto ButtonAreaHeight{ 28 };
 
-	using fnPointIntParam = void(*)(const Point<int>&);
+	using fnPointIntParam = std::function<void(const Point<int>&)>;
 
 public:
 	MiniMapWindow() = delete;
@@ -112,6 +113,8 @@ private:
 	void drawPowerMap();
     void drawLilTransMap();
 
+	void fillButtonHandlerTable();
+
 private:
 	SDL_Window* mWindow{ nullptr };
 	SDL_Renderer* mRenderer{ nullptr };
@@ -135,6 +138,8 @@ private:
 
 	std::unordered_map<ButtonId, Texture> mOverlayTextures;
 	std::unordered_map<ButtonId, const EffectMap*> mEffectMaps;
+
+	std::unordered_map<ButtonId, std::function<void(void)>> mDrawHandlers;
 
 	std::vector<fnPointIntParam> mFocusOnTileCallbacks;
 

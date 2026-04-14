@@ -10,7 +10,6 @@
 // file, included in this distribution, for details.
 #include "MiniMapWindow.h"
 
-#include "../BindFunction.h"
 #include "../Colors.h"
 #include "../EffectMap.h"
 #include "../Graphics.h"
@@ -225,13 +224,30 @@ Uint32 MiniMapWindow::id() const
 
 void MiniMapWindow::focusOnMapCoordBind(fnPointIntParam fn)
 {
-    BindFuncPtr<std::vector<fnPointIntParam>, fnPointIntParam>(mFocusOnTileCallbacks, fn);
+    mFocusOnTileCallbacks.push_back(fn);
 }
 
 
 void MiniMapWindow::focusOnMapCoordUnbind(fnPointIntParam fn)
 {
-    UnbindFuncPtr<std::vector<fnPointIntParam>, fnPointIntParam>(mFocusOnTileCallbacks, fn);
+    auto fnTarget = fn.template target<void(*)(const Point<int>&)>();
+    if (!fnTarget)
+    {
+        throw std::runtime_error("focusOnMapCoordUnbind(): Cannot unbind this type of callable.");
+    }
+
+    auto it = std::find_if(mFocusOnTileCallbacks.begin(), mFocusOnTileCallbacks.end(),
+        [fnTarget](const fnPointIntParam& callback) {
+            auto callbackTarget = callback.template target<void(*)(const Point<int>&)>();
+            return callbackTarget && *callbackTarget == *fnTarget;
+        });
+
+    if (it == mFocusOnTileCallbacks.end())
+    {
+        throw std::runtime_error("focusOnMapCoordUnbind(): function pointer not bound.");
+    }
+
+    mFocusOnTileCallbacks.erase(it);
 }
 
 
@@ -364,7 +380,6 @@ void MiniMapWindow::drawPlainMap()
 
     SDL_RenderPresent(mRenderer);
     SDL_SetRenderTarget(mRenderer, nullptr);
-
 }
 
 
@@ -566,6 +581,25 @@ void MiniMapWindow::drawLilTransMap()
 }
 
 
+void MiniMapWindow::fillButtonHandlerTable()
+{
+    mDrawHandlers.emplace(ButtonId::Normal, [this]() { drawPlainMap(); });
+    mDrawHandlers.emplace(ButtonId::LandValue, [this]() { drawCurrentOverlay(); });
+    mDrawHandlers.emplace(ButtonId::Crime, [this]() { drawCurrentOverlay(); });
+    mDrawHandlers.emplace(ButtonId::FireProtection, [this]() { drawCurrentOverlay(); });
+    mDrawHandlers.emplace(ButtonId::PoliceProtection, [this]() { drawCurrentOverlay(); });
+    mDrawHandlers.emplace(ButtonId::PopulationDensity, [this]() { drawCurrentOverlay(); });
+    mDrawHandlers.emplace(ButtonId::PopulationGrowth, [this]() { drawCurrentOverlay(); });
+    mDrawHandlers.emplace(ButtonId::Pollution, [this]() { drawCurrentOverlay(); });
+    mDrawHandlers.emplace(ButtonId::TrafficDensity, [this]() { drawCurrentOverlay(); });
+    mDrawHandlers.emplace(ButtonId::TransportationNetwork, [this]() { drawLilTransMap(); });
+    mDrawHandlers.emplace(ButtonId::PowerGrid, [this]() { drawPowerMap(); });
+    mDrawHandlers.emplace(ButtonId::Residential, [this]() { drawResidential(); });
+    mDrawHandlers.emplace(ButtonId::Commercial, [this]() { drawCommercial(); });
+    mDrawHandlers.emplace(ButtonId::Industrial, [this]() { drawIndustrial(); });
+}
+
+
 void MiniMapWindow::draw()
 {
     switch (mButtonDownId)
@@ -752,34 +786,7 @@ void MiniMapWindow::handleButtonArea(const Point<int>& point)
 
         button.toggled(true);
         mButtonDownId = static_cast<ButtonId>(button.userValue());
-
-		const auto buttonId = static_cast<ButtonId>(button.userValue());
-
-        // fixme    Find a better way to do this
-        if (buttonId == ButtonId::TransportationNetwork)
-        {
-            drawLilTransMap();
-        }
-        else if (buttonId == ButtonId::PowerGrid)
-        {
-            drawPowerMap();
-        }
-        else if (buttonId == ButtonId::Residential)
-        {
-            drawResidential();
-        }
-        else if (buttonId == ButtonId::Commercial)
-        {
-            drawCommercial();
-        }
-        else if (buttonId == ButtonId::Industrial)
-        {
-            drawIndustrial();
-        }
-        else
-        {
-            drawCurrentOverlay();
-        }
+        mDrawHandlers.at(mButtonDownId)();
     }
 
     handleNoUiButtonSelected(previousButtonDownId);
