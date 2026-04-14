@@ -269,6 +269,8 @@ void MiniMapWindow::initTexture(Texture& texture, const Vector<int>& dimensions)
         { 0, 0, static_cast<float>(dimensions.x), static_cast<float>(dimensions.y) },
         dimensions
     };
+
+	SDL_SetTextureScaleMode(texture.texture, SDL_SCALEMODE_NEAREST);
 }
 
 
