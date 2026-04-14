@@ -67,7 +67,6 @@ public:
 	uint32_t id() const;
 
 	void focusOnMapCoordBind(MapCoordsDelegate);
-	void focusOnMapCoordUnbind();
 
 	void updateMapViewPosition(const Point<int>& position);
 	void updateViewportSize(const Vector<int>& viewportSize);

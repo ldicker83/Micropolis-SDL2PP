@@ -228,12 +228,6 @@ void MiniMapWindow::focusOnMapCoordBind(MapCoordsDelegate delegate)
 }
 
 
-void MiniMapWindow::focusOnMapCoordUnbind()
-{
-    mFocusOnTileCallback = nullptr;
-}
-
-
 void MiniMapWindow::updateMapViewPosition(const Point<int>& position)
 {
     const Point<int> selectorPosition = position.skewInverseBy({ TileSize, TileSize }).skewBy({ MiniTileSize, MiniTileSize });
