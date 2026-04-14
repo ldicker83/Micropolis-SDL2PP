@@ -146,7 +146,7 @@ namespace
     }
 
 
-    void resetButtonsToNormal(std::array<MiniMapWindow::ButtonMeta, 14>& buttons)
+    void resetButtonsToNormal(std::array<MiniMapWindow::ToggleButton, 14>& buttons)
     {
 		for (auto& button : buttons)
         {

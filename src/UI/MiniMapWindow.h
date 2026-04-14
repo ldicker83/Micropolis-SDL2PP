@@ -48,7 +48,7 @@ public:
 		Industrial
 	};
 
-	struct ButtonMeta
+	struct ToggleButton
 	{
 		SDL_FRect rect{};
 		bool toggled{ false };
@@ -136,7 +136,7 @@ private:
 	Vector<int> mMapSize{};
 
 	std::array<SDL_FRect, 28> mButtonUV{};
-	std::array<ButtonMeta, 14> mButtons{};
+	std::array<ToggleButton, 14> mButtons{};
 
 	std::map<ButtonId, Texture> mOverlayTextures;
 	std::map<ButtonId, const EffectMap*> mEffectMaps;
