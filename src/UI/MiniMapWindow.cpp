@@ -145,6 +145,14 @@ namespace
         SDL_SetRenderTarget(&renderer, nullptr);
     }
 
+
+    void resetButtonsToNormal(std::array<MiniMapWindow::ButtonMeta, 14>& buttons)
+    {
+		for (auto& button : buttons)
+        {
+            button.state = MiniMapWindow::ButtonStateNormal;
+        }
+    }
 };
 
 
@@ -196,7 +204,7 @@ MiniMapWindow::MiniMapWindow(const Point<int>& position, const Vector<int>& size
     setButtonValues();
     setButtonTextureUv();
     setButtonPositions();
-    resetOverlayButtons();
+    resetButtonsToNormal(mButtons);
 
     initOverlayTextures();
 }
@@ -309,17 +317,6 @@ void MiniMapWindow::drawCurrentOverlay()
             drawOverlayPoints(*mRenderer, mOverlayTextures[mButtonDownId], *map);
         }
     }
-}
-
-
-void MiniMapWindow::resetOverlayButtons()
-{
-    for (auto& button : mButtons)
-    {
-        button.state = ButtonStateNormal;
-    }
-
-    mButtons[0].state = ButtonStatePressed;
 }
 
 

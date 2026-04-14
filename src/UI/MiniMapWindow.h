@@ -48,6 +48,13 @@ public:
 		Industrial
 	};
 
+	struct ButtonMeta
+	{
+		SDL_FRect rect{};
+		int state{};
+		ButtonId id{ ButtonId::Normal };
+	};
+
 	static constexpr auto ButtonStateNormal{ 0 };
 	static constexpr auto ButtonStatePressed{ 1 };
 
@@ -73,8 +80,6 @@ public:
 	void updateTilePointedAt(const Point<int>& tilePointedAt);
 
 	void linkEffectMap(ButtonId id, const EffectMap& map);
-
-	void resetOverlayButtons();
 
 	void hide();
 	void show();
@@ -114,14 +119,6 @@ private:
 	void drawIndustrial();
 	void drawPowerMap();
     void drawLilTransMap();
-
-private:
-	struct ButtonMeta
-	{
-		SDL_FRect rect{};
-		int state{};
-		ButtonId id{ ButtonId::Normal };
-	};
 
 private:
 	SDL_Window* mWindow{ nullptr };
