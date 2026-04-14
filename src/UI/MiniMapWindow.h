@@ -48,15 +48,18 @@ public:
 		Industrial
 	};
 
+	enum class ButtonState
+	{
+		Normal,
+		Pressed
+	};
+
 	struct ButtonMeta
 	{
 		SDL_FRect rect{};
-		int state{};
+		ButtonState state{ ButtonState::Normal };
 		ButtonId id{ ButtonId::Normal };
 	};
-
-	static constexpr auto ButtonStateNormal{ 0 };
-	static constexpr auto ButtonStatePressed{ 1 };
 
 	static constexpr auto MiniTileSize{ 3 };
 	static constexpr auto TileSize{ 16 };

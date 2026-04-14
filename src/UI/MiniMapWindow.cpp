@@ -150,7 +150,7 @@ namespace
     {
 		for (auto& button : buttons)
         {
-            button.state = MiniMapWindow::ButtonStateNormal;
+            button.state = MiniMapWindow::ButtonState::Normal;
         }
     }
 };
@@ -616,7 +616,7 @@ void MiniMapWindow::drawUI()
     const int arraySize = static_cast<int>(mButtons.size());
     for (int i{ 0 }; i < arraySize; ++i)
     {
-        SDL_RenderTexture(mRenderer, mButtonTextures.texture, &mButtonUV[i + (mButtons[i].state * static_cast<size_t>(arraySize))], &mButtons[i].rect);
+        SDL_RenderTexture(mRenderer, mButtonTextures.texture, &mButtonUV[i + (static_cast<int>(mButtons[i].state) * static_cast<size_t>(arraySize))], &mButtons[i].rect);
     }
 
     SDL_RenderPresent(mRenderer);
@@ -742,11 +742,11 @@ void MiniMapWindow::handleButtonArea(const Point<int>& point)
     {
         if (!pointInFRect(point, button.rect))
         {
-            button.state = ButtonStateNormal;
+            button.state = ButtonState::Normal;
             continue;
         }
 
-        button.state = ButtonStatePressed;
+        button.state = ButtonState::Pressed;
         mButtonDownId = button.id;
 
         // fixme    Find a better way to do this
@@ -784,7 +784,7 @@ void MiniMapWindow::handleNoUiButtonSelected()
 {
     if (noButtonsSelected())
     {
-        mButtons[0].state = ButtonStatePressed;
+        mButtons[0].state = ButtonState::Pressed;
         mButtonDownId = ButtonId::Normal;
     }
 }
@@ -853,7 +853,7 @@ bool MiniMapWindow::noButtonsSelected()
 {
     for (auto& button : mButtons)
     {
-        if (button.state == ButtonStatePressed)
+        if (button.state == ButtonState::Pressed)
         {
             return false;
         }
