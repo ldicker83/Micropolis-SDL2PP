@@ -30,6 +30,12 @@ bool WindowBase::visible() const
 
 void WindowBase::toggleVisible()
 {
+    if (mAlwaysVisible)
+    {
+		mVisible = true;
+        return;
+    }
+
     mVisible = !mVisible;
     mVisible ? show() : hide();
 }
@@ -44,6 +50,11 @@ void WindowBase::show()
 
 void WindowBase::hide()
 {
+    if(mAlwaysVisible)
+    {
+        return;
+	}
+
     mVisible = false;
     onHide();
 }

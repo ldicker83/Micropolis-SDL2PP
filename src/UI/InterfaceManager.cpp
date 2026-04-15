@@ -38,10 +38,11 @@ namespace
 	}
 }
 
-InterfaceManager::InterfaceManager(SDL_Renderer* renderer, SDL_Window* window, Budget& budget) :
+InterfaceManager::InterfaceManager(SDL_Renderer* renderer, SDL_Window* window, Budget& budget, const RCI& rci) :
 	mRenderer{ renderer },
 	mWindow{ window },
 	mBudgetWindow{ renderer, budget },
+	mDashboardWindow{ renderer, rci },
 	mGraphWindow{ renderer },
 	mEvaluationWindow{ renderer },
 	mToolPalette{ renderer },
@@ -50,6 +51,7 @@ InterfaceManager::InterfaceManager(SDL_Renderer* renderer, SDL_Window* window, B
 	mFileIo{ *window }
 {
 	mWindowStack.addWindow(&mBudgetWindow);
+	mWindowStack.addWindow(&mDashboardWindow);
 	mWindowStack.addWindow(&mEvaluationWindow);
 	mWindowStack.addWindow(&mGraphWindow);
 	mWindowStack.addWindow(&mOptionsWindow);
@@ -61,6 +63,7 @@ InterfaceManager::InterfaceManager(SDL_Renderer* renderer, SDL_Window* window, B
 	mModalWindows.addWindow(&mOptionsWindow);
 
 	WindowTable[InterfaceManager::Window::Budget] = &mBudgetWindow;
+	WindowTable[InterfaceManager::Window::Dashboard] = &mDashboardWindow;
 	WindowTable[InterfaceManager::Window::Evaluation] = &mEvaluationWindow;
 	WindowTable[InterfaceManager::Window::Graph] = &mGraphWindow;
 	WindowTable[InterfaceManager::Window::Options] = &mOptionsWindow;

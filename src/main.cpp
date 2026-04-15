@@ -1064,7 +1064,7 @@ void initUI()
 
     stringRenderer = std::make_unique<StringRender>(MainWindowRenderer);
 
-    interfaceManager = std::make_unique<InterfaceManager>(MainWindowRenderer, MainWindow, budget);
+    interfaceManager = std::make_unique<InterfaceManager>(MainWindowRenderer, MainWindow, budget, currentRCI());
 
     const Point<int> toolPalettePosition
     {

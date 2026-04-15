@@ -162,6 +162,9 @@
     <ClCompile Include="src\RCI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\UI\DashboardWindow.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\animtab.h">
@@ -331,6 +334,9 @@
     </ClInclude>
     <ClInclude Include="src\RCI.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\DashboardWindow.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

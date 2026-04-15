@@ -37,6 +37,7 @@
     <ClCompile Include="src\Tool.cpp" />
     <ClCompile Include="src\Traffic.cpp" />
     <ClCompile Include="src\UI\BudgetWindow.cpp" />
+    <ClCompile Include="src\UI\DashboardWindow.cpp" />
     <ClCompile Include="src\UI\EvaluationWindow.cpp" />
     <ClCompile Include="src\UI\FileIoDialog.cpp" />
     <ClCompile Include="src\UI\GraphWindow.cpp" />
@@ -91,6 +92,7 @@
     <ClInclude Include="src\Traffic.h" />
     <ClInclude Include="src\UI\BudgetWindow.h" />
     <ClInclude Include="src\UI\Button.h" />
+    <ClInclude Include="src\UI\DashboardWindow.h" />
     <ClInclude Include="src\UI\EvaluationWindow.h" />
     <ClInclude Include="src\UI\FileIoDialog.h" />
     <ClInclude Include="src\UI\GraphWindow.h" />

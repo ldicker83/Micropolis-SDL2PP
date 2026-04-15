@@ -11,6 +11,7 @@
 #pragma once
 
 #include "BudgetWindow.h"
+#include "DashboardWindow.h"
 #include "EvaluationWindow.h"
 #include "FileIoDialog.h"
 #include "GraphWindow.h"
@@ -31,6 +32,7 @@ public:
 	enum class Window
 	{
 		Budget,
+		Dashboard,
 		Graph,
 		Evaluation,
 		MiniMap,
@@ -45,7 +47,7 @@ public:
 	InterfaceManager& operator=(const InterfaceManager&) = delete;
 
 public:
-	InterfaceManager(SDL_Renderer* renderer, SDL_Window* window, Budget& budget);
+	InterfaceManager(SDL_Renderer* renderer, SDL_Window* window, Budget& budget, const RCI& rci);
 
 	void injectMouseMotion(const Vector<int>& delta);
 	bool injectMouseDown(const Point<int>& position);
@@ -80,6 +82,7 @@ private:
 	SDL_Window* mWindow{ nullptr };
 
 	BudgetWindow mBudgetWindow;
+	DashboardWindow mDashboardWindow;
 	GraphWindow mGraphWindow;
 	EvaluationWindow mEvaluationWindow;
 	ToolPalette mToolPalette;
