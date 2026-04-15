@@ -18,6 +18,8 @@
 
 #include "Power.h"
 
+#include "RCI.h"
+
 #include "s_alloc.h"
 #include "s_disast.h"
 #include "s_msg.h"
@@ -44,7 +46,6 @@ constexpr auto CensusRate = 4;
 constexpr auto TaxFrequency = 48;
 
 int CrimeRamp, PolluteRamp ;
-int RValve, CValve, IValve;
 int ResCap, ComCap, IndCap;
 float EMarket = 4.0;
 int DisasterEvent;
@@ -62,6 +63,7 @@ int MeltX, MeltY;
 
 namespace
 {
+	RCI rci;
 
 	/**
 	 * Fire Protection Thresholds
@@ -742,9 +744,9 @@ void SetValves(const CityProperties& properties, const Budget& budget)
     MiscHistory[2] = ResidentialPopulationCount;
     MiscHistory[3] = CommercialPopulationCount;
     MiscHistory[4] = IndustrialPopulationCount;
-    MiscHistory[5] = RValve;
-    MiscHistory[6] = CValve;
-    MiscHistory[7] = IValve;
+    MiscHistory[5] = rci.residentialDemand();
+    MiscHistory[6] = rci.commercialDemand();
+    MiscHistory[7] = rci.industrialDemand();
     MiscHistory[10] = CrimeRamp;
     MiscHistory[11] = PolluteRamp;
     MiscHistory[12] = LVAverage;
@@ -850,64 +852,21 @@ void SetValves(const CityProperties& properties, const Budget& budget)
     Cratio = ((Cratio - 1) * 600) + TaxTable[index];
     Iratio = ((Iratio - 1) * 600) + TaxTable[index];
 
-    if (Rratio > 0)		/* ratios are velocity changes to valves  */
-    {
-        if (RValve < 2000)
-        {
-            RValve += static_cast<int>(Rratio);
-        }
-    }
-    if (Rratio < 0)
-    {
-        if (RValve > -2000)
-        {
-            RValve += static_cast<int>(Rratio);
-        }
-    }
-    if (Cratio > 0)
-    {
-        if (CValve < 1500)
-        {
-            CValve += static_cast<int>(Cratio);
-        }
-    }
-    if (Cratio < 0)
-    {
-        if (CValve > -1500)
-        {
-            CValve += static_cast<int>(Cratio);
-        }
-    }
-    if (Iratio > 0)
-    {
-        if (IValve < 1500)
-        {
-            IValve += static_cast<int>(Iratio);
-        }
-    }
-    if (Iratio < 0)
-    {
-        if (IValve > -1500)
-        {
-            IValve += static_cast<int>(Iratio);
-        }
-    }
+	rci.adjustResidentialDemand(static_cast<int>(Rratio));
+	rci.adjustCommercialDemand(static_cast<int>(Cratio));
+	rci.adjustIndustrialDemand(static_cast<int>(Iratio));
 
-    RValve = std::clamp(RValve, -1500, 1500);
-    CValve = std::clamp(CValve, -1500, 1500);
-    IValve = std::clamp(IValve, -1500, 1500);
-
-    if ((ResCap) && (RValve > 0)) // Stad, Prt, Airprt
+    if ((ResCap) && (rci.residentialDemand() > 0)) // Stad, Prt, Airprt
     {
-        RValve = 0;
+        rci.residentialDemand(0);
     }
-    if ((ComCap) && (CValve > 0))
+    if ((ComCap) && (rci.commercialDemand() > 0))
     {
-        CValve = 0;
+        rci.commercialDemand(0);
     }
-    if ((IndCap) && (IValve > 0))
+    if ((IndCap) && (rci.industrialDemand() > 0))
     {
-        IValve = 0;
+        rci.industrialDemand(0);
     }
 }
 
@@ -1106,9 +1065,9 @@ void InitSimMemory()
     CrimeRamp = 0;
     PolluteRamp = 0;
     PopulationTotal = 0;
-    RValve = 0;
-    CValve = 0;
-    IValve = 0;
+	rci.residentialDemand(0);
+	rci.commercialDemand(0);
+	rci.industrialDemand(0);
     ResCap = 0;
     ComCap = 0;
     IndCap = 0;
@@ -1180,9 +1139,9 @@ void SimLoadInit(CityProperties& properties)
     ResidentialPopulationCount = MiscHistory[2];
     CommercialPopulationCount = MiscHistory[3];
     IndustrialPopulationCount = MiscHistory[4];
-    RValve = MiscHistory[5];
-    CValve = MiscHistory[6];
-    IValve = MiscHistory[7];
+    rci.residentialDemand(MiscHistory[5]);
+    rci.commercialDemand(MiscHistory[6]);
+    rci.industrialDemand(MiscHistory[7]);
     CrimeRamp = MiscHistory[10];
     PolluteRamp = MiscHistory[11];
     LVAverage = MiscHistory[12];
