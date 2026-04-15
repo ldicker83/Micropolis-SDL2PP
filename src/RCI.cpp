@@ -13,6 +13,17 @@
 #include <algorithm>
 
 
+namespace
+{
+	static constexpr int ResidentialDemandMin = -2000;
+	static constexpr int ResidentialDemandMax = 2000;
+	static constexpr int CommercialDemandMin = -1500;
+	static constexpr int CommercialDemandMax = 1500;
+	static constexpr int IndustrialDemandMin = -1500;
+	static constexpr int IndustrialDemandMax = 1500;
+}
+
+
 void RCI::adjustResidentialDemand(int delta)
 {
 	if(delta == 0)
@@ -20,7 +31,7 @@ void RCI::adjustResidentialDemand(int delta)
 		return;
 	}
 
-	mResidentialDemand = std::clamp(mResidentialDemand + delta, -2000, 2000); // magic numbers
+	mResidentialDemand = std::clamp(mResidentialDemand + delta, ResidentialDemandMin, ResidentialDemandMax);
 }
 
 
@@ -31,7 +42,7 @@ void RCI::adjustCommercialDemand(int delta)
 		return;
 	}
 
-	mCommercialDemand = std::clamp(mCommercialDemand + delta, -1500, 1500); // magic numbers
+	mCommercialDemand = std::clamp(mCommercialDemand + delta, CommercialDemandMin, CommercialDemandMax);
 }
 
 
@@ -42,5 +53,5 @@ void RCI::adjustIndustrialDemand(int delta)
 		return;
 	}
 
-	mIndustrialDemand = std::clamp(mIndustrialDemand + delta, -1500, 1500); // magic numbers
+	mIndustrialDemand = std::clamp(mIndustrialDemand + delta, IndustrialDemandMin, IndustrialDemandMax);
 }
