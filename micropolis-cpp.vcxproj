@@ -116,6 +116,7 @@
     <Image Include="Micropolis.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="convert_xpm_to_png.bat" />
     <None Include="vcpkg.json" />
   </ItemGroup>
   <ItemGroup>
