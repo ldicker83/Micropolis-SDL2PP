@@ -23,6 +23,7 @@
     <ClCompile Include="src\Math\IsZero.cpp" />
     <ClCompile Include="src\Math\Point.cpp" />
     <ClCompile Include="src\Math\Rectangle.cpp" />
+    <ClCompile Include="src\RCI.cpp" />
     <ClCompile Include="src\Scan.cpp" />
     <ClCompile Include="src\Sprite.cpp" />
     <ClCompile Include="src\StringRender.cpp" />
@@ -76,6 +77,7 @@
     <ClInclude Include="src\Math\Rectangle.h" />
     <ClInclude Include="src\Math\Vector.h" />
     <ClInclude Include="src\Math\VectorSizeRange.h" />
+    <ClInclude Include="src\RCI.h" />
     <ClInclude Include="src\Scan.h" />
     <ClInclude Include="src\Sprite.h" />
     <ClInclude Include="src\StringRender.h" />
@@ -116,7 +118,6 @@
     <Image Include="Micropolis.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="convert_xpm_to_png.bat" />
     <None Include="vcpkg.json" />
   </ItemGroup>
   <ItemGroup>

@@ -10,6 +10,7 @@
 // file, included in this distribution, for details.
 #pragma once
 
+
 class RCI
 {
 public:
@@ -19,22 +20,14 @@ public:
 		mIndustrialDemand{ industrialDemand }
 	{}
 
-	int getResidentialDemand() const
-	{
-		return mResidentialDemand;
-	}
-	
-	
-	int getCommercialDemand() const
-	{
-		return mCommercialDemand;
-	}
-	
-	
-	int getIndustrialDemand() const
-	{
-		return mIndustrialDemand;
-	}
+
+	void adjustResidentialDemand(int delta);
+	void adjustCommercialDemand(int delta);
+	void adjustIndustrialDemand(int delta);
+
+	int residentialDemand() const { return mResidentialDemand; }
+	int commercialDemand() const { return mCommercialDemand; }
+	int industrialDemand() const { return mIndustrialDemand; }
 
 private:
 	int mResidentialDemand{ 0 };
