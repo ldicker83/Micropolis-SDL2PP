@@ -14,6 +14,7 @@
 class RCI
 {
 public:
+	RCI() = default;
 	RCI(int residentialDemand, int commercialDemand, int industrialDemand) :
 		mResidentialDemand{ residentialDemand },
 		mCommercialDemand{ commercialDemand },
@@ -25,8 +26,13 @@ public:
 	void adjustCommercialDemand(int delta);
 	void adjustIndustrialDemand(int delta);
 
+	void residentialDemand(int demand) { mResidentialDemand = demand; }
 	int residentialDemand() const { return mResidentialDemand; }
+	
+	void commercialDemand(int demand) { mCommercialDemand = demand; }
 	int commercialDemand() const { return mCommercialDemand; }
+	
+	void industrialDemand(int demand) { mIndustrialDemand = demand; }
 	int industrialDemand() const { return mIndustrialDemand; }
 
 private:
