@@ -900,13 +900,14 @@ void initViewParamters()
 
 void drawValve()
 {
-    double residentialPercent = static_cast<double>(RValve) / 1500.0;
-    double commercialPercent = static_cast<double>(CValve) / 1500.0;
-    double industrialPercent = static_cast<double>(IValve) / 1500.0;
+    const auto& rci = currentRCI();
+    const auto residentialPercent = static_cast<float>(rci.residentialDemand()) / 2000.0f;
+    const auto commercialPercent = static_cast<float>(rci.commercialDemand()) / 1500.0f;
+    const auto industrialPercent = static_cast<float>(rci.industrialDemand()) / 1500.0f;
 
-    ResidentialValveRect.h = -(RciValveHeight * static_cast<float>(residentialPercent));
-    CommercialValveRect.h = -(RciValveHeight * static_cast<float>(commercialPercent));
-    IndustrialValveRect.h = -(RciValveHeight * static_cast<float>(industrialPercent));
+    ResidentialValveRect.h = -(RciValveHeight * residentialPercent);
+    CommercialValveRect.h = -(RciValveHeight * commercialPercent);
+    IndustrialValveRect.h = -(RciValveHeight * industrialPercent);
 
     SDL_SetRenderDrawColor(MainWindowRenderer, Colors::Green.r, Colors::Green.g, Colors::Green.b, 255);
     SDL_RenderFillRect(MainWindowRenderer, &ResidentialValveRect);

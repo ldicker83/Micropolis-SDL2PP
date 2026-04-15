@@ -10,8 +10,12 @@
 // file, included in this distribution, for details.
 #pragma once
 
+#include "RCI.h"
+
 class Budget;
 class CityProperties;
+
+const RCI& currentRCI();
 
 void SimFrame(CityProperties&, Budget&);
 void condemnZone(int Xloc, int Yloc, int ch);

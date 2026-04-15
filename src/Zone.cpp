@@ -624,7 +624,7 @@ void updateIndustry(bool zonePowered)
 
     if (!(randomRange(0, 8)))
     {
-        zscore = IValve + evaluateIndustrial(trafficResult);
+        zscore = currentRCI().industrialDemand() + evaluateIndustrial(trafficResult);
 
         if (!zonePowered)
         {
@@ -672,7 +672,7 @@ void updateCommercial(bool zonePowered)
     if (!(rand16() & 7))
     {
         locvalve = evaluateCommercial(trafficResult);
-        zscore = CValve + locvalve;
+        zscore = currentRCI().commercialDemand() + locvalve;
 
         if (!zonePowered)
         {
@@ -729,7 +729,7 @@ void updateResidential(const Point<int>& location, bool zonePowered)
     if ((tileValue == ResidentialEmpty) || (randomRange(0, 8) == 0))
     {
         int locationValue = evaluateResidential(trafficResult);
-        int zoneScore = RValve + locationValue;
+        int zoneScore = currentRCI().residentialDemand() + locationValue;
         if (!zonePowered)
         {
             zoneScore = -500;

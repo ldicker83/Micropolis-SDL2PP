@@ -1341,6 +1341,12 @@ void Simulate(int mod16, CityProperties& properties, Budget& budget)
 }
 
 
+const RCI& currentRCI()
+{
+    return rci;
+}
+
+
 void SimFrame(CityProperties& properties, Budget& budget)
 {
     if (simSpeed() == SimulationSpeed::Paused)

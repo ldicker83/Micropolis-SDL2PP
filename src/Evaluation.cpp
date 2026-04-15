@@ -366,9 +366,12 @@ void GetScore(const Budget& budget)
     if (RoadEffect < 32) { z = z - (32 - RoadEffect); }
     if (PoliceEffect < 1000) { z = static_cast<int>(z * (.9 + (PoliceEffect / 10000.1))); }
     if (FireEffect < 1000) { z = static_cast<int>(z * (.9 + (FireEffect / 10000.1))); }
-    if (RValve < -1000) { z = static_cast<int>(z * .85); }
-    if (CValve < -1000) { z = static_cast<int>(z * .85); }
-    if (IValve < -1000) { z = static_cast<int>(z * .85); }
+
+	const auto& rci = currentRCI();
+
+    if (rci.residentialDemand() < -1000) { z = static_cast<int>(z * .85); }
+    if (rci.commercialDemand() < -1000) { z = static_cast<int>(z * .85); }
+    if (rci.industrialDemand() < -1000) { z = static_cast<int>(z * .85); }
 
     SM = 1.0;
     if ((CityPop == 0) || (deltaCityPop == 0))
