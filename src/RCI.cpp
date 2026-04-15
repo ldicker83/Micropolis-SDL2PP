@@ -24,6 +24,13 @@ namespace
 }
 
 
+RCI::RCI(int residentialDemand, int commercialDemand, int industrialDemand) :
+	mResidentialDemand{ residentialDemand },
+	mCommercialDemand{ commercialDemand },
+	mIndustrialDemand{ industrialDemand }
+{}
+
+
 void RCI::adjustResidentialDemand(int delta)
 {
 	if(delta == 0)

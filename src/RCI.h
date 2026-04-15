@@ -15,11 +15,7 @@ class RCI
 {
 public:
 	RCI() = default;
-	RCI(int residentialDemand, int commercialDemand, int industrialDemand) :
-		mResidentialDemand{ residentialDemand },
-		mCommercialDemand{ commercialDemand },
-		mIndustrialDemand{ industrialDemand }
-	{}
+	RCI(int residentialDemand, int commercialDemand, int industrialDemand);
 
 
 	void adjustResidentialDemand(int delta);
