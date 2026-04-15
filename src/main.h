@@ -43,7 +43,6 @@ extern int DisasterEvent;
 extern int DisasterWait;
 
 extern int ResCap, ComCap, IndCap;
-extern int RValve, CValve, IValve;
 extern int PoweredZoneCount;
 extern int UnpoweredZoneCount;
 
