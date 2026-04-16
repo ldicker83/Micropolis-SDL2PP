@@ -344,6 +344,7 @@ void primeGame(const int startFlag, CityProperties& properties, Budget& budget)
     case -2: // Load a city
         if (LoadCity("filename", properties, budget))
         {
+			interfaceManager->dashboardWindow().cityName(properties.CityName());
             break;
         }
         // If load fails, simply create a new city
@@ -352,6 +353,7 @@ void primeGame(const int startFlag, CityProperties& properties, Budget& budget)
     case -1:
         properties.GameLevel(0);
         properties.CityName("NoWhere");
+		interfaceManager->dashboardWindow().cityName(properties.CityName());
         doPlayNewCity(properties, budget);
         break;
 
@@ -387,6 +389,7 @@ void openGame()
     {
         resetGame();
         LoadCity(interfaceManager->fileIoDialog().fullPath(), cityProperties, budget);
+        interfaceManager->dashboardWindow().cityName(cityProperties.CityName());
         drawBigMap();
     }
 }

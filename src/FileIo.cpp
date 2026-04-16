@@ -23,6 +23,7 @@
 #include "Util.h"
 
 #include <algorithm>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <limits>
@@ -53,6 +54,7 @@ namespace
         { Scenario::Rio, { "snro.888", "Rio de Janeiro", ((2047 - 1900) * 48) + 2, 20000, 8 } }
     };
 
+
     void copyBufIntoArray(const int(&buf)[HistoryLength], GraphHistory& graph)
     {
         for (size_t i = 0; i < ResidentialPopulationHistory.size(); ++i)
@@ -60,6 +62,7 @@ namespace
             graph[i] = buf[i];
         }
     }
+
 
     bool loadFile(const std::string filename)
     {
@@ -170,6 +173,12 @@ namespace
         outfile.close();
         return true;
     }
+
+
+    std::string extractFilenameWithoutExtension(const std::string& filepath)
+    {
+        return std::filesystem::path(filepath).stem().string();
+    }
 }
 
 
@@ -180,6 +189,8 @@ bool LoadCity(const std::string& filename, CityProperties& properties, Budget& b
         std::cout << "Unable to load a city from the file named '" << filename << "'" << std::endl;
         return false;
     }
+
+    properties.CityName(extractFilenameWithoutExtension(filename));
 
     return true;
 }
@@ -209,6 +220,7 @@ void LoadScenario(Scenario scenario, CityProperties& properties, Budget& budget)
     CityTime = scenarioProperties.Time;
     ScenarioID = scenarioProperties.Id;
 
+    ResetMap();
     loadFile("scenarios/" + scenarioProperties.FileName);
 
     simSpeed(SimulationSpeed::Normal);
